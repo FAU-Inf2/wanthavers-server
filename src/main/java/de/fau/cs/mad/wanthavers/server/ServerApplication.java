@@ -8,4 +8,12 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
 
     }
+
+    public static void main(String[] args) {
+        try {
+            new ServerApplication().run(args);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
