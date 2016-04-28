@@ -1,2 +1,34 @@
 rootProject.name = 'de.fau.cs.mad.wanthavers.server'
 
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath 'org.ajoberstar:gradle-git:0.8.0' }
+}
+
+import org.ajoberstar.grgit.*
+
+def grgitserver = Grgit.open('.')
+def serverbranch = grgitserver.branch.getCurrent().name
+println 'Current wanthavers-server branch: ' + serverbranch
+
+File dir = new File('../wanthavers-common')
+if (!dir.exists()) {
+    println 'Cloning wanthavers-common repository...'
+    def grgit = Grgit.clone(dir: dir, uri: 'https://github.com/FAU-Inf2/wanthavers-common')
+    if(serverbranch == 'release' || serverbranch == 'refs/heads/release') {
+        grgit.branch.add(name: 'release', startPoint: 'origin/release')
+        grgit.checkout(branch: 'release')
+    }
+} else {
+    println 'Pulling changes from wanthavers-common repository...'
+
+    def grgit = Grgit.open(dir)
+    def commonbranch = grgit.branch.getCurrent().fullName
+    println 'Current wanthavers-common branch: ' + commonbranch
+
+    grgit.pull()
+}
+
+include ':server'
+include ':wanthavers-common'
+project(":wanthavers-common").projectDir = file("../wanthavers-common")

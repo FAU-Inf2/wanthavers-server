@@ -12,8 +12,12 @@ repositories {
     mavenCentral()
 }
 
+build.dependsOn(":wanthavers-common:build")
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    compile project(':wanthavers-common')
 
     compile 'org.eclipse.persistence:javax.persistence:2.1.0'
     compile 'io.dropwizard:dropwizard-core:' + dropwizardVersion
