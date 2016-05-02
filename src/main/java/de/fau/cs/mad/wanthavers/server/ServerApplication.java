@@ -6,7 +6,7 @@ import io.dropwizard.setup.Environment;
 public class ServerApplication extends Application<ServerConfiguration> {
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
-
+        environment.jersey().register(new UserResourceImpl());
     }
 
     public static void main(String[] args) {
