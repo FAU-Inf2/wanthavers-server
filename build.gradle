@@ -29,6 +29,7 @@ dependencies {
     compile 'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion
     compile 'com.h2database:h2:1.4.186'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3'
+    compile 'io.federecio:dropwizard-swagger:0.7.0'
 }
 
 task wrapper(type: Wrapper) {
