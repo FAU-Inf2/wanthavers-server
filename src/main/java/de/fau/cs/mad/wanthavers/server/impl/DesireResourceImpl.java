@@ -9,7 +9,6 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
 public class DesireResourceImpl implements DesireResource {
     private final DesireFacade facade;
@@ -61,6 +60,17 @@ public class DesireResourceImpl implements DesireResource {
     @Override
     @UnitOfWork
     public void createDummies() {
+
+
+        User[] list = new User[]{
+                new User("Yoda", "com.mail@yoda"),
+                new User("Jon Doe", "jon@doe.com"),
+                new User("Max Muster", "m.muster@xyz.de")
+        };
+
+        for(User u : list){
+           // createUser(u);
+        }
 
     }
 

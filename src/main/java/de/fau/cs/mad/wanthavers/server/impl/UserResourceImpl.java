@@ -45,4 +45,5 @@ public class UserResourceImpl implements UserResource {
         facade.deleteUser(id);
     }
 
+
 }

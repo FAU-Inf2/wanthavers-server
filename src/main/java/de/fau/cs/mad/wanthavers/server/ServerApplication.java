@@ -52,6 +52,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final DesireResourceImpl desireResource = new DesireResourceImpl(desireFacade);
         environment.jersey().register(desireResource);
+
+
     }
 
     public static void main(String[] args) {
