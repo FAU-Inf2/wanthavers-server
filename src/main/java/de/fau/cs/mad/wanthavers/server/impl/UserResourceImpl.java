@@ -7,12 +7,19 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
+import java.util.List;
 
 public class UserResourceImpl implements UserResource {
     private final UserFacade facade;
 
     public UserResourceImpl(UserFacade facade) {
         this.facade = facade;
+    }
+
+    @Override
+    @UnitOfWork
+    public List<User> get() {
+        return this.facade.getAllUsers();
     }
 
     @Override
@@ -43,6 +50,23 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public void deleteUser(@ApiParam(value = "id of the to be deleted user", required = true) long id) {
         facade.deleteUser(id);
+    }
+
+    /**
+     * TODO: remove after tests
+     */
+    @Override
+    @UnitOfWork
+    public void createDummies() {
+        User[] users = new User[]{
+                new User("Yoda", "com.mail@yoda"),
+                new User("Jon Doe", "jon@doe.com"),
+                new User("Max Muster", "m.muster@xyz.de")
+        };
+
+        for(User u : users){
+            createUser(u);
+        }
     }
 
 

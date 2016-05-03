@@ -3,7 +3,11 @@ package de.fau.cs.mad.wanthavers.server.dao;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import sun.security.krb5.internal.crypto.Des;
+
+import java.util.List;
 
 public class DesireDAO extends AbstractDAO<Desire>{
 
@@ -52,5 +56,11 @@ public class DesireDAO extends AbstractDAO<Desire>{
         currentSession().delete(Desire);
 
         return true;
+    }
+
+    public List<Desire> findAll(){
+        Query query = super.currentSession().createQuery("SELECT d FROM Desire d");
+        List<Desire> result = super.list(query);
+        return result;
     }
 }

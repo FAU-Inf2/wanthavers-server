@@ -9,12 +9,20 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
+import java.util.Date;
+import java.util.List;
 
 public class DesireResourceImpl implements DesireResource {
     private final DesireFacade facade;
 
     public DesireResourceImpl(DesireFacade facade) {
         this.facade = facade;
+    }
+
+    @Override
+    @UnitOfWork
+    public List<Desire> get() {
+        return this.facade.getAllDesires();
     }
 
     @Override
@@ -33,8 +41,6 @@ public class DesireResourceImpl implements DesireResource {
     @UnitOfWork
     public Desire createDesire(@ApiParam(value = "Desire to create", required = true) Desire newDesire, @Auth User user) {
         //set desire creator
-        System.out.println("USER: "+user);
-
         newDesire.setCreator(user);
 
         return facade.createNewDesire(newDesire);
@@ -54,24 +60,35 @@ public class DesireResourceImpl implements DesireResource {
 
 
     /**
-     * DEBUG REMOVE
+     * TODO: remove after tests
      */
-
     @Override
     @UnitOfWork
     public void createDummies() {
-
-
-        User[] list = new User[]{
+        User[] users = new User[]{
                 new User("Yoda", "com.mail@yoda"),
                 new User("Jon Doe", "jon@doe.com"),
                 new User("Max Muster", "m.muster@xyz.de")
         };
 
-        for(User u : list){
-           // createUser(u);
+        for(int i = 0; i < users.length; i++){
+            users[i].setId((long) i);
         }
 
+        Desire[] desires = new Desire[]{
+                new Desire("Bier", "Kiste Bier", users[0], 15., 5., new Date(System.currentTimeMillis()), "Star Wars", 0., 0.),
+                new Desire("Bagger", "Loch baggern", users[2], 155., 35., new Date(System.currentTimeMillis()), "TachFak", 0., 0.),
+                new Desire("Pizza", "Pizza Fungi", users[2], 8.5, 3., new Date(System.currentTimeMillis()), "Wohnheim", 0., 0.),
+                new Desire("Jeans", "Graue Jeans", users[1], 79., 8., new Date(System.currentTimeMillis()), "Schlosspark", 0., 0.),
+                new Desire("Döner", "Döner vegetarisch", users[0], 4., 2.5, new Date(System.currentTimeMillis()), "Arcaden", 0., 0.),
+                new Desire("Mineralwasser", "Kasten stilles Mineralwasser", users[1], 6.99, 3., new Date(System.currentTimeMillis()), "Daheim", 0., 0.),
+                new Desire("Fass Bier", "5l-Fass Bier", users[0], 9.95, 5., new Date(System.currentTimeMillis()), "Star Wars", 0., 0.),
+                new Desire("Router", "WLAN-Router mit Setup", users[1], 49., 6., new Date(System.currentTimeMillis()), "Schule", 0., 0.)
+        };
+
+        for(Desire d : desires){
+            facade.createNewDesire(d);
+        }
     }
 
 

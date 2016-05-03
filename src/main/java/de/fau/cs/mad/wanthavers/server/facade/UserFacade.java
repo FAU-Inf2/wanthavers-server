@@ -3,6 +3,8 @@ package de.fau.cs.mad.wanthavers.server.facade;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.dao.UserDAO;
 
+import java.util.List;
+
 public class UserFacade {
     private final UserDAO dao;
 
@@ -24,5 +26,9 @@ public class UserFacade {
 
     public boolean deleteUser(long id){
         return dao.delete(dao.findById(id));
+    }
+
+    public List<User> getAllUsers(){
+       return this.dao.findAll();
     }
 }

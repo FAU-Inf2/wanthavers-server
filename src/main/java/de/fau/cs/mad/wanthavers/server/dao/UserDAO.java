@@ -2,7 +2,10 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.User;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+
+import java.util.List;
 
 public class UserDAO extends AbstractDAO<User>{
 
@@ -43,5 +46,11 @@ public class UserDAO extends AbstractDAO<User>{
         currentSession().delete(user);
 
         return true;
+    }
+
+    public List<User> findAll(){
+        Query query = super.currentSession().createQuery("SELECT u FROM User u");
+        List<User> result = super.list(query);
+        return result;
     }
 }
