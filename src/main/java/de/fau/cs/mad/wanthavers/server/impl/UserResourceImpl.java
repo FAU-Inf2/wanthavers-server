@@ -1,10 +1,12 @@
-package de.fau.cs.mad.wanthavers.server;
+package de.fau.cs.mad.wanthavers.server.impl;
 
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
+
+import javax.ws.rs.WebApplicationException;
 
 public class UserResourceImpl implements UserResource {
     private final UserFacade facade;
@@ -18,9 +20,8 @@ public class UserResourceImpl implements UserResource {
     public User get(@ApiParam(value = "id of the desired user", required = true) long id) {
         User ret =  facade.getUserByID(id);
 
-        //TODO: remove in production
         if(ret == null){
-            ret = new User("Johnny Test", "test@it");
+            throw new WebApplicationException(404);
         }
 
         return ret;
@@ -43,4 +44,5 @@ public class UserResourceImpl implements UserResource {
     public void deleteUser(@ApiParam(value = "id of the to be deleted user", required = true) long id) {
         facade.deleteUser(id);
     }
+
 }
