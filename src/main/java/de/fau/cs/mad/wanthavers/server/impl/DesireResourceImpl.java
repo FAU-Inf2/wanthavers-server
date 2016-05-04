@@ -77,10 +77,10 @@ public class DesireResourceImpl implements DesireResource {
 
         Desire[] desires = new Desire[]{
                 new Desire("Bier", "Kiste Bier", users[0], 15., 5., new Date(System.currentTimeMillis()), "Todesstern", 0., 0.),
-                new Desire("Bagger", "Loch baggern", users[2], 155., 35., new Date(System.currentTimeMillis()), "TachFak", 0., 0.),
+                new Desire("Bagger", "Loch baggern", users[2], 155., 35., new Date(System.currentTimeMillis()), "TechFak", 0., 0.),
                 new Desire("Pizza", "Pizza Fungi", users[2], 8.5, 3., new Date(System.currentTimeMillis()), "Wohnheim", 0., 0.),
                 new Desire("Jeans", "Graue Jeans", users[1], 79., 8., new Date(System.currentTimeMillis()), "Schlosspark", 0., 0.),
-                new Desire("Döner", "Döner vegetarisch", users[0], 4., 2.5, new Date(System.currentTimeMillis()), "Arcaden", 0., 0.),
+                new Desire("Doener", "Doener vegetarisch", users[0], 4., 2.5, new Date(System.currentTimeMillis()), "Arcaden", 0., 0.),
                 new Desire("Mineralwasser", "Kasten stilles Mineralwasser", users[1], 6.99, 3., new Date(System.currentTimeMillis()), "Daheim", 0., 0.),
                 new Desire("Fass Bier", "5l-Fass Bier", users[0], 9.95, 5., new Date(System.currentTimeMillis()), "Star Wars", 0., 0.),
                 new Desire("Router", "WLAN-Router mit Setup", users[1], 49., 6., new Date(System.currentTimeMillis()), "Schule", 0., 0.)
