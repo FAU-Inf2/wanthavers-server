@@ -2,7 +2,6 @@ package de.fau.cs.mad.wanthavers.server.facade;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.util.List;
 
