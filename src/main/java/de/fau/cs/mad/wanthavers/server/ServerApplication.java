@@ -1,13 +1,17 @@
 package de.fau.cs.mad.wanthavers.server;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
+import de.fau.cs.mad.wanthavers.server.dao.RatingDAO;
 import de.fau.cs.mad.wanthavers.server.dao.UserDAO;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
+import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import de.fau.cs.mad.wanthavers.server.impl.DesireResourceImpl;
+import de.fau.cs.mad.wanthavers.server.impl.RatingResourceImpl;
 import de.fau.cs.mad.wanthavers.server.impl.UserResourceImpl;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
@@ -19,7 +23,7 @@ import io.dropwizard.setup.Environment;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -42,6 +46,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final DesireDAO desireDAO = new DesireDAO(hibernate.getSessionFactory());
         final DesireFacade desireFacade = new DesireFacade(desireDAO);
 
+        final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
+        final RatingFacade ratingFacade = new RatingFacade(ratingDAO);
+
         /** create resources and register **/
 
         final UserResourceImpl userResource = new UserResourceImpl(userFacade);
@@ -53,6 +60,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final DesireResourceImpl desireResource = new DesireResourceImpl(desireFacade);
         environment.jersey().register(desireResource);
 
+        final RatingResourceImpl ratingResource = new RatingResourceImpl(ratingFacade);
+        environment.jersey().register(ratingResource);
 
     }
 

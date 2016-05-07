@@ -47,7 +47,7 @@ public class DesireDAO extends AbstractDAO<Desire>{
     }
 
     public boolean delete(Desire Desire){
-        if(findById(Desire.getID()) == null){
+        if(Desire == null){
             return false;
         }
 
