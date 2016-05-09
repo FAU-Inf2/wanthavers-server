@@ -64,7 +64,7 @@ public class HaverDAO extends AbstractDAO<Haver>{
 
 
         stored.setCreationDate(newHaver.getCreationDate());
-        stored.setUserId(newHaver.getUserId());
+        stored.setUser(newHaver.getUser());
         stored.setAccepted(newHaver.isAccepted());
 
         return stored;

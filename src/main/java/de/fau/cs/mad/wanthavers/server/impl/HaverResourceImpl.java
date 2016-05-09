@@ -5,6 +5,7 @@ import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.HaverResource;
 import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
@@ -39,7 +40,8 @@ public class HaverResourceImpl implements HaverResource {
 
     @Override
     @UnitOfWork
-    public Haver createHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "Haver to create", required = true) Haver newHaver) {
+    public Haver createHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "Haver to create", required = true) Haver newHaver, @Auth User user) {
+        newHaver.setUser(user);
         return facade.createNewHaver(desireId, newHaver);
     }
 
