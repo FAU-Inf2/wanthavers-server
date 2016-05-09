@@ -1,9 +1,13 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
+import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -52,5 +56,18 @@ public class UserDAO extends AbstractDAO<User>{
         Query query = super.currentSession().createQuery("SELECT u FROM User u");
         List<User> result = super.list(query);
         return result;
+    }
+
+
+    public List<Desire> getDesires(long id) {
+        assert findById(id) != null;
+
+        // Maybe avoid hard coded query, see http://stackoverflow.com/a/2671395
+        Query query = currentSession().createQuery("FROM Desire WHERE creator.id = :id");
+        query.setParameter("id", id);
+
+        List<Desire> desires = query.list();
+
+        return desires;
     }
 }

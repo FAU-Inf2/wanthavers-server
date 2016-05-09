@@ -1,5 +1,6 @@
 package de.fau.cs.mad.wanthavers.server.facade;
 
+import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.dao.UserDAO;
 
@@ -31,4 +32,6 @@ public class UserFacade {
     public List<User> getAllUsers(){
        return this.dao.findAll();
     }
+
+    public List<Desire> getDesires(long id) { return this.dao.getDesires(id);}
 }

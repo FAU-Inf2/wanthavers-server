@@ -1,5 +1,6 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
+import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
@@ -50,6 +51,12 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public void deleteUser(@ApiParam(value = "id of the to be deleted user", required = true) long id) {
         facade.deleteUser(id);
+    }
+
+    @Override
+    @UnitOfWork
+    public List<Desire> getDesires(@ApiParam(value = "id of the desired user", required = true) long id) {
+        return facade.getDesires(id);
     }
 
     /**
