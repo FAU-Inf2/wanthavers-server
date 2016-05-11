@@ -16,6 +16,10 @@ public class DesireFacade {
         return dao.findById(id);
     }
 
+    public List<Desire> getAllDesiresByLocation(double lat, double lon, double radius){
+        return dao.findAllByLocation(lat, lon, radius);
+    }
+
     public Desire createNewDesire(Desire desire){
         return dao.create(desire);
     }
@@ -31,4 +35,5 @@ public class DesireFacade {
     public List<Desire> getAllDesires(){
         return dao.findAll();
     }
+
 }
