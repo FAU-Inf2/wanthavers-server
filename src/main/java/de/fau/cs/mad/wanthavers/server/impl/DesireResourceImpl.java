@@ -82,14 +82,14 @@ public class DesireResourceImpl implements DesireResource {
         }
 
         Desire[] desires = new Desire[]{
-                new Desire("Bier", "Kiste Bier", users[0], 15., 5., new Date(System.currentTimeMillis()), "Todesstern", 49.589674, 11.011961),
-                new Desire("Bagger", "Loch baggern", users[2], 155., 35., new Date(System.currentTimeMillis()), "TechFak", 49.589674, 11.011961),
-                new Desire("Pizza", "Pizza Fungi", users[2], 8.5, 3., new Date(System.currentTimeMillis()), "Wohnheim", 49.452030, 11.076750),
-                new Desire("Jeans", "Graue Jeans", users[1], 79., 8., new Date(System.currentTimeMillis()), "Schlosspark", 49.452030, 11.076750),
-                new Desire("Doener", "Doener vegetarisch", users[0], 4., 2.5, new Date(System.currentTimeMillis()), "Arcaden", 52.520007, 13.404954),
-                new Desire("Mineralwasser", "Kasten stilles Mineralwasser", users[1], 6.99, 3., new Date(System.currentTimeMillis()), "Daheim", 52.520007, 13.404954),
-                new Desire("Fass Bier", "5l-Fass Bier", users[0], 9.95, 5., new Date(System.currentTimeMillis()), "Star Wars", 52.520007, 13.404954),
-                new Desire("Router", "WLAN-Router mit Setup", users[1], 49., 6., new Date(System.currentTimeMillis()), "Schule", 49.452030, 11.076750)
+                new Desire("Bier", "Kiste Bier", users[0], 15., 5., new Date(System.currentTimeMillis()), "Todesstern", 49.589674, 11.011961, 0),
+                new Desire("Bagger", "Loch baggern", users[2], 155., 35., new Date(System.currentTimeMillis()), "TechFak", 49.589674, 11.011961, 1),
+                new Desire("Pizza", "Pizza Fungi", users[2], 8.5, 3., new Date(System.currentTimeMillis()), "Wohnheim", 49.452030, 11.076750, 2),
+                new Desire("Jeans", "Graue Jeans", users[1], 79., 8., new Date(System.currentTimeMillis()), "Schlosspark", 49.452030, 11.076750, 3),
+                new Desire("Doener", "Doener vegetarisch", users[0], 4., 2.5, new Date(System.currentTimeMillis()), "Arcaden", 52.520007, 13.404954, 1),
+                new Desire("Mineralwasser", "Kasten stilles Mineralwasser", users[1], 6.99, 3., new Date(System.currentTimeMillis()), "Daheim", 52.520007, 13.404954, 0),
+                new Desire("Fass Bier", "5l-Fass Bier", users[0], 9.95, 5., new Date(System.currentTimeMillis()), "Star Wars", 52.520007, 13.404954, 2),
+                new Desire("Router", "WLAN-Router mit Setup", users[1], 49., 6., new Date(System.currentTimeMillis()), "Schule", 49.452030, 11.076750, 1)
         };
 
         for(Desire d : desires){

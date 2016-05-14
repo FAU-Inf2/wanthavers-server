@@ -41,6 +41,7 @@ public class DesireDAO extends AbstractDAO<Desire>{
         stored.setPrice(modified.getPrice());
         stored.setReward(modified.getReward());
         stored.setTitle(modified.getTitle());
+        stored.setColorIndex(modified.getColorIndex());
 
         persist(stored);
         return stored;
