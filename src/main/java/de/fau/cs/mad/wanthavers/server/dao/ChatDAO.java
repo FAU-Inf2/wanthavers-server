@@ -38,7 +38,7 @@ public class ChatDAO{
         query.whereEqualTo(ParseChat.user2, u.getID());
 
         try {
-            list.addAll(ChatMapper.get(query.find()));
+            list.addAll(ChatMapper.get(query2.find()));
         } catch (ParseException e) {}
 
         return list;
