@@ -10,6 +10,14 @@ version = '0.1'
 
 repositories {
     mavenCentral()
+
+    maven {
+        credentials {
+            username 'anonymous'
+            password 'anonymous'
+        }
+        url "http://mad.cs.fau.de:8081/content/repositories/releases/"
+    }
 }
 
 build.dependsOn(":wanthavers-common:build")
@@ -30,6 +38,8 @@ dependencies {
     compile 'com.h2database:h2:1.4.186'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3'
     compile 'io.federecio:dropwizard-swagger:0.7.0'
+    compile 'org.json:json:20160212'
+    compile 'com.github.philsippl:parse4j:1.5'
 }
 
 task wrapper(type: Wrapper) {

@@ -5,18 +5,9 @@ import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
-import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
-import de.fau.cs.mad.wanthavers.server.dao.HaverDAO;
-import de.fau.cs.mad.wanthavers.server.dao.RatingDAO;
-import de.fau.cs.mad.wanthavers.server.dao.UserDAO;
-import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
-import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
-import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
-import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
-import de.fau.cs.mad.wanthavers.server.impl.DesireResourceImpl;
-import de.fau.cs.mad.wanthavers.server.impl.HaverResourceImpl;
-import de.fau.cs.mad.wanthavers.server.impl.RatingResourceImpl;
-import de.fau.cs.mad.wanthavers.server.impl.UserResourceImpl;
+import de.fau.cs.mad.wanthavers.server.dao.*;
+import de.fau.cs.mad.wanthavers.server.facade.*;
+import de.fau.cs.mad.wanthavers.server.impl.*;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthFactory;
 import io.dropwizard.auth.basic.BasicAuthFactory;
@@ -56,6 +47,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final HaverDAO haverDAO = new HaverDAO(hibernate.getSessionFactory());
         final HaverFacade haverFacade = new HaverFacade(haverDAO);
 
+        final ChatDAO chatDAO = new ChatDAO();
+        final ChatFacade chatFacade = new ChatFacade(chatDAO);
+
         /** create resources and register **/
 
         final UserResourceImpl userResource = new UserResourceImpl(userFacade);
@@ -72,6 +66,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final HaverResourceImpl haverResource = new HaverResourceImpl(haverFacade);
         environment.jersey().register(haverResource);
+
+        final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade);
+        environment.jersey().register(chatResource);
 
     }
 
