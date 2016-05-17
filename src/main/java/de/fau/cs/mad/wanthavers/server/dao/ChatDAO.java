@@ -14,6 +14,7 @@ import org.parse4j.ParseObject;
 import org.parse4j.ParseQuery;
 import org.parse4j.util.ParseRegistry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatDAO{
@@ -26,11 +27,21 @@ public class ChatDAO{
 
     public List<Chat> getChatsByUser(User u) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
+        query.whereEqualTo(ParseChat.user1, u.getID());
+
+        List<Chat> list = new ArrayList<>();
         try {
-            return ChatMapper.get(query.find());
-        } catch (ParseException e) {
-            return null;
-        }
+            list.addAll(ChatMapper.get(query.find()));
+        } catch (ParseException e) {}
+
+        ParseQuery<ParseChat> query2 = ParseQuery.getQuery(ParseChat.class);
+        query.whereEqualTo(ParseChat.user2, u.getID());
+
+        try {
+            list.addAll(ChatMapper.get(query.find()));
+        } catch (ParseException e) {}
+
+        return list;
     }
 
     public Chat createChat(long u1, long u2, long desireId){
