@@ -34,12 +34,13 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
 
+        /*
         bootstrap.addBundle(new SwaggerBundle<ServerConfiguration>() {
             @Override
             protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ServerConfiguration configuration) {
                 return configuration.swaggerBundleConfiguration;
             }
-        });
+        });*/
     }
 
     @Override
@@ -50,6 +51,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
         /** create DAOs and facades **/
+
 
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
         final UserFacade userFacade = new UserFacade(userDAO);
@@ -93,8 +95,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade);
         environment.jersey().register(chatResource);
 
-        final ApiListingResource api = new ApiListingResource();
-        environment.jersey().register(api);
+       //final ApiListingResource api = new ApiListingResource();
+        //environment.jersey().register(api);
         //configureSwagger(environment);
     }
 

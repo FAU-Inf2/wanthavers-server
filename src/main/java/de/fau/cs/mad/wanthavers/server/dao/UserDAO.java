@@ -26,7 +26,9 @@ public class UserDAO extends AbstractDAO<User>{
     }
 
     public User findById(long id) {
-        return super.get(id);
+        Query query = this.sessionFactory.openSession().createQuery("SELECT u FROM User u WHERE id="+id);
+        User result = super.uniqueResult(query);
+        return result;
     }
 
     public User create(User user){
