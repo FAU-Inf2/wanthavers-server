@@ -1,19 +1,18 @@
 package de.fau.cs.mad.wanthavers.server;
 
-import com.wordnik.swagger.jaxrs.config.BeanConfig;
 import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
-import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
 import io.dropwizard.Application;
-import io.dropwizard.auth.AuthFactory;
-import io.dropwizard.auth.basic.BasicAuthFactory;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -72,8 +71,15 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final UserResourceImpl userResource = new UserResourceImpl(userFacade);
         environment.jersey().register(userResource);
 
-        UserAuthenticator authenticator = new UserAuthenticator(userFacade);
-        environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(authenticator, "SECRET", User.class)));
+        environment.jersey().register(new AuthDynamicFeature(
+                new BasicCredentialAuthFilter.Builder<User>()
+                        .setAuthenticator(new UserAuthenticator(userFacade))
+                        .setRealm("SUPER SECRET STUFF")
+                        .buildAuthFilter()));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+
+        //UserAuthenticator authenticator = new UserAuthenticator(userFacade);
+        //environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(authenticator, "SECRET", User.class)));
 
         final DesireResourceImpl desireResource = new DesireResourceImpl(desireFacade);
         environment.jersey().register(desireResource);
@@ -89,7 +95,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);
-        configureSwagger(environment);
+        //configureSwagger(environment);
     }
 
     public static void main(String[] args) {
@@ -101,13 +107,14 @@ public class ServerApplication extends Application<ServerConfiguration> {
     }
 
     private void configureSwagger(Environment environment) {
-        BeanConfig config = new BeanConfig();
+/*        BeanConfig config = new BeanConfig();
         config.setTitle(getName());
         config.setVersion("0.0.1");
         config.setBasePath("/v1");
         String pkg = UserResource.class.getPackage().toString().split(" ")[1];
         config.setResourcePackage(pkg);
         config.setScan(true);
+        config.setHost("localhost:8080");*/
     }
 
 }

@@ -13,4 +13,4 @@ database:
       hibernate.hbm2ddl.auto: 'create'
 
 swagger:
-  resourcePackage: de.fau.cs.mad.wanthavers.common.rest.api
+    resourcePackage: de.fau.cs.mad.wanthavers.common.rest.api
