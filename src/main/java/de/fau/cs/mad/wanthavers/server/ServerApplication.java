@@ -1,10 +1,10 @@
 package de.fau.cs.mad.wanthavers.server;
 
-import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
@@ -19,6 +19,8 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
+import io.swagger.jaxrs.config.BeanConfig;
+import io.swagger.jaxrs.listing.ApiListingResource;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
@@ -34,13 +36,12 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
 
-        /*
         bootstrap.addBundle(new SwaggerBundle<ServerConfiguration>() {
             @Override
             protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ServerConfiguration configuration) {
                 return configuration.swaggerBundleConfiguration;
             }
-        });*/
+        });
     }
 
     @Override
@@ -95,8 +96,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade);
         environment.jersey().register(chatResource);
 
-       //final ApiListingResource api = new ApiListingResource();
-        //environment.jersey().register(api);
+        final ApiListingResource api = new ApiListingResource();
+        environment.jersey().register(api);
         //configureSwagger(environment);
     }
 
@@ -109,14 +110,13 @@ public class ServerApplication extends Application<ServerConfiguration> {
     }
 
     private void configureSwagger(Environment environment) {
-/*        BeanConfig config = new BeanConfig();
+        BeanConfig config = new BeanConfig();
         config.setTitle(getName());
         config.setVersion("0.0.1");
         config.setBasePath("/v1");
         String pkg = UserResource.class.getPackage().toString().split(" ")[1];
         config.setResourcePackage(pkg);
         config.setScan(true);
-        config.setHost("localhost:8080");*/
     }
 
 }

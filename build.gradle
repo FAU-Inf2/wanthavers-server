@@ -37,9 +37,11 @@ dependencies {
     compile 'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion
     compile 'com.h2database:h2:1.4.186'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3'
-    compile 'io.federecio:dropwizard-swagger:0.7.0'
+    //compile 'io.federecio:dropwizard-swagger:0.7.0'
     compile 'org.json:json:20160212'
     compile 'com.github.philsippl:parse4j:1.5'
+
+    compile 'com.smoketurner:dropwizard-swagger:0.9.2-3'
 }
 
 task wrapper(type: Wrapper) {
