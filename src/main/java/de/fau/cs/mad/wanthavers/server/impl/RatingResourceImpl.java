@@ -16,6 +16,8 @@ import java.util.List;
 
 
 public class RatingResourceImpl implements RatingResource {
+    private static boolean dummyExecuted = false;
+
     private final RatingFacade facade;
 
     public RatingResourceImpl(RatingFacade facade) {
@@ -66,6 +68,10 @@ public class RatingResourceImpl implements RatingResource {
     @Override
     @UnitOfWork
     public void createDummies(@ApiParam(value = "id of the desired user", required = true) long userId) {
+        if(dummyExecuted) {
+            return;
+        }
+
         User[] users = new User[]{
                 new User("Yoda", "com.mail@yoda"),
                 new User("Jon Doe", "jon@doe.com"),
@@ -97,6 +103,8 @@ public class RatingResourceImpl implements RatingResource {
 
         for(Rating r : ratings)
             createRating(userId, r);
+
+        dummyExecuted = true;
     }
 
 }

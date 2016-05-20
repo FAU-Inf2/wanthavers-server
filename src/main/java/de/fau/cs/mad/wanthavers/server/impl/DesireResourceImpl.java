@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 public class DesireResourceImpl implements DesireResource {
+    private static boolean dummyExecuted = false;
+
     private final DesireFacade facade;
 
     public DesireResourceImpl(DesireFacade facade) {
@@ -71,6 +73,10 @@ public class DesireResourceImpl implements DesireResource {
     @Override
     @UnitOfWork
     public void createDummies() {
+        if(dummyExecuted) {
+            return;
+        }
+
         User[] users = new User[]{
                 new User("Yoda", "com.mail@yoda"),
                 new User("Jon Doe", "jon@doe.com"),
@@ -95,6 +101,8 @@ public class DesireResourceImpl implements DesireResource {
         for(Desire d : desires){
             facade.createNewDesire(d);
         }
+
+        dummyExecuted = true;
     }
 
 

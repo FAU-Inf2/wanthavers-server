@@ -15,6 +15,8 @@ import java.util.List;
 
 
 public class HaverResourceImpl implements HaverResource {
+    private static boolean dummyExecuted = false;
+
     private final HaverFacade facade;
 
     public HaverResourceImpl(HaverFacade facade) {
@@ -60,6 +62,10 @@ public class HaverResourceImpl implements HaverResource {
     @Override
     @UnitOfWork
     public void createDummies() {
+        if(dummyExecuted) {
+            return;
+        }
+
         User[] users = new User[]{
                 new User("Yoda", "com.mail@yoda"),
                 new User("Jon Doe", "jon@doe.com"),
@@ -105,6 +111,8 @@ public class HaverResourceImpl implements HaverResource {
 
         for(Haver h : havers)
             createHaver(h.getDesireId(), h, h.getUser());
+
+        dummyExecuted = true;
     }
 
 }

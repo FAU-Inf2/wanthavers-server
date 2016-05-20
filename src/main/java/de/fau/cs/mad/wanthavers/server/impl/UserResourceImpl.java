@@ -11,6 +11,8 @@ import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
 public class UserResourceImpl implements UserResource {
+    private static boolean dummyExecuted = false;
+
     private final UserFacade facade;
 
     public UserResourceImpl(UserFacade facade) {
@@ -65,6 +67,10 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public void createDummies() {
+        if(dummyExecuted) {
+            return;
+        }
+
         User[] users = new User[]{
                 new User("Yoda", "com.mail@yoda"),
                 new User("Jon Doe", "jon@doe.com"),
@@ -74,6 +80,8 @@ public class UserResourceImpl implements UserResource {
         for(User u : users){
             createUser(u);
         }
+
+        dummyExecuted = true;
     }
 
 
