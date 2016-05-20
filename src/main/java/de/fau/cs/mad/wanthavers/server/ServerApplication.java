@@ -53,15 +53,15 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
         /** create DAOs and facades **/
 
+        final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
+        final RatingFacade ratingFacade = new RatingFacade(ratingDAO);
+
 
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
         final UserFacade userFacade = new UserFacade(userDAO);
 
         final DesireDAO desireDAO = new DesireDAO(hibernate.getSessionFactory());
         final DesireFacade desireFacade = new DesireFacade(desireDAO);
-
-        final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
-        final RatingFacade ratingFacade = new RatingFacade(ratingDAO);
 
         final HaverDAO haverDAO = new HaverDAO(hibernate.getSessionFactory());
         final HaverFacade haverFacade = new HaverFacade(haverDAO);
@@ -71,7 +71,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         /** create resources and register **/
 
-        final UserResourceImpl userResource = new UserResourceImpl(userFacade);
+        final UserResourceImpl userResource = new UserResourceImpl(userFacade, ratingFacade);
         environment.jersey().register(userResource);
 
         environment.jersey().register(new AuthDynamicFeature(

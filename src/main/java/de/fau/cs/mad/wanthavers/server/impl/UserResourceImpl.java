@@ -1,8 +1,11 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
+import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
@@ -14,21 +17,30 @@ public class UserResourceImpl implements UserResource {
     private static boolean dummyExecuted = false;
 
     private final UserFacade facade;
+    private final RatingFacade ratingFacade;
 
-    public UserResourceImpl(UserFacade facade) {
+    public UserResourceImpl(UserFacade facade, RatingFacade ratingFacade) {
         this.facade = facade;
+        this.ratingFacade = ratingFacade;
     }
 
     @Override
     @UnitOfWork
     public List<User> get() {
-        return this.facade.getAllUsers();
+        List<User> list = this.facade.getAllUsers();
+        for(User u : list){
+            Rating r = ratingFacade.avgRating(u.getID());
+            u.setRating(r.getStars());
+        }
+        return list;
     }
 
     @Override
     @UnitOfWork
     public User get(@ApiParam(value = "id of the desired user", required = true) long id) {
         User ret =  facade.getUserByID(id);
+        Rating r = ratingFacade.avgRating(id);
+        ret.setRating(r.getStars());
 
         if(ret == null){
             throw new WebApplicationException(404);

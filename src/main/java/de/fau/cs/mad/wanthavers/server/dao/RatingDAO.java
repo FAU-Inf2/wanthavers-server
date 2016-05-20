@@ -84,6 +84,10 @@ public class RatingDAO extends AbstractDAO<Rating>{
 
     public Rating average(long userId) {
         List<Rating> ratings = getRatingsByUserId(userId);
+
+        if(ratings.size() == 0)
+            return new Rating(userId, 0);
+
         float stars = 0;
         for(Rating r : ratings)
             stars += r.getStars();
