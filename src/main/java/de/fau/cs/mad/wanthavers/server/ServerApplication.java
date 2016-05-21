@@ -1,9 +1,7 @@
 package de.fau.cs.mad.wanthavers.server;
 
-import de.fau.cs.mad.wanthavers.common.Desire;
-import de.fau.cs.mad.wanthavers.common.Haver;
-import de.fau.cs.mad.wanthavers.common.Rating;
-import de.fau.cs.mad.wanthavers.common.User;
+
+import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.dao.*;
@@ -21,10 +19,12 @@ import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
+import org.eclipse.jetty.util.resource.FileResource;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -69,7 +69,12 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final ChatDAO chatDAO = new ChatDAO();
         final ChatFacade chatFacade = new ChatFacade(chatDAO);
 
+        final MediaDAO mediaDAO = new MediaDAO(hibernate.getSessionFactory());
+        final MediaFacade mediaFacade = new MediaFacade(mediaDAO);
+
         /** create resources and register **/
+
+        environment.jersey().register(MultiPartFeature.class);
 
         final UserResourceImpl userResource = new UserResourceImpl(userFacade, ratingFacade);
         environment.jersey().register(userResource);
@@ -95,6 +100,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade);
         environment.jersey().register(chatResource);
+
+        final MediaResourceImpl mediaResource = new MediaResourceImpl(mediaFacade);
+        environment.jersey().register(mediaResource);
 
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);
