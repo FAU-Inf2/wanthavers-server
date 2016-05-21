@@ -11,7 +11,7 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
-public class UserDAO extends AbstractDAO<User>{
+public class UserDAO extends AbstractDAO<User> {
 
     private final SessionFactory sessionFactory;
 
@@ -26,16 +26,24 @@ public class UserDAO extends AbstractDAO<User>{
     }
 
     public User findById(long id) {
-        Query query = this.sessionFactory.openSession().createQuery("SELECT u FROM User u WHERE id="+id);
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createQuery("SELECT u FROM User u WHERE id=" + id);
         User result = super.uniqueResult(query);
+
+        session.close();
         return result;
+
+/*        Query query = this.sessionFactory.openSession().createQuery("SELECT u FROM User u WHERE id="+id);
+        User result = super.uniqueResult(query);
+        return result;*/
     }
 
-    public User create(User user){
+    public User create(User user) {
         return persist(user);
     }
 
-    public User update(long id, User modified){
+    public User update(long id, User modified) {
         User stored = findById(id);
         stored.setName(modified.getName());
         stored.setEmail(modified.getEmail());
@@ -44,8 +52,8 @@ public class UserDAO extends AbstractDAO<User>{
         return stored;
     }
 
-    public boolean delete(User user){
-        if(findById(user.getID()) == null){
+    public boolean delete(User user) {
+        if (findById(user.getID()) == null) {
             return false;
         }
 
@@ -54,7 +62,7 @@ public class UserDAO extends AbstractDAO<User>{
         return true;
     }
 
-    public List<User> findAll(){
+    public List<User> findAll() {
         Query query = super.currentSession().createQuery("SELECT u FROM User u");
         List<User> result = super.list(query);
         return result;
