@@ -22,7 +22,7 @@ public class ChatDAO{
     public ChatDAO() {
         ParseRegistry.registerSubclass(ParseChat.class);
         ParseRegistry.registerSubclass(ParseMessage.class);
-        Parse.initialize("wanthavers", "", "localhost:8090/parse");
+        Parse.initialize("wanthavers", "", "chat:8090/parse");
     }
 
     public List<Chat> getChatsByUser(User u) {
