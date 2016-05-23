@@ -7,9 +7,9 @@ import org.hibernate.SessionFactory;
 
 import java.util.List;
 
-public class DesireDAO extends AbstractDAO<Desire>{
+public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTimestampDAO<Desire> {
 
-    private final SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory; //TODO: remove
 
     /**
      * Creates a new DAO with a given session provider.
@@ -18,7 +18,8 @@ public class DesireDAO extends AbstractDAO<Desire>{
      */
     public DesireDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
+        this.sessionFactory = sessionFactory; //TODO: remove
+
     }
 
     public Desire findById(long id) {
@@ -43,6 +44,7 @@ public class DesireDAO extends AbstractDAO<Desire>{
         stored.setTitle(modified.getTitle());
         stored.setColorIndex(modified.getColorIndex());
         stored.setImage(modified.getImage());
+        //TODO: super.update(stored);
 
         persist(stored);
         return stored;
@@ -58,7 +60,9 @@ public class DesireDAO extends AbstractDAO<Desire>{
         return true;
     }
 
+    //TODO: change DesireResource to expect a Desire object for simple get call
     public List<Desire> findAll(){
+        //TODO: if param Desire object == null -> call super.findAllNew(0), so that it returns every Desire
         Query query = super.currentSession().createQuery("SELECT d FROM Desire d");
         List<Desire> result = super.list(query);
         return result;
