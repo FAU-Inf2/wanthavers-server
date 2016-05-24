@@ -22,7 +22,7 @@ public class CategoryDAO extends AbstractDAO<Category>{
     }
 
     public List<Category> getSubCategories(long id) {
-        Query query = super.currentSession().createQuery("SELECT c FROM Category c WHERE parent = "+id);
+        Query query = super.currentSession().createQuery("SELECT c FROM Category c WHERE parentId = "+id);
         List<Category> result = super.list(query);
         return result;
     }
