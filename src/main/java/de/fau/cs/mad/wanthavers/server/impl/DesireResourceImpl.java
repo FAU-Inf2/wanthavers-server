@@ -47,7 +47,7 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public Desire createDesire(@ApiParam(value = "Desire to create", required = true) Desire newDesire, @Auth User user) {
+    public Desire createDesire(@Auth User user, @ApiParam(value = "Desire to create", required = true) Desire newDesire) {
         //set desire creator
         newDesire.setCreator(user);
 

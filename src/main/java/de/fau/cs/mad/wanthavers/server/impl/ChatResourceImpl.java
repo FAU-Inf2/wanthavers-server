@@ -44,7 +44,7 @@ public class ChatResourceImpl implements ChatResource {
 
     @UnitOfWork
     @Override
-    public Chat createChat(Chat chat, @Auth User user) {
+    public Chat createChat(@Auth User user, Chat chat) {
         Chat tmp = this.facade.createChat(chat.getUser1(), chat.getUser2(), chat.getDesireId());
         if(tmp == null){
             throw new WebApplicationException(400);
@@ -55,7 +55,7 @@ public class ChatResourceImpl implements ChatResource {
 
     @UnitOfWork
     @Override
-    public Message createMessage(String id, Message msg, @Auth User user) {
+    public Message createMessage(@Auth User user, String id, Message msg) {
         Message tmp = this.facade.createMessage(id, user, msg.getBody());
         if(tmp == null){
             throw new WebApplicationException(400);

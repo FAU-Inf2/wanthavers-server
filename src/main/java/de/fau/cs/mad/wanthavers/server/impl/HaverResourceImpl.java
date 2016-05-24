@@ -42,7 +42,7 @@ public class HaverResourceImpl implements HaverResource {
 
     @Override
     @UnitOfWork
-    public Haver createHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "Haver to create", required = true) Haver newHaver, @Auth User user) {
+    public Haver createHaver(@Auth User user, @ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "Haver to create", required = true) Haver newHaver) {
         newHaver.setUser(user);
         return facade.createNewHaver(desireId, newHaver);
     }
@@ -110,7 +110,7 @@ public class HaverResourceImpl implements HaverResource {
         };
 
         for(Haver h : havers)
-            createHaver(h.getDesireId(), h, h.getUser());
+            createHaver(h.getUser(), h.getDesireId(), h);
 
         dummyExecuted = true;
     }
