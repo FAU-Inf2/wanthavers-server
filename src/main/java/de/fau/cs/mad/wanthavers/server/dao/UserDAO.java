@@ -47,6 +47,8 @@ public class UserDAO extends AbstractDAO<User> {
         User stored = findById(id);
         stored.setName(modified.getName());
         stored.setEmail(modified.getEmail());
+        stored.setImage(modified.getImage());
+        stored.setBirthday(modified.getBirthday());
 
         persist(stored);
         return stored;
