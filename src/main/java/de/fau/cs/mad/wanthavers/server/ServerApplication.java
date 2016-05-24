@@ -24,7 +24,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -72,6 +72,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final MediaDAO mediaDAO = new MediaDAO(hibernate.getSessionFactory());
         final MediaFacade mediaFacade = new MediaFacade(mediaDAO);
 
+        final CategoryDAO categoryDAO = new CategoryDAO(hibernate.getSessionFactory());
+        final CategoryFacade categoryFacade = new CategoryFacade(categoryDAO);
+
         /** create resources and register **/
 
         environment.jersey().register(MultiPartFeature.class);
@@ -103,6 +106,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final MediaResourceImpl mediaResource = new MediaResourceImpl(mediaFacade);
         environment.jersey().register(mediaResource);
+
+        final CategoryResourceImpl categoryResource = new CategoryResourceImpl(categoryFacade);
+        environment.jersey().register(categoryResource);
 
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);
