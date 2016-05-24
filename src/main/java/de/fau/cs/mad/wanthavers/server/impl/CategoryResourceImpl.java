@@ -27,16 +27,19 @@ public class CategoryResourceImpl implements CategoryResource {
 
 
     @Override
+    @UnitOfWork
     public Category get(@ApiParam(value = "id of the desired Category", required = true) long id) {
         return this.facade.getById(id);
     }
 
     @Override
+    @UnitOfWork
     public List<Category> getSub(@ApiParam(value = "id of the desired Category", required = true) long id) {
         return this.facade.getSubCategories(id);
     }
 
     @Override
+    @UnitOfWork
     public Category create(@Auth User user, @ApiParam(value = "Category to create", required = true) Category newCategory) {
         return this.facade.create(newCategory);
     }
