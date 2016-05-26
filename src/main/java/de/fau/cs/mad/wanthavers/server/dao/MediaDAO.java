@@ -46,6 +46,10 @@ public class MediaDAO extends AbstractDAO<Media>{
         return super.get(id);
     }
 
+    public Media create(Media media) {
+        return persist(media);
+    }
+
     public Media create(InputStream fileInputStream,
                        FormDataContentDisposition contentDispositionHeader) {
 

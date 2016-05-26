@@ -29,6 +29,8 @@ public class MediaFacade {
         return dao.create(fileInputStream, contentDispositionHeader);
     }
 
-
+    public Media createNewMedia(Media media) {
+        return dao.create(media);
+    }
 
 }

@@ -5,6 +5,7 @@ import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
+import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -83,11 +84,7 @@ public class UserResourceImpl implements UserResource {
             return;
         }
 
-        User[] users = new User[]{
-                new User("Yoda", "com.mail@yoda"),
-                new User("Jon Doe", "jon@doe.com"),
-                new User("Max Muster", "m.muster@xyz.de")
-        };
+        User[] users = Dummies.getUsers();
 
         for(User u : users){
             createUser(u);
