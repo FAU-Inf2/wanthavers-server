@@ -147,6 +147,9 @@ public class Dummies {
 
         setDesireIds(desires, media.length, users.length);
 
+        Haver accepted = new Haver(users[0], new Date(System.currentTimeMillis()), desires[1].getID());
+        accepted.setAccepted(true);
+
         return new Haver[]{
                 new Haver(users[1], new Date(System.currentTimeMillis()), desires[0].getID()),
                 new Haver(users[2], new Date(System.currentTimeMillis()), desires[0].getID()),
@@ -155,7 +158,7 @@ public class Dummies {
                 new Haver(users[5], new Date(System.currentTimeMillis()), desires[0].getID()),
                 new Haver(users[6], new Date(System.currentTimeMillis()), desires[0].getID()),
                 new Haver(users[7], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[0], new Date(System.currentTimeMillis()), desires[1].getID()),
+                accepted,
                 new Haver(users[1], new Date(System.currentTimeMillis()), desires[1].getID()),
                 new Haver(users[0], new Date(System.currentTimeMillis()), desires[2].getID()),
                 new Haver(users[1], new Date(System.currentTimeMillis()), desires[2].getID()),
