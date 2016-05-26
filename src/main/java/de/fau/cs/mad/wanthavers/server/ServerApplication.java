@@ -106,7 +106,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final HaverResourceImpl haverResource = new HaverResourceImpl(haverFacade);
         environment.jersey().register(haverResource);
 
-        final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade);
+        final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade, userFacade, desireFacade);
         environment.jersey().register(chatResource);
 
         final MediaResourceImpl mediaResource = new MediaResourceImpl(mediaFacade);
