@@ -3,6 +3,8 @@ package de.fau.cs.mad.wanthavers.server.dummy;
 import de.fau.cs.mad.wanthavers.common.*;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Nico on 26.05.2016.
@@ -58,6 +60,11 @@ public class Dummies {
 
         User yoda = new User("Yoda", "com.mail@yoda");
         yoda.setImage(media[0]);
+
+        Set<String> roles = new HashSet<>();
+        roles.add(UserRoles.USER_ROLE_USER);
+        roles.add(UserRoles.USER_ROLE_ADMIN);
+        yoda.setRoles(roles);
 
         User jon = new User("Jon Doe", "jon@doe.com");
         jon.setImage(media[2]);

@@ -4,6 +4,7 @@ package de.fau.cs.mad.wanthavers.server;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
+import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
 import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
@@ -21,6 +22,7 @@ import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
 import org.eclipse.jetty.util.resource.FileResource;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
@@ -85,8 +87,11 @@ public class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new AuthDynamicFeature(
                 new BasicCredentialAuthFilter.Builder<User>()
                         .setAuthenticator(new UserAuthenticator(userFacade))
+                        .setAuthorizer(new UserAuthorizer())
                         .setRealm("SUPER SECRET STUFF")
                         .buildAuthFilter()));
+
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
         //UserAuthenticator authenticator = new UserAuthenticator(userFacade);
