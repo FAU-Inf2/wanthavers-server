@@ -24,9 +24,8 @@ public class MediaFacade {
         return dao.findAll();
     }
 
-    public Media createNewDesire(InputStream fileInputStream,
-                                  FormDataContentDisposition contentDispositionHeader){
-        return dao.create(fileInputStream, contentDispositionHeader);
+    public Media createNewDesire(String base64, String filename){
+        return dao.create(base64, filename);
     }
 
     public Media createNewMedia(Media media) {

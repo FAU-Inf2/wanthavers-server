@@ -15,6 +15,7 @@ import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.Media;
 import io.dropwizard.hibernate.AbstractDAO;
 import net.coobird.thumbnailator.Thumbnails;
+import org.apache.commons.codec.binary.Base64;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -50,9 +51,7 @@ public class MediaDAO extends AbstractDAO<Media>{
         return persist(media);
     }
 
-    public Media create(InputStream fileInputStream,
-                       FormDataContentDisposition contentDispositionHeader) {
-
+    public Media create(String base64, String filename) {
         Media m = new Media();
 
         String accessKey = System.getenv("S3_ACCESS_KEY");
@@ -60,7 +59,7 @@ public class MediaDAO extends AbstractDAO<Media>{
 
         AmazonS3 s3client = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey));
         String extension = "";
-        String[] tmp = contentDispositionHeader.getFileName().split("\\.");
+        String[] tmp = filename.split("\\.");
         if(tmp.length > 1){
             extension = "."+tmp[tmp.length - 1];
         }
@@ -68,7 +67,7 @@ public class MediaDAO extends AbstractDAO<Media>{
 
         File image = null;
         try {
-            image = saveTemp(fileInputStream);
+            image = saveTemp(base64);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -77,12 +76,12 @@ public class MediaDAO extends AbstractDAO<Media>{
 
             try {
 
-                String filename = UUID.randomUUID().toString() + extension;
-                File out = File.createTempFile(filename, extension);
+                String tmpName = UUID.randomUUID().toString() + extension;
+                File out = File.createTempFile(tmpName, extension);
                 Thumbnails.of(image).size(res, res).toFile(out);
 
-                s3client.putObject(new PutObjectRequest("whimages", filename, out));
-                String url = "https://s3.eu-central-1.amazonaws.com/whimages/"+filename;
+                s3client.putObject(new PutObjectRequest("whimages", tmpName, out));
+                String url = "https://s3.eu-central-1.amazonaws.com/whimages/"+tmpName;
                 m.setImage(url, res);
                 out.delete();
             } catch (AmazonServiceException ase) {
@@ -99,20 +98,13 @@ public class MediaDAO extends AbstractDAO<Media>{
     }
 
 
-    private static File saveTemp(InputStream inputStream) throws IOException {
+    private static File saveTemp(String base64) throws IOException {
         File file = File.createTempFile(UUID.randomUUID().toString(), ".tmp");
 
         // write the inputStream to a FileOutputStream
         FileOutputStream outputStream = new FileOutputStream(file);
-
-        int read = 0;
-        byte[] bytes = new byte[1024];
-
-        while ((read = inputStream.read(bytes)) != -1) {
-            outputStream.write(bytes, 0, read);
-        }
-
-        outputStream.close();
+        byte[] data = Base64.decodeBase64(base64);
+        outputStream.write(data);
 
         return file;
     }

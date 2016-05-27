@@ -43,8 +43,8 @@ public class MediaResourceImpl implements MediaResource {
 
     @Override
     @UnitOfWork
-    public Media createMedia(InputStream fileInputStream, FormDataContentDisposition contentDispositionHeader) {
-        return this.facade.createNewDesire(fileInputStream, contentDispositionHeader);
+    public Media createMedia(String base64, String filename) {
+        return this.facade.createNewDesire(base64, filename);
     }
 
     @UnitOfWork
