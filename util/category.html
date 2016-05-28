@@ -1,0 +1,219 @@
+<!doctype html>
+<html ng-app="app">
+<head>
+    <title>My Angular App</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+    <script>
+        /*
+         * An Angular service which helps with creating recursive directives.
+         * @author Mark Lagendijk
+         * @license MIT
+         */
+        angular.module('RecursionHelper', []).factory('RecursionHelper', ['$compile', function($compile){
+            return {
+                /**
+                 * Manually compiles the element, fixing the recursion loop.
+                 * @param element
+                 * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
+                 * @returns An object containing the linking functions.
+                 */
+                compile: function(element, link){
+                    // Normalize the link parameter
+                    if(angular.isFunction(link)){
+                        link = { post: link };
+                    }
+
+                    // Break the recursion loop by removing the contents
+                    var contents = element.contents().remove();
+                    var compiledContents;
+                    return {
+                        pre: (link && link.pre) ? link.pre : null,
+                        /**
+                         * Compiles and re-adds the contents
+                         */
+                        post: function(scope, element){
+                            // Compile the contents
+                            if(!compiledContents){
+                                compiledContents = $compile(contents);
+                            }
+                            // Re-add the compiled contents to the element
+                            compiledContents(scope, function(clone){
+                                element.append(clone);
+                            });
+
+                            // Call the post-linking function, if any
+                            if(link && link.post){
+                                link.post.apply(null, arguments);
+                            }
+                        }
+                    };
+                }
+            };
+        }]);
+    </script>
+
+    <script>
+        var app = angular.module("app",['RecursionHelper']);
+
+
+        app.config(['$httpProvider', function($httpProvider) {
+            $httpProvider.defaults.withCredentials = true;
+        }]);
+
+        app.factory('Category', ['$http', function ($http, $scope) {
+            return {
+                get: function(server, id) {
+                    return $http.get(server+'/v1/categories/'+id+'/subcategories' );
+                },
+                create: function(server, name, parent, image){
+                    return $http.post(server+'/v1/categories/', {id: null, parent: parent,name: name, image: image} );
+                }
+            };
+        }]);
+
+        app.factory('Media', ['$http', function ($http, $scope) {
+            return {
+                create: function(server, filename, base64){
+                    return $http({
+                        method: 'POST',
+                        url: server+"/v1/media",
+                        data: "filename="+encodeURIComponent(filename)+"&base64="+encodeURIComponent(base64),
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                }
+            };
+        }]);
+
+        app.controller('MainCtrl',  function($scope, $rootScope, Category, Media){
+
+            $scope.categories = [];
+            $scope.base = {"id":0,"name":"ROOT"};
+            $scope.server = "http://faui21f.informatik.uni-erlangen.de:9090";
+
+            $scope.start = function(){
+                Category.get($scope.server,0).then(function(resp){
+                    $scope.base = {"id":0,"name":"ROOT"};
+                    $scope.base.children = resp.data;
+                    $scope.getChildren($scope.base);
+
+
+                });
+            }
+
+
+            $scope.getChildren = function(c){
+                Category.get($scope.server,c.id).then(function(resp){
+                    c.children = resp.data;
+                    for(i=0;i<c.children.length;i++){
+                        $scope.getChildren(c.children[i]);
+                    }
+                });
+            }
+
+            $scope.new = function(){
+                Media.create($scope.server, window.filename, window.base64).then(function(resp){
+                    Category.create($scope.server,$scope.name, $scope.parentid, resp.data).then(function(resp){
+                        window.clearFile();
+                        $scope.start();
+                    })
+                });
+            }
+
+            $scope.start();
+
+        });
+
+        app.directive("tree", function(RecursionHelper) {
+            return {
+                restrict: "E",
+                scope: {family: '='},
+                template:
+                '<img ng-if="family.image!=null" style="width:50px;height:50px;margin-right:10px" src="{{family.image.lowRes}}">{{ family.name + "("+family.id+")"}}'+
+                '<ul >' +
+                '<li ng-repeat="child in family.children">' +
+                '<tree family="child"></tree>' +
+                '</li>' +
+                '</ul>',
+                compile: function(element) {
+                    return RecursionHelper.compile(element, function(scope, iElement, iAttrs, controller, transcludeFn){
+                        // Define your normal link function here.
+                        // Alternative: instead of passing a function,
+                        // you can also pass an object with
+                        // a 'pre'- and 'post'-link function.
+                    });
+                }
+            };
+        });
+
+    </script>
+
+    <script>
+        window.clearFile = function(){
+            $("#fileInput").replaceWith($("#fileInput").val('').clone(true));
+        }
+    </script>
+
+    <style>
+
+        li{
+
+            margin-top:5px;
+            padding:5px;
+        }
+    </style>
+</head>
+<body ng-controller="MainCtrl">
+
+<div class="container" style="padding-top:50px">
+    <h1>WantHaver Category Editor</h1>
+
+    <div class="row" style="margin-top:50px">
+        <div class="col-md-6">
+            <label for="name">Server</label>
+            <input type="text" id="name" class="form-control" ng-model="server"><br>
+            <label for="name">Name</label>
+            <input type="text" placeholder="Name" id="name" class="form-control" ng-model="name"><br>
+            <label for="id">Parent-Id</label>
+            <input type="text" placeholder="id" id="id" class="form-control" ng-model="parentid" value="0"><br>
+            <input style="display:inline-block" id="fileInput" type="file" onchange="previewFile()">&nbsp;&nbsp;<button class="btn btn-default btn-danger btn-xs" type="button" onclick="window.clearFile()">clear file</button><br><br>
+            <br><br>
+            <button class="btn btn-default btn-lg btn-primary" type="submit" ng-click="new()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&nbsp;create new category</button>&nbsp;
+            <button class="btn btn-default btn-lg" type="submit" ng-click="start()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;refresh</button>
+
+
+        </div>
+
+        <div class="col-md-6">
+            <tree family="base"></tree>
+        </div>
+    </div>
+
+    <script>
+
+        function previewFile() {
+
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            window.filename = file.name;
+
+            reader.addEventListener("load", function () {
+                var tmp = reader.result.split(",");
+                window.base64 = tmp[1];
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
+
+    </script>
+
+</body>
+</html>
