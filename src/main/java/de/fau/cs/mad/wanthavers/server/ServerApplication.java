@@ -20,9 +20,15 @@ import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
+import org.eclipse.jetty.server.Dispatcher;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.eclipse.jetty.util.resource.FileResource;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
+import java.util.EnumSet;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
@@ -80,6 +86,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         /** create resources and register **/
 
         environment.jersey().register(MultiPartFeature.class);
+        environment.jersey().register(CORSResponseFilter.class);
 
         final UserResourceImpl userResource = new UserResourceImpl(userFacade, ratingFacade);
         environment.jersey().register(userResource);
@@ -93,6 +100,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+
+
 
         //UserAuthenticator authenticator = new UserAuthenticator(userFacade);
         //environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(authenticator, "SECRET", User.class)));
