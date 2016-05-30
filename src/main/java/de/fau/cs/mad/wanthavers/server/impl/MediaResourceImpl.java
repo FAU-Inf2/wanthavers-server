@@ -2,9 +2,11 @@ package de.fau.cs.mad.wanthavers.server.impl;
 
 
 import de.fau.cs.mad.wanthavers.common.Media;
+import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.MediaResource;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.MediaFacade;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
@@ -43,7 +45,7 @@ public class MediaResourceImpl implements MediaResource {
 
     @Override
     @UnitOfWork
-    public Media createMedia(String base64, String filename) {
+    public Media createMedia(@Auth User user, String base64, String filename) {
         return this.facade.createNewDesire(base64, filename);
     }
 
