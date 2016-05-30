@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.facade;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Media;
+import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
 import de.fau.cs.mad.wanthavers.server.dao.MediaDAO;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -24,8 +25,8 @@ public class MediaFacade {
         return dao.findAll();
     }
 
-    public Media createNewDesire(String base64, String filename){
-        return dao.create(base64, filename);
+    public Media createNewDesire(User user, String base64, String filename){
+        return dao.create(user, base64, filename);
     }
 
     public Media createNewMedia(Media media) {

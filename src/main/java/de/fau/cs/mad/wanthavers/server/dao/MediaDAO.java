@@ -13,6 +13,7 @@ import com.amazonaws.services.s3.model.PutObjectResult;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.Media;
+import de.fau.cs.mad.wanthavers.common.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import net.coobird.thumbnailator.Thumbnails;
 import org.apache.commons.codec.binary.Base64;
@@ -51,8 +52,9 @@ public class MediaDAO extends AbstractDAO<Media>{
         return persist(media);
     }
 
-    public Media create(String base64, String filename) {
+    public Media create(User u, String base64, String filename) {
         Media m = new Media();
+        m.setCreator(u.getID());
 
         String accessKey = System.getenv("S3_ACCESS_KEY");
         String secretKey = System.getenv("S3_SECRET_KEY");
