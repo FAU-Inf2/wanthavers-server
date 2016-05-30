@@ -24,4 +24,11 @@ public class CategoryFacade {
         return dao.create(newCategory);
     }
 
+    public void delete(long id){
+        dao.delete(id);
+    }
+
+    public Category update(long id, Category newCategory) {
+        return this.dao.update(id, newCategory);
+    }
 }

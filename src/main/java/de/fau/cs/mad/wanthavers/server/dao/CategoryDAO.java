@@ -31,6 +31,18 @@ public class CategoryDAO extends AbstractDAO<Category>{
         return persist(newCategory);
     }
 
+    public void delete(long id) {
+        Query query = super.currentSession().createQuery("DELETE FROM Category WHERE id="+id);
+        query.executeUpdate();
+    }
 
+    public Category update(long id, Category newCategory) {
+        Category c = findById(id);
+        c.setImage(newCategory.getImage());
+        c.setName(newCategory.getName());
+        c.setParent(newCategory.getParent());
 
+        persist(c);
+        return c;
+    }
 }

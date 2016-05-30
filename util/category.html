@@ -72,6 +72,16 @@
                 },
                 create: function(server, name, parent, image){
                     return $http.post(server+'/v1/categories/', {id: null, parent: parent,name: name, image: image} );
+                },
+                remove: function(server, id){
+                    return $http({
+                        method: 'DELETE',
+                        url: server+"/v1/categories/"+id,
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+                    });
+                },
+                update: function(server, id, name, parent, image){
+                    return $http.put(server+'/v1/categories/'+id, {id:id, name:name, parent:parent, image:image} );
                 }
             };
         }]);
@@ -90,7 +100,8 @@
         }]);
 
         app.controller('MainCtrl',  function($scope, $rootScope, Category, Media){
-
+            $scope.id = undefined;
+            $scope.media = undefined;
             $scope.categories = [];
             $scope.base = {"id":0,"name":"ROOT"};
             $scope.server = "http://faui21f.informatik.uni-erlangen.de:9090";
@@ -116,12 +127,60 @@
             }
 
             $scope.new = function(){
+
                 Media.create($scope.server, window.filename, window.base64).then(function(resp){
                     Category.create($scope.server,$scope.name, $scope.parentid, resp.data).then(function(resp){
-                        window.clearFile();
+                        $scope.clearAll();
                         $scope.start();
                     })
                 });
+            }
+
+            $scope.update = function(){
+                if($scope.id == undefined)
+                        return;
+
+
+                if(window.base64 != undefined){
+                    Media.create($scope.server, window.filename, window.base64).then(function(resp){
+                        Category.update($scope.server, $scope.id, $scope.name, $scope.parentid, resp.data).then(function(resp){
+                            $scope.clearAll();
+                            $scope.start();
+                        })
+                    });
+                }else{
+                    Category.update($scope.server, $scope.id, $scope.name, $scope.parentid, $scope.media).then(function(resp){
+                        $scope.clearAll();
+                        $scope.start();
+                    })
+                }
+            }
+
+            $scope.setSub = function(id){
+                $scope.parentid = id;
+            }
+
+            $scope.remove = function(id){
+                Category.remove($scope.server, id).then(function(resp){
+                    $scope.start();
+                });
+            }
+
+            $scope.edit = function(item){
+                $scope.id = item.id;
+                $scope.media = item.image;
+                $scope.parentid = item.parent;
+                $scope.name = item.name;
+                document.getElementById("preview").src = item.image.lowRes;
+            }
+
+            $scope.clearAll = function(){
+                $scope.id = undefined;
+                $scope.media = undefined;
+                $scope.parentid = 0;
+                $scope.name = "";
+                document.getElementById("preview").src = undefined;
+                window.clearFile();
             }
 
             $scope.start();
@@ -131,16 +190,19 @@
         app.directive("tree", function(RecursionHelper) {
             return {
                 restrict: "E",
-                scope: {family: '='},
+                scope: {family: '=', parent: '='},
                 template:
                 '<img ng-if="family.image!=null" style="width:50px;height:50px;margin-right:10px" src="{{family.image.lowRes}}">{{ family.name + "("+family.id+")"}}'+
+                '&nbsp;<button ng-click="parent.setSub(family.id)">set parent</button>'+
+                '&nbsp;<button ng-if="family.id!=0" ng-click="parent.remove(family.id)">delete</button>'+
+                '&nbsp;<button ng-if="family.id!=0" ng-click="parent.edit(family)">edit</button>'+
                 '<ul >' +
                 '<li ng-repeat="child in family.children">' +
-                '<tree family="child"></tree>' +
+                '<tree family="child" parent="parent"></tree>' +
                 '</li>' +
                 '</ul>',
                 compile: function(element) {
-                    return RecursionHelper.compile(element, function(scope, iElement, iAttrs, controller, transcludeFn){
+                    return RecursionHelper.compile(element, function(scope, iElement, iAttrs, controller, transcludeFn, $rootScope){
                         // Define your normal link function here.
                         // Alternative: instead of passing a function,
                         // you can also pass an object with
@@ -155,6 +217,8 @@
     <script>
         window.clearFile = function(){
             $("#fileInput").replaceWith($("#fileInput").val('').clone(true));
+            window.base64 = undefined;
+            window.filename = undefined;
         }
     </script>
 
@@ -179,17 +243,19 @@
             <label for="name">Name</label>
             <input type="text" placeholder="Name" id="name" class="form-control" ng-model="name"><br>
             <label for="id">Parent-Id</label>
-            <input type="text" placeholder="id" id="id" class="form-control" ng-model="parentid" value="0"><br>
+            <input type="text" id="id" class="form-control" ng-model="parentid"><br>
             <input style="display:inline-block" id="fileInput" type="file" onchange="previewFile()">&nbsp;&nbsp;<button class="btn btn-default btn-danger btn-xs" type="button" onclick="window.clearFile()">clear file</button><br><br>
-            <br><br>
-            <button class="btn btn-default btn-lg btn-primary" type="submit" ng-click="new()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&nbsp;create new category</button>&nbsp;
-            <button class="btn btn-default btn-lg" type="submit" ng-click="start()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;refresh</button>
-
+            <br>
+            <img id="preview" style="width:100px;height:100px"><br><br>
+            <button class="btn btn-default btn-primary" type="submit" ng-click="new()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&nbsp;create new category</button>&nbsp;
+            <button class="btn btn-default btn-primary" type="submit" ng-click="update()"><span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>&nbsp;update</button>&nbsp;
+            <button class="btn btn-default" type="submit" ng-click="start()"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>&nbsp;refresh</button>&nbsp;
+            <button class="btn btn-danger" type="submit" ng-click="clearAll()"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span>&nbsp;clear</button>
 
         </div>
 
         <div class="col-md-6">
-            <tree family="base"></tree>
+            <tree family="base" parent="this"></tree>
         </div>
     </div>
 
@@ -202,9 +268,11 @@
 
             window.filename = file.name;
 
+
             reader.addEventListener("load", function () {
                 var tmp = reader.result.split(",");
                 window.base64 = tmp[1];
+                document.getElementById("preview").src = reader.result;
             }, false);
 
             if (file) {

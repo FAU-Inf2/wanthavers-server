@@ -43,4 +43,16 @@ public class CategoryResourceImpl implements CategoryResource {
     public Category create(@Auth User user, @ApiParam(value = "Category to create", required = true) Category newCategory) {
         return this.facade.create(newCategory);
     }
+
+    @Override
+    @UnitOfWork
+    public void delete(@Auth User user, @ApiParam(value = "id of the desired Category", required = true) long id) {
+        this.facade.delete(id);
+    }
+
+
+    @UnitOfWork
+    public Category update(@Auth User user, @ApiParam(value = "id of the desired Category", required = true) long id, Category newCategory) {
+        return this.facade.update(id, newCategory);
+    }
 }
