@@ -20,8 +20,13 @@ public class UserAuthenticator implements Authenticator<BasicCredentials, User> 
             throws AuthenticationException {
         User user = userFacade.getUserByID(Long.valueOf(credentials.getUsername()));
         if(user != null){
-            //TODO: if(user.getPassword == credentials.getUsername())
-            return Optional.of(user);
+            try{
+                if(HashHelper.check(credentials.getPassword(), user.getPassword())){
+                    return Optional.of(user);
+                }
+            }catch(Exception e){
+                System.err.println(e.getMessage());
+            }
         }
 
         return Optional.absent();

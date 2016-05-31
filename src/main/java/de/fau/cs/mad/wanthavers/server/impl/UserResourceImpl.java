@@ -53,7 +53,11 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public User createUser(@ApiParam(value = "User to create", required = true) User newUser, String password) {
-        return facade.createNewUser(newUser, password);
+        try {
+            return facade.createNewUser(newUser, password);
+        } catch (Exception e) {
+            throw new WebApplicationException(400);
+        }
     }
 
     @Override

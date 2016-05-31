@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -39,7 +40,8 @@ public class UserDAO extends AbstractDAO<User> {
         return result;*/
     }
 
-    public User create(User user, String password) {
+    public User create(User user, String password) throws Exception {
+        user.setPassword(HashHelper.getSaltedHash(password));
         return persist(user);
     }
 
