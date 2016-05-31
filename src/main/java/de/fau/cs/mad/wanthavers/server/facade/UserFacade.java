@@ -34,4 +34,6 @@ public class UserFacade {
     }
 
     public List<Desire> getDesires(long id) { return this.dao.getDesires(id);}
+
+    public User getUserByEmail(String email) { return this.dao.getUserByEmail(email); }
 }

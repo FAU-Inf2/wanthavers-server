@@ -12,6 +12,7 @@ import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public List<User> get() {
         List<User> list = this.facade.getAllUsers();
-        for(User u : list){
+        for (User u : list) {
             Rating r = ratingFacade.avgRating(u.getID());
             u.setRating(r.getStars());
         }
@@ -40,11 +41,11 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public User get(@ApiParam(value = "id of the desired user", required = true) long id) {
-        User ret =  facade.getUserByID(id);
+        User ret = facade.getUserByID(id);
         Rating r = ratingFacade.avgRating(id);
         ret.setRating(r.getStars());
 
-        if(ret == null){
+        if (ret == null) {
             throw new WebApplicationException(404);
         }
 
@@ -54,8 +55,11 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public User createUser(@ApiParam(value = "User to create", required = true) User newUser, String password) {
-        try {
+        if (facade.getUserByEmail(newUser.getEmail()) != null) {
+            throw new WebApplicationException(409);
+        }
 
+        try {
             newUser.setPassword(HashHelper.getSaltedHash(password));
             return facade.createNewUser(newUser, password);
         } catch (Exception e) {
@@ -87,13 +91,13 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public void createDummies() {
-        if(dummyExecuted) {
+        if (dummyExecuted) {
             return;
         }
 
         User[] users = Dummies.getUsers();
 
-        for(User u : users){
+        for (User u : users) {
             createUser(u, "test");
         }
 

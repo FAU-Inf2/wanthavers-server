@@ -83,4 +83,12 @@ public class UserDAO extends AbstractDAO<User> {
 
         return desires;
     }
+
+    public User getUserByEmail(String email) {
+        Query query = currentSession().createQuery("FROM User WHERE email = :email");
+        query.setParameter("email", email);
+
+        User user = super.uniqueResult(query);
+        return user;
+    }
 }
