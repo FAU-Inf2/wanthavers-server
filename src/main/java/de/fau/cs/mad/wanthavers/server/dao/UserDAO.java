@@ -41,7 +41,6 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public User create(User user, String password) throws Exception {
-        user.setPassword(HashHelper.getSaltedHash(password));
         return persist(user);
     }
 

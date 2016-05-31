@@ -5,6 +5,7 @@ import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
+import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
@@ -54,6 +55,8 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public User createUser(@ApiParam(value = "User to create", required = true) User newUser, String password) {
         try {
+
+            newUser.setPassword(HashHelper.getSaltedHash(password));
             return facade.createNewUser(newUser, password);
         } catch (Exception e) {
             throw new WebApplicationException(400);
@@ -91,7 +94,7 @@ public class UserResourceImpl implements UserResource {
         User[] users = Dummies.getUsers();
 
         for(User u : users){
-            createUser(u, u.getPassword());
+            createUser(u, "test");
         }
 
         dummyExecuted = true;
