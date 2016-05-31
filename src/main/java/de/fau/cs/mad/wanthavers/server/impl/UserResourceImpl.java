@@ -52,8 +52,8 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     @UnitOfWork
-    public User createUser(@ApiParam(value = "User to create", required = true) User newUser) {
-        return facade.createNewUser(newUser);
+    public User createUser(@ApiParam(value = "User to create", required = true) User newUser, String password) {
+        return facade.createNewUser(newUser, password);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class UserResourceImpl implements UserResource {
         User[] users = Dummies.getUsers();
 
         for(User u : users){
-            createUser(u);
+            createUser(u, u.getPassword());
         }
 
         dummyExecuted = true;

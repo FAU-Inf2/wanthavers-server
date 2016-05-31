@@ -39,7 +39,7 @@ public class UserDAO extends AbstractDAO<User> {
         return result;*/
     }
 
-    public User create(User user) {
+    public User create(User user, String password) {
         return persist(user);
     }
 

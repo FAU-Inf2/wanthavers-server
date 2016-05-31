@@ -17,8 +17,8 @@ public class UserFacade {
         return dao.findById(id);
     }
 
-    public User createNewUser(User user){
-        return dao.create(user);
+    public User createNewUser(User user, String password){
+        return dao.create(user, password);
     }
 
     public User updateUser(long id, User user){

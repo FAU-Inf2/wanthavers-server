@@ -60,6 +60,7 @@ public class Dummies {
 
         User yoda = new User("Yoda", "com.mail@yoda");
         yoda.setImage(media[0]);
+        yoda.setPassword("test");
 
         Set<String> roles = new HashSet<>();
         roles.add(UserRoles.USER_ROLE_USER);
@@ -68,19 +69,36 @@ public class Dummies {
 
         User jon = new User("Jon Doe", "jon@doe.com");
         jon.setImage(media[2]);
+        jon.setPassword("test");
 
         User max = new User("Max Muster", "m.muster@xyz.de");
         max.setImage(media[1]);
+        max.setPassword("test");
+
+        User tick = new User("Tick", "tick@bla.de");
+        tick.setPassword("test");
+
+        User trick = new User("Trick", "trick@blubb.de");
+        trick.setPassword("test");
+
+        User track = new User("Track", "track@foo.com");
+        track.setPassword("test");
+
+        User donald = new User("Donald", "donald@duck.net");
+        donald.setPassword("test");
+
+        User dagobert = new User("Dagobert", "money@save.com");
+        dagobert.setPassword("test");
 
         return new User[]{
                 yoda,
                 jon,
                 max,
-                new User("Tick", "tick@bla.de"),
-                new User("Trick", "trick@blubb.de"),
-                new User("Track", "track@foo.com"),
-                new User("Donald", "donald@duck.net"),
-                new User("Dagobert", "money@save.com")
+                tick,
+                trick,
+                track,
+                donald,
+                dagobert
         };
     }
 
