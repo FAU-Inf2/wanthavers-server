@@ -84,6 +84,23 @@ public class UserDAO extends AbstractDAO<User> {
         return desires;
     }
 
+    public List<Desire> getDesiresAsHaver(long id) {
+        assert findById(id) != null;
+
+        // Maybe avoid hard coded query, see http://stackoverflow.com/a/2671395
+        Query query = currentSession().createQuery("SELECT desireId FROM Haver WHERE user.id = :id");
+        query.setParameter("id", id);
+
+        List<Long> ids = query.list();
+
+        Query query2 = currentSession().createQuery("FROM Desire WHERE id IN :id");
+        query2.setParameterList("id", ids);
+
+        List<Desire> desires = query2.list();
+
+        return desires;
+    }
+
     public User getUserByEmail(String email) {
         Query query = currentSession().createQuery("FROM User WHERE email = :email");
         query.setParameter("email", email);
