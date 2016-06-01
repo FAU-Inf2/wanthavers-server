@@ -36,4 +36,8 @@ public class DesireFacade {
         return dao.findAll();
     }
 
+    public Desire updateDesireStatus(long desireId, int status) {
+        return this.dao.updateDesireStatus(desireId, status);
+    }
+
 }

@@ -62,6 +62,17 @@ public class DesireResourceImpl implements DesireResource {
     }
 
     @Override
+    public Desire updateDesireStatus(@ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new status of the specified Desire", required = true) int status) {
+        Desire ret = facade.updateDesireStatus(id, status);
+
+        if(ret == null) {
+            throw new WebApplicationException(404);
+        }
+
+        return ret;
+    }
+
+    @Override
     @UnitOfWork
     public void deleteDesire(@ApiParam(value = "id of the to be deleted Desire", required = true) long id) {
         facade.deleteDesire(id);

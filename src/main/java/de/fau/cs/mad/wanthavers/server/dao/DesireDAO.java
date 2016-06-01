@@ -44,10 +44,23 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         stored.setTitle(modified.getTitle());
         stored.setColorIndex(modified.getColorIndex());
         stored.setImage(modified.getImage());
+        stored.setStatus(modified.getStatus());
         //TODO: super.update(stored);
 
         persist(stored);
         return stored;
+    }
+
+    public Desire updateDesireStatus(long desireId, int status) {
+        Desire stored = findById(desireId);
+
+        if(stored == null) {
+            return null;
+        }
+
+        stored.setStatus(status);
+
+        return persist(stored);
     }
 
     public boolean delete(Desire Desire){
