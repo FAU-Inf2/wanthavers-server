@@ -41,6 +41,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         stored.setDropzone_string(modified.getDropzone_string());
         stored.setPrice(modified.getPrice());
         stored.setReward(modified.getReward());
+        stored.setCurrency(modified.getCurrency());
         stored.setTitle(modified.getTitle());
         stored.setColorIndex(modified.getColorIndex());
         stored.setImage(modified.getImage());
