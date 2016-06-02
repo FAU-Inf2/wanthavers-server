@@ -36,7 +36,7 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public List<Desire> getByFilters(List<Long> categories, double price_min, double price_max, double reward_min, double rating_min, double lat, double lon, double radius) {
+    public List<Desire> getByFilters(long category, double price_min, double price_max, double reward_min, double rating_min, double lat, double lon, double radius) {
         ArrayList<Desire> desires = new ArrayList<>();
 
         if (radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)) {
