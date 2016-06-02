@@ -10,7 +10,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DesireResourceImpl implements DesireResource {
@@ -36,10 +36,22 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public Desire get(@ApiParam(value = "id of the desired Desire", required = true) long id) {
-        Desire ret =  facade.getDesireByID(id);
+    public List<Desire> getByFilters(List<Long> categories, double price_min, double price_max, double reward_min, double rating_min, double lat, double lon, double radius) {
+        ArrayList<Desire> desires = new ArrayList<>();
 
-        if(ret == null){
+        if (radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)) {
+            desires.addAll(getByLocation(lat, lon, radius));
+        }
+
+        return desires;
+    }
+
+    @Override
+    @UnitOfWork
+    public Desire get(@ApiParam(value = "id of the desired Desire", required = true) long id) {
+        Desire ret = facade.getDesireByID(id);
+
+        if (ret == null) {
             throw new WebApplicationException(404);
         }
 
@@ -66,7 +78,7 @@ public class DesireResourceImpl implements DesireResource {
     public Desire updateDesireStatus(@ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new status of the specified Desire", required = true) int status) {
         Desire ret = facade.updateDesireStatus(id, status);
 
-        if(ret == null) {
+        if (ret == null) {
             throw new WebApplicationException(404);
         }
 
@@ -86,19 +98,18 @@ public class DesireResourceImpl implements DesireResource {
     @Override
     @UnitOfWork
     public void createDummies() {
-        if(dummyExecuted) {
+        if (dummyExecuted) {
             return;
         }
 
         Desire[] desires = Dummies.getDesires();
 
-        for(Desire d : desires){
+        for (Desire d : desires) {
             facade.createNewDesire(d);
         }
 
         dummyExecuted = true;
     }
-
 
 
 }
