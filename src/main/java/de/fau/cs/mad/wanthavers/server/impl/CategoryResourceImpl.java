@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.impl;
 
 
 import de.fau.cs.mad.wanthavers.common.Category;
+import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Media;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.CategoryResource;
@@ -34,8 +35,22 @@ public class CategoryResourceImpl implements CategoryResource {
 
     @Override
     @UnitOfWork
-    public List<Category> getSub(@ApiParam(value = "id of the desired Category", required = true) long id) {
-        return this.facade.getSubCategories(id);
+    public List<Category> getSub(@ApiParam(value = "id of the desired Category", required = true) long id, boolean recursive) {
+        if(recursive){
+            return this.facade.getSubCategoriesDeep(id);
+        }else{
+            return this.facade.getSubCategoriesFlat(id);
+        }
+    }
+
+    @Override
+    @UnitOfWork
+    public List<Desire> getDesires(@ApiParam(value = "id of the desired Category", required = true) long id, boolean recursive) {
+        if(recursive){
+            return this.facade.getDesiresByCategoryDeep(id);
+        }else{
+            return this.facade.getDesiresByCategoryFlat(id);
+        }
     }
 
     @Override
@@ -49,7 +64,6 @@ public class CategoryResourceImpl implements CategoryResource {
     public void delete(@Auth User user, @ApiParam(value = "id of the desired Category", required = true) long id) {
         this.facade.delete(id);
     }
-
 
     @UnitOfWork
     public Category update(@Auth User user, @ApiParam(value = "id of the desired Category", required = true) long id, Category newCategory) {
