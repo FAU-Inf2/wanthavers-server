@@ -32,7 +32,7 @@ import java.util.EnumSet;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -83,6 +83,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final CategoryDAO categoryDAO = new CategoryDAO(hibernate.getSessionFactory());
         final CategoryFacade categoryFacade = new CategoryFacade(categoryDAO);
 
+        final LocationDAO locationDAO = new LocationDAO(hibernate.getSessionFactory());
+        final LocationFacade locationFacade = new LocationFacade(locationDAO);
+
         /** create resources and register **/
 
         environment.jersey().register(MultiPartFeature.class);
@@ -123,6 +126,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final CategoryResourceImpl categoryResource = new CategoryResourceImpl(categoryFacade);
         environment.jersey().register(categoryResource);
+
+        final LocationResourceImpl locationResource = new LocationResourceImpl(locationFacade);
+        environment.jersey().register(locationResource);
 
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);
