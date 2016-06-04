@@ -9,6 +9,7 @@ import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
@@ -50,6 +51,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
                 return configuration.swaggerBundleConfiguration;
             }
         });
+
+        bootstrap.addBundle(new AssetsBundle("/static", "/static", "index.html"));
+
     }
 
     @Override
@@ -133,6 +137,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);
         //configureSwagger(environment);
+
+
+
     }
 
     public static void main(String[] args) {
