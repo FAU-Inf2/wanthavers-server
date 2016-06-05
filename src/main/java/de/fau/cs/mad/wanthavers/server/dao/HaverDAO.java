@@ -67,6 +67,7 @@ public class HaverDAO extends AbstractDAO<Haver>{
         stored.setUser(newHaver.getUser());
         stored.setAccepted(newHaver.isAccepted());
 
+        persist(stored);
         return stored;
     }
 
