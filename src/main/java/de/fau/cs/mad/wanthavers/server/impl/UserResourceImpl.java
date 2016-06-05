@@ -42,12 +42,13 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public User get(@ApiParam(value = "id of the desired user", required = true) long id) {
         User ret = facade.getUserByID(id);
-        Rating r = ratingFacade.avgRating(id);
-        ret.setRating(r.getStars());
-
+        
         if (ret == null) {
             throw new WebApplicationException(404);
         }
+
+        Rating r = ratingFacade.avgRating(id);
+        ret.setRating(r.getStars());
 
         return ret;
     }
