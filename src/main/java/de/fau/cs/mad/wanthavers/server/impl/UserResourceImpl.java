@@ -13,6 +13,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.validation.ConstraintViolationException;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
@@ -51,6 +52,29 @@ public class UserResourceImpl implements UserResource {
         ret.setRating(r.getStars());
 
         return ret;
+    }
+
+    @Override
+    @UnitOfWork
+    public User login(@ApiParam(value = "email of user", required = true) @FormParam("email") String email, @ApiParam(value = "password for user", required = true) @FormParam("password") String password) {
+        User user = facade.getUserByEmail(email);
+
+        if(user == null) {
+            throw new WebApplicationException(404);
+        }
+
+        String hashedPw = null;
+        try {
+            hashedPw = HashHelper.getSaltedHash(password);
+        } catch (Exception e) {
+            throw new WebApplicationException(500);
+        }
+
+        if(!hashedPw.equals(user.getPassword())) {
+            throw new WebApplicationException(409);
+        }
+
+        return user;
     }
 
     @Override
