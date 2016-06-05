@@ -14,7 +14,7 @@ public class HashHelper {
     // The higher the number of iterations the more
     // expensive computing the hash is for us and
     // also for an attacker.
-    private static final int iterations = 20*1000;
+    private static final int iterations = 1000;
     private static final int saltLen = 32;
     private static final int desiredKeyLen = 256;
 
