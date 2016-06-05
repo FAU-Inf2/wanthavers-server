@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server;
 
 
 import de.fau.cs.mad.wanthavers.common.*;
+import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
@@ -133,6 +134,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final LocationResourceImpl locationResource = new LocationResourceImpl(locationFacade);
         environment.jersey().register(locationResource);
+
+        final LoginResource loginResource = new LoginResourceImpl();
+        environment.jersey().register(loginResource);
 
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);

@@ -18,7 +18,7 @@ public class UserAuthenticator implements Authenticator<BasicCredentials, User> 
     @Override
     public Optional<User> authenticate(BasicCredentials credentials)
             throws AuthenticationException {
-        User user = userFacade.getUserByID(Long.valueOf(credentials.getUsername()));
+        User user = userFacade.getUserByEmail(credentials.getUsername());
         if(user != null){
             try{
                 if(HashHelper.check(credentials.getPassword(), user.getPassword())){
