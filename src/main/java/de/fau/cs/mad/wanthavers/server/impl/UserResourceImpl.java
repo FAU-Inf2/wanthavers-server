@@ -63,15 +63,12 @@ public class UserResourceImpl implements UserResource {
             throw new WebApplicationException(404);
         }
 
-        String hashedPw = null;
         try {
-            hashedPw = HashHelper.getSaltedHash(password);
+            if(!HashHelper.check(password, user.getPassword())) {
+                throw new WebApplicationException(409);
+            }
         } catch (Exception e) {
             throw new WebApplicationException(500);
-        }
-
-        if(!hashedPw.equals(user.getPassword())) {
-            throw new WebApplicationException(409);
         }
 
         return user;
