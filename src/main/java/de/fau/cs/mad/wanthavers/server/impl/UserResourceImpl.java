@@ -56,26 +56,6 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     @UnitOfWork
-    public User login(@ApiParam(value = "email of user", required = true) @FormParam("email") String email, @ApiParam(value = "password for user", required = true) @FormParam("password") String password) {
-        User user = facade.getUserByEmail(email);
-
-        if(user == null) {
-            throw new WebApplicationException(404);
-        }
-
-        try {
-            if(!HashHelper.check(password, user.getPassword())) {
-                throw new WebApplicationException(409);
-            }
-        } catch (Exception e) {
-            throw new WebApplicationException(500);
-        }
-
-        return user;
-    }
-
-    @Override
-    @UnitOfWork
     public User createUser(@ApiParam(value = "User to create", required = true) User newUser, String password) {
         if (facade.getUserByEmail(newUser.getEmail()) != null) {
             throw new WebApplicationException(409);
