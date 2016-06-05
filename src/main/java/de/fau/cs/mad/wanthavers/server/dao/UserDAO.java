@@ -102,10 +102,14 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public User getUserByEmail(String email) {
-        Query query = currentSession().createQuery("FROM User WHERE email = :email");
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createQuery("FROM User WHERE email = :email");
         query.setParameter("email", email);
 
         User user = super.uniqueResult(query);
+
+        session.close();
         return user;
     }
 }
