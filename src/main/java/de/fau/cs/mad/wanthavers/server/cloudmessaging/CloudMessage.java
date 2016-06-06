@@ -7,11 +7,24 @@ import org.json.JSONObject;
 public class CloudMessage {
     private String to;
     private JSONObject data;
-    
-    public CloudMessage(String to, String subject, String message) {
+    private JSONObject notification;
+
+    /**
+     *
+     * @param to: API token, which identifies reciever
+     * @param subject: data field used for storing a String to identify furhter procedure of the app for this notification
+     * @param title: title to display in notification center
+     * @param message: message to display in notification center
+     */
+    public CloudMessage(String to, String subject, String title, String message) {
         this.to = to;
+
+        notification = new JSONObject();
+        notification.put("body", message);
+        notification.put("title", subject);
+        notification.put("icon", "");
+
         data = new JSONObject();
-        data.put("message", message);
         data.put("subject", subject);
     }
     
@@ -34,4 +47,13 @@ public class CloudMessage {
     public void setData(JSONObject data) {
         this.data = data;
     }
+
+    public void setNotification(JSONObject notification) {
+        this.notification = notification;
+    }
+
+    public JSONObject getNotification() {
+        return notification;
+    }
+
 }

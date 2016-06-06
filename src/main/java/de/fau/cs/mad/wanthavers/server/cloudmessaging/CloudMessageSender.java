@@ -1,6 +1,7 @@
 package de.fau.cs.mad.wanthavers.server.cloudmessaging;
 
 
+import com.amazonaws.util.IOUtils;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -17,6 +18,7 @@ public class CloudMessageSender {
         try {
             JSONObject sendData = new JSONObject();
             sendData.put("to", message.getTo());
+            sendData.put("notification", message.getNotification());
             sendData.put("data", message.getData());
 
             URL url = new URL(FIREBASE_URL);
@@ -30,7 +32,7 @@ public class CloudMessageSender {
             outputStream.write(sendData.toString().getBytes());
 
             InputStream inputStream = conn.getInputStream();
-            String resp = inputStream.toString();
+            String resp = IOUtils.toString(inputStream);
             System.out.println("Send CloudMessage to "+message.getTo());
             System.out.println("Answer: "+resp);
 
