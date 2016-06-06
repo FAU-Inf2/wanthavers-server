@@ -69,6 +69,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
         final RatingFacade ratingFacade = new RatingFacade(ratingDAO);
 
+        final CloudMessageTokenDAO tokenDAO = new CloudMessageTokenDAO(hibernate.getSessionFactory());
+        final CloudMessageTokenFacade tokenFacade = new CloudMessageTokenFacade(tokenDAO);
 
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
         final UserFacade userFacade = new UserFacade(userDAO);
@@ -80,7 +82,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final HaverFacade haverFacade = new HaverFacade(haverDAO);
 
         final ChatDAO chatDAO = new ChatDAO();
-        final ChatFacade chatFacade = new ChatFacade(chatDAO);
+        final ChatFacade chatFacade = new ChatFacade(chatDAO, tokenDAO);
 
         final MediaDAO mediaDAO = new MediaDAO(hibernate.getSessionFactory());
         final MediaFacade mediaFacade = new MediaFacade(mediaDAO);
@@ -91,8 +93,6 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final LocationDAO locationDAO = new LocationDAO(hibernate.getSessionFactory());
         final LocationFacade locationFacade = new LocationFacade(locationDAO);
 
-        final CloudMessageTokenDAO tokenDAO = new CloudMessageTokenDAO(hibernate.getSessionFactory());
-        final CloudMessageTokenFacade tokenFacade = new CloudMessageTokenFacade(tokenDAO);
 
         /** create resources and register **/
 
@@ -141,7 +141,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final CloudMessageTokenResourceImpl tokenResource = new CloudMessageTokenResourceImpl(tokenFacade);
         environment.jersey().register(tokenResource);
         
-	final LoginResource loginResource = new LoginResourceImpl();
+	    final LoginResource loginResource = new LoginResourceImpl();
         environment.jersey().register(loginResource);
 
         final ApiListingResource api = new ApiListingResource();

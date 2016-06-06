@@ -49,6 +49,7 @@ public class ChatDAO{
         c.setDesireId(desireId);
         c.setUser1(u1);
         c.setUser2(u2);
+        c.setChatId(Long.valueOf(c.getChatId()));
 
         try {
             c.save();
@@ -81,9 +82,19 @@ public class ChatDAO{
         } catch (ParseException e) {
             return null;
         }
+    }
 
+    public Chat getChatByChatId(String chatId, User user) {
+        ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
+        query.whereEqualTo(ParseChat.chatId, chatId);
 
-
+        List<Chat> list = new ArrayList<>();
+        try {
+            list.addAll(ChatMapper.get(query.find()));
+            return list.get(0);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
 
