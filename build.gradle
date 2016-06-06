@@ -40,10 +40,10 @@ dependencies {
     //compile 'io.federecio:dropwizard-swagger:0.7.0'
     compile 'org.json:json:20160212'
     compile 'com.github.philsippl:parse4j:1.5'
-
     compile 'com.smoketurner:dropwizard-swagger:0.9.2-3'
     compile 'com.amazonaws:aws-java-sdk:1.11.3'
     compile 'net.coobird:thumbnailator:0.4.8'
+
 }
 
 task wrapper(type: Wrapper) {

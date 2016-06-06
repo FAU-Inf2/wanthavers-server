@@ -9,6 +9,7 @@ import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
@@ -91,6 +92,11 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public List<Desire> getDesiresAsHaver(@ApiParam(value = "id of the user", required = true) long id) {
         return facade.getDesiresAsHaver(id);
+    }
+
+    @Override
+    public void resetPassword(@FormParam("token") String token, @FormParam("password") String password) {
+
     }
 
     /**
