@@ -38,4 +38,11 @@ public class UserFacade {
     public List<Desire> getDesiresAsHaver(long id) { return  this.dao.getDesiresAsHaver(id); }
 
     public User getUserByEmail(String email) { return this.dao.getUserByEmail(email); }
+
+    public void sendResetToken(String email){ this.dao.sendResetToken(email);}
+
+    public boolean resetPassword(String token, String newPassword){
+        return this.dao.resetPassword(token, newPassword);
+    }
+
 }

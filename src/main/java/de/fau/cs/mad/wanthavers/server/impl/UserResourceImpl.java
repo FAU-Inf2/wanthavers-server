@@ -95,8 +95,17 @@ public class UserResourceImpl implements UserResource {
     }
 
     @Override
-    public void resetPassword(@FormParam("token") String token, @FormParam("password") String password) {
+    @UnitOfWork
+    public void resetPassword(String token, String password) {
+        if(!this.facade.resetPassword(token, password)){
+            throw new WebApplicationException(400);
+        }
+    }
 
+    @Override
+    @UnitOfWork
+    public void sendToken(String email) {
+        this.facade.sendResetToken(email);
     }
 
     /**

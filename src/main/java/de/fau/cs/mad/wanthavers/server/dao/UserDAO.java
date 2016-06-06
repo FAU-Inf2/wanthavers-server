@@ -102,10 +102,40 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public User getUserByEmail(String email) {
-        Query query = currentSession().createQuery("FROM User WHERE email = :email");
+        Session session = sessionFactory.openSession();
+
+        Query query = session.createQuery("FROM User WHERE email = :email");
         query.setParameter("email", email);
 
         User user = super.uniqueResult(query);
+        session.close();
         return user;
+    }
+
+    public void sendResetToken(String email){
+        User user = getUserByEmail(email);
+        String token = user.createPasswordToken();
+        persist(user);
+        System.out.println(token);
+    }
+
+    public boolean resetPassword(String token, String newPassword){
+        Query query = currentSession().createQuery("FROM User WHERE passwordToken = :token");
+        query.setParameter("token", token);
+
+        User user = (User)query.uniqueResult();
+        if(user == null || !user.checkPasswordToken(token)){
+            return false;
+        }
+
+        user.createPasswordToken();
+        try {
+            user.setPassword(HashHelper.getSaltedHash(newPassword));
+        } catch (Exception e) {
+            return false;
+        }
+
+        persist(user);
+        return true;
     }
 }
