@@ -43,16 +43,20 @@ public class DesireResourceImpl implements DesireResource {
     @UnitOfWork
     public List<Desire> getByFilters(long category, double price_min, double price_max, double reward_min, float rating_min, double lat, double lon, double radius) {
         List<Desire> desiresByFilter = desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, lat, lon, radius);
+        List<Desire> desires;
 
-        List<Desire> desiresByCategory = categoryFacade.getDesiresByCategoryDeep(category);
+        if (category > 0) {
+            List<Desire> desiresByCategory = categoryFacade.getDesiresByCategoryDeep(category);
 
-        Set<Desire> desiresByFilterSet = new HashSet<>(desiresByFilter);
-        Set<Desire> desiresByCategorySet = new HashSet<>(desiresByCategory);
+            Set<Desire> desiresByFilterSet = new HashSet<>(desiresByFilter);
+            Set<Desire> desiresByCategorySet = new HashSet<>(desiresByCategory);
 
-        desiresByFilterSet.retainAll(desiresByCategorySet);
+            desiresByFilterSet.retainAll(desiresByCategorySet);
+            desires = new ArrayList<>(desiresByFilterSet);
+        } else {
+            desires = desiresByFilter;
+        }
 
-
-        List<Desire> desires = new ArrayList<>(desiresByFilterSet);
         List<Desire> ret = new ArrayList<>();
 
         if (rating_min > 0) {
