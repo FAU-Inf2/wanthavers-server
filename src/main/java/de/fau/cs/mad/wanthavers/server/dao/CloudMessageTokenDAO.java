@@ -51,7 +51,7 @@ public class CloudMessageTokenDAO extends AbstractDAO<CloudMessageToken> {
         // Prevent app from persisting the same token multiple times
         List<CloudMessageToken> registered = findTokensByUserId(userId);
         for(CloudMessageToken token : registered)
-            if(token.getToken() == newToken.getToken())
+            if(token.getToken().equals(newToken.getToken()))
                 return null;
 
         return persist(newToken);
