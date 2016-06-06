@@ -50,6 +50,12 @@ public class HaverResourceImpl implements HaverResource {
 
     @Override
     @UnitOfWork
+    public Haver getAccepted(@ApiParam(value = "id of the desired desire", required = true) long desireId) {
+        return this.facade.getAccepted(desireId);
+    }
+
+    @Override
+    @UnitOfWork
     public Haver updateHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the haver", required = true) long id, @ApiParam(value = "new details of the specified haver", required = true) Haver haver) {
         return facade.updateHaver(desireId, id, haver);
     }

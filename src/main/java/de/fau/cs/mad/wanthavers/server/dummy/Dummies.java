@@ -173,7 +173,7 @@ public class Dummies {
         setDesireIds(desires, media.length, users.length);
 
         Haver accepted = new Haver(users[0], new Date(System.currentTimeMillis()), desires[1].getID());
-        accepted.setAccepted(true);
+        accepted.setStatus(HaverStatus.ACCEPTED);
 
         return new Haver[]{
                 new Haver(users[1], new Date(System.currentTimeMillis()), desires[0].getID()),

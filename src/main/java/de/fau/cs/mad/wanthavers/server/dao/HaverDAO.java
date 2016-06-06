@@ -1,6 +1,7 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.Haver;
+import de.fau.cs.mad.wanthavers.common.HaverStatus;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -65,7 +66,7 @@ public class HaverDAO extends AbstractDAO<Haver>{
 
         stored.setCreationDate(newHaver.getCreationDate());
         stored.setUser(newHaver.getUser());
-        stored.setAccepted(newHaver.isAccepted());
+        stored.setStatus(newHaver.getStatus());
 
         persist(stored);
         return stored;
@@ -78,6 +79,17 @@ public class HaverDAO extends AbstractDAO<Haver>{
         currentSession().delete(haver);
 
         return true;
+    }
+
+    public Haver getAccepted(long desireId){
+        final Session session = currentSession();
+
+        Criteria criteria = session.createCriteria(Haver.class)
+                .add(Restrictions.eq("desireId", desireId))
+                .add(Restrictions.eq("status", HaverStatus.ACCEPTED));
+
+        Haver haver = (Haver)criteria.uniqueResult();
+        return haver;
     }
 
 }

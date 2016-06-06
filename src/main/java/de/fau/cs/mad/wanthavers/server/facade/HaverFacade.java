@@ -32,4 +32,5 @@ public class HaverFacade {
         return this.dao.delete(dao.findById(desireId, id));
     }
 
+    public Haver getAccepted(long desireId){return  this.dao.getAccepted(desireId);}
 }
