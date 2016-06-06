@@ -86,7 +86,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         String queryString = "SELECT d from Desire d";
         boolean whereAdded = false;
 
-        if (price_min >= 0 && (price_max > price_min || price_max == 0)) {
+        if (price_min > 0 && (price_max > price_min || price_max == 0)) {
             queryString += " WHERE";
             whereAdded = true;
 
@@ -99,20 +99,16 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         if (reward_min > 0) {
             if (!whereAdded) {
                 queryString += " WHERE";
+                queryString += " reward >= :reward_min";
                 whereAdded = true;
+            } else {
+                queryString += " AND reward >= :reward_min";
             }
-
-            queryString += " reward >= :reward_min";
         }
 
         double latMin = 0., latMax = 0., lonMin = 0., lonMax = 0.;
 
         if (radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)) {
-            if (!whereAdded) {
-                queryString += " WHERE";
-                whereAdded = true;
-            }
-
             double latDiff = getLatDiff(radius);
             double lonDiff = getLonDiff(lon, radius);
             latMin = lat - latDiff;
@@ -120,12 +116,18 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
             lonMin = lon - lonDiff;
             lonMax = lon + lonDiff;
 
-            queryString += " dropzone_lat BETWEEN :lat_min AND :lat_max AND dropzone_long BETWEEN :lon_min AND lon_max";
+            if (!whereAdded) {
+                queryString += " WHERE";
+                queryString += " dropzone_lat BETWEEN :lat_min AND :lat_max AND dropzone_long BETWEEN :lon_min AND lon_max";
+                whereAdded = true;
+            } else {
+                queryString += " AND dropzone_lat BETWEEN :lat_min AND :lat_max AND dropzone_long BETWEEN :lon_min AND lon_max";
+            }
         }
 
         Query query = currentSession().createQuery(queryString);
 
-        if (price_min >= 0 && (price_max > price_min || price_max == 0)) {
+        if (price_min > 0 && (price_max > price_min || price_max == 0)) {
             query.setParameter("price_min", price_min);
             if (price_max > price_min) {
                 query.setParameter("price_max", price_max);
