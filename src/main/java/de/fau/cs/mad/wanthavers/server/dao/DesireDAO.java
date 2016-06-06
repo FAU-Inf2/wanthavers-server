@@ -86,12 +86,18 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         String queryString = "SELECT d from Desire d";
         boolean whereAdded = false;
 
-        if (price_min > 0 && (price_max > price_min || price_max == 0)) {
+        if (price_min > 0) {
             queryString += " WHERE";
             whereAdded = true;
-
             queryString += " price >= :price_min";
-            if (price_max > price_min) {
+        }
+
+        if (price_max > price_min) {
+            if (!whereAdded) {
+                queryString += " WHERE";
+                whereAdded = true;
+                queryString += " price <= :price_max";
+            } else {
                 queryString += " AND price <= :price_max";
             }
         }
@@ -127,11 +133,12 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
 
         Query query = currentSession().createQuery(queryString);
 
-        if (price_min > 0 && (price_max > price_min || price_max == 0)) {
+        if (price_min > 0) {
             query.setParameter("price_min", price_min);
-            if (price_max > price_min) {
-                query.setParameter("price_max", price_max);
-            }
+        }
+
+        if (price_max > price_min) {
+            query.setParameter("price_max", price_max);
         }
 
         if (reward_min > 0) {
