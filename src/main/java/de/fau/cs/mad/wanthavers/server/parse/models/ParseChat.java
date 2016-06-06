@@ -9,7 +9,7 @@ public class ParseChat extends ParseObject {
     public static String user1 = "user1";
     public static String user2 = "user2";
     public static String desireId = "desireId";
-    public static String chatId = "chatId";
+    //public static String chatId = "chatId";
 
     public void setUser1(long value) {
         put(user1, value);
@@ -34,7 +34,7 @@ public class ParseChat extends ParseObject {
     public long getDesireId() {
         return getLong(desireId);
     }
-
+/*
     public void setChatId(long value) {
         put(chatId, value);
     }
@@ -42,5 +42,5 @@ public class ParseChat extends ParseObject {
     public long getChatId() {
         return getLong(chatId);
     }
-
+*/
 }
