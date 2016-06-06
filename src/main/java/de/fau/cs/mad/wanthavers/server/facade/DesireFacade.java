@@ -20,6 +20,10 @@ public class DesireFacade {
         return dao.findAllByLocation(lat, lon, radius);
     }
 
+    public List<Desire> getAllDesiresByFilter(double price_min, double price_max, double reward_min, double lat, double lon, double radius) {
+        return dao.findAllByFilter(price_min, price_max, reward_min, lat, lon, radius);
+    }
+
     public Desire createNewDesire(Desire desire){
         return dao.create(desire);
     }

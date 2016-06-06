@@ -117,7 +117,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         //UserAuthenticator authenticator = new UserAuthenticator(userFacade);
         //environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(authenticator, "SECRET", User.class)));
 
-        final DesireResourceImpl desireResource = new DesireResourceImpl(desireFacade);
+        final DesireResourceImpl desireResource = new DesireResourceImpl(desireFacade, categoryFacade, ratingFacade);
         environment.jersey().register(desireResource);
 
         final RatingResourceImpl ratingResource = new RatingResourceImpl(ratingFacade);

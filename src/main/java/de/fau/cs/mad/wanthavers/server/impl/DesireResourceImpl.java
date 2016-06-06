@@ -4,52 +4,81 @@ import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.DesireResource;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
+import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
+import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class DesireResourceImpl implements DesireResource {
     private static boolean dummyExecuted = false;
 
-    private final DesireFacade facade;
+    private final DesireFacade desireFacade;
+    private final CategoryFacade categoryFacade;
+    private final RatingFacade ratingFacade;
 
-    public DesireResourceImpl(DesireFacade facade) {
-        this.facade = facade;
+    public DesireResourceImpl(DesireFacade desireFacade, CategoryFacade categoryFacade, RatingFacade ratingFacade) {
+        this.desireFacade = desireFacade;
+        this.categoryFacade = categoryFacade;
+        this.ratingFacade = ratingFacade;
     }
 
     @Override
     @UnitOfWork
     public List<Desire> get() {
-        return this.facade.getAllDesires();
+        return this.desireFacade.getAllDesires();
     }
 
     @Override
     @UnitOfWork
     public List<Desire> getByLocation(double lat, double lon, double radius) {
-        return this.facade.getAllDesiresByLocation(lat, lon, radius);
+        return this.desireFacade.getAllDesiresByLocation(lat, lon, radius);
     }
 
     @Override
     @UnitOfWork
-    public List<Desire> getByFilters(long category, double price_min, double price_max, double reward_min, double rating_min, double lat, double lon, double radius) {
-        ArrayList<Desire> desires = new ArrayList<>();
+    public List<Desire> getByFilters(long category, double price_min, double price_max, double reward_min, float rating_min, double lat, double lon, double radius) {
+        List<Desire> desiresByFilter = desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, lat, lon, radius);
 
-        if (radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)) {
-            desires.addAll(getByLocation(lat, lon, radius));
+        List<Desire> desiresByCategory = categoryFacade.getDesiresByCategoryDeep(category);
+
+        Set<Desire> desiresByFilterSet = new HashSet<>(desiresByFilter);
+        Set<Desire> desiresByCategorySet = new HashSet<>(desiresByCategory);
+
+        desiresByFilterSet.retainAll(desiresByCategorySet);
+
+
+        List<Desire> desires = new ArrayList<>(desiresByFilterSet);
+        List<Desire> ret = new ArrayList<>();
+
+        if (rating_min > 0) {
+            HashMap<Long, Float> avgUserRating = new HashMap<>();
+
+            for (Desire d : desires) {
+                long userId = d.getCreator().getID();
+                if (!avgUserRating.containsKey(userId)) {
+                    avgUserRating.put(userId, ratingFacade.avgRating(userId).getStars());
+                }
+
+                if (avgUserRating.get(userId) > rating_min) {
+                    ret.add(d);
+                }
+            }
+        } else {
+            ret = desires;
         }
 
-        return desires;
+        return ret;
     }
 
     @Override
     @UnitOfWork
     public Desire get(@ApiParam(value = "id of the desired Desire", required = true) long id) {
-        Desire ret = facade.getDesireByID(id);
+        Desire ret = desireFacade.getDesireByID(id);
 
         if (ret == null) {
             throw new WebApplicationException(404);
@@ -64,19 +93,19 @@ public class DesireResourceImpl implements DesireResource {
         //set desire creator
         newDesire.setCreator(user);
 
-        return facade.createNewDesire(newDesire);
+        return desireFacade.createNewDesire(newDesire);
     }
 
     @Override
     @UnitOfWork
     public Desire updateDesire(@ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new details of the specified Desire", required = true) Desire desire) {
-        return facade.updateDesire(id, desire);
+        return desireFacade.updateDesire(id, desire);
     }
 
     @Override
     @UnitOfWork
     public Desire updateDesireStatus(@ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new status of the specified Desire", required = true) int status) {
-        Desire ret = facade.updateDesireStatus(id, status);
+        Desire ret = desireFacade.updateDesireStatus(id, status);
 
         if (ret == null) {
             throw new WebApplicationException(404);
@@ -88,7 +117,7 @@ public class DesireResourceImpl implements DesireResource {
     @Override
     @UnitOfWork
     public void deleteDesire(@ApiParam(value = "id of the to be deleted Desire", required = true) long id) {
-        facade.deleteDesire(id);
+        desireFacade.deleteDesire(id);
     }
 
 
@@ -105,7 +134,7 @@ public class DesireResourceImpl implements DesireResource {
         Desire[] desires = Dummies.getDesires();
 
         for (Desire d : desires) {
-            facade.createNewDesire(d);
+            desireFacade.createNewDesire(d);
         }
 
         dummyExecuted = true;
