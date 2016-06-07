@@ -35,7 +35,7 @@ public class UserFacade {
 
     public List<Desire> getDesires(long id) { return this.dao.getDesires(id);}
 
-    public List<Desire> getDesiresAsHaver(long id,  Integer status) { return  this.dao.getDesiresAsHaver(id, status); }
+    public List<Desire> getDesiresAsHaver(long id,  List<Integer> status) { return  this.dao.getDesiresAsHaver(id, status); }
 
     public User getUserByEmail(String email) { return this.dao.getUserByEmail(email); }
 

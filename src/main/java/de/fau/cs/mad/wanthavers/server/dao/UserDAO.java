@@ -91,7 +91,7 @@ public class UserDAO extends AbstractDAO<User> {
         return desires;
     }
 
-    public List<Desire> getDesiresAsHaver(long userId, Integer status) {
+    public List<Desire> getDesiresAsHaver(long userId, List<Integer> status) {
         assert findById(userId) != null;
 
         Criteria criteria = currentSession().createCriteria(Haver.class)
@@ -99,7 +99,7 @@ public class UserDAO extends AbstractDAO<User> {
                 .add(Restrictions.eq("user.id", userId));
 
         if(status != null) {
-            criteria.add(Restrictions.eq("status", status));
+            criteria.add(Restrictions.in("status", status));
         }
 
         List<Long> ids = criteria.list();

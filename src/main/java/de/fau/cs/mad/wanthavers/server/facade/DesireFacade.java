@@ -16,8 +16,8 @@ public class DesireFacade {
         return dao.findById(id);
     }
 
-    public List<Desire> getAllDesiresByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius) {
-        return dao.findAllByFilter(price_min, price_max, reward_min, lat, lon, radius);
+    public List<Desire> getAllDesiresByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status) {
+        return dao.findAllByFilter(price_min, price_max, reward_min, lat, lon, radius, status);
     }
 
     public Desire createNewDesire(Desire desire){

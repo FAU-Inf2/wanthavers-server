@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import javax.swing.*;
 import java.util.List;
 
 public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTimestampDAO<Desire> {
@@ -84,7 +85,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         return result;
     }
 
-    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius) {
+    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class);
         if (price_min != null)
             criteria.add(Restrictions.ge("price", price_min));
@@ -104,6 +105,10 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
             double lonMax = lon + lonDiff;
             criteria.add(Restrictions.between("dropzone_lat", latMin, latMax));
             criteria.add(Restrictions.between("dropzone_long", lonMin, lonMax));
+        }
+
+        if(status != null){
+            criteria.add(Restrictions.in("status", status));
         }
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
