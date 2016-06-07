@@ -16,6 +16,7 @@ import de.fau.cs.mad.wanthavers.common.Media;
 import de.fau.cs.mad.wanthavers.common.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import net.coobird.thumbnailator.Thumbnails;
+import net.coobird.thumbnailator.geometry.Positions;
 import org.apache.commons.codec.binary.Base64;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.hibernate.Criteria;
@@ -24,6 +25,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.List;
 import java.util.UUID;
@@ -80,7 +83,14 @@ public class MediaDAO extends AbstractDAO<Media>{
 
                 String tmpName = UUID.randomUUID().toString() + extension;
                 File out = File.createTempFile(tmpName, extension);
-                Thumbnails.of(image).size(res, res).toFile(out);
+
+                BufferedImage imageTmp = ImageIO.read(image);
+                int size = Math.min(imageTmp.getHeight(), imageTmp.getWidth());
+
+                Thumbnails.of(image)
+                        .sourceRegion(Positions.CENTER, size, size)
+                        .size(res, res)
+                        .toFile(out);
 
                 s3client.putObject(new PutObjectRequest("whimages", tmpName, out));
                 String url = "https://s3.eu-central-1.amazonaws.com/whimages/"+tmpName;
