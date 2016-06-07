@@ -82,17 +82,17 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         return result;
     }
 
-    public List<Desire> findAllByFilter(double price_min, double price_max, double reward_min, double lat, double lon, double radius) {
+    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius) {
         String queryString = "SELECT d from Desire d";
         boolean whereAdded = false;
 
-        if (price_min > 0) {
+        if (price_min != null) {
             queryString += " WHERE";
             whereAdded = true;
             queryString += " price >= :price_min";
         }
 
-        if (price_max > price_min) {
+        if (price_max != null && price_max > price_min) {
             if (!whereAdded) {
                 queryString += " WHERE";
                 whereAdded = true;
@@ -102,7 +102,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
             }
         }
 
-        if (reward_min > 0) {
+        if (reward_min != null) {
             if (!whereAdded) {
                 queryString += " WHERE";
                 queryString += " reward >= :reward_min";
@@ -114,7 +114,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
 
         double latMin = 0., latMax = 0., lonMin = 0., lonMax = 0.;
 
-        if (radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)) {
+        if (radius != null && lat != null && lon != null /*radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)*/) {
             double latDiff = getLatDiff(radius);
             double lonDiff = getLonDiff(lon, radius);
             latMin = lat - latDiff;
@@ -133,19 +133,19 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
 
         Query query = currentSession().createQuery(queryString);
 
-        if (price_min > 0) {
+        if (price_min != null) {
             query.setParameter("price_min", price_min);
         }
 
-        if (price_max > price_min) {
+        if (price_max != null && price_max > price_min) {
             query.setParameter("price_max", price_max);
         }
 
-        if (reward_min > 0) {
+        if (reward_min != null) {
             query.setParameter("reward_min", reward_min);
         }
 
-        if (radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)) {
+        if (radius != null && lat != null && lon != null /*radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)*/) {
             query.setParameter("lat_min", latMin);
             query.setParameter("lat_max", latMax);
             query.setParameter("lon_min", lonMin);
@@ -178,6 +178,5 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         double tmp = radius * 360. / (Math.cos(lon) * 40075.);
         return tmp;
     }
-
 
 }

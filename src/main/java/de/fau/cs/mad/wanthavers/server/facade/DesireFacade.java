@@ -20,7 +20,7 @@ public class DesireFacade {
         return dao.findAllByLocation(lat, lon, radius);
     }
 
-    public List<Desire> getAllDesiresByFilter(double price_min, double price_max, double reward_min, double lat, double lon, double radius) {
+    public List<Desire> getAllDesiresByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius) {
         return dao.findAllByFilter(price_min, price_max, reward_min, lat, lon, radius);
     }
 
