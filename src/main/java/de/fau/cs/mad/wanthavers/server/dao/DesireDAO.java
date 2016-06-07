@@ -111,18 +111,6 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         return criteria.list();
     }
 
-    public List<Desire> findAllByLocation(double lat, double lon, double radius) {
-        double latDiff = getLatDiff(radius);
-        double lonDiff = getLonDiff(lon, radius);
-        double latMin = lat - latDiff;
-        double latMax = lat + latDiff;
-        double lonMin = lon - lonDiff;
-        double lonMax = lon + lonDiff;
-        Query query = super.currentSession().createQuery("SELECT d FROM Desire d WHERE dropzone_lat BETWEEN " + latMin + " AND " + latMax + " AND dropzone_long BETWEEN " + lonMin + " AND " + lonMax);
-        List<Desire> result = super.list(query);
-        return result;
-    }
-
     private double getLatDiff(double radius) {
         double tmp = radius * (360. / 40075.);
         return tmp;

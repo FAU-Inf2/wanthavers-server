@@ -1,6 +1,8 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.Haver;
+import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -8,9 +10,14 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Projection;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.persistence.criteria.Selection;
 import java.util.List;
+
+import static de.fau.cs.mad.wanthavers.common.User.USER_ID;
 
 public class UserDAO extends AbstractDAO<User> {
 
@@ -84,14 +91,18 @@ public class UserDAO extends AbstractDAO<User> {
         return desires;
     }
 
-    public List<Desire> getDesiresAsHaver(long id) {
-        assert findById(id) != null;
+    public List<Desire> getDesiresAsHaver(long userId, Integer status) {
+        assert findById(userId) != null;
 
-        // Maybe avoid hard coded query, see http://stackoverflow.com/a/2671395
-        Query query = currentSession().createQuery("SELECT desireId FROM Haver WHERE user.id = :id");
-        query.setParameter("id", id);
+        Criteria criteria = currentSession().createCriteria(Haver.class)
+                .setProjection(Projections.property(Desire.DESIRE_ID))
+                .add(Restrictions.eq("user.id", userId));
 
-        List<Long> ids = query.list();
+        if(status != null) {
+            criteria.add(Restrictions.eq("status", status));
+        }
+
+        List<Long> ids = criteria.list();
 
         Query query2 = currentSession().createQuery("FROM Desire WHERE id IN :id");
         query2.setParameterList("id", ids);
