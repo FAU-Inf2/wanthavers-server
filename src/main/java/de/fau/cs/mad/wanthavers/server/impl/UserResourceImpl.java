@@ -58,12 +58,13 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public User createUser(@ApiParam(value = "User to create", required = true) User newUser, String password) {
-        if (facade.getUserByEmail(newUser.getEmail()) != null) {
+        if (facade.getUserByEmail(newUser.getEmail().toLowerCase()) != null) {
             throw new WebApplicationException(409);
         }
 
         try {
             newUser.setPassword(HashHelper.getSaltedHash(password));
+            newUser.setEmail(newUser.getEmail().toLowerCase());
             return facade.createNewUser(newUser, password);
         } catch (Exception e) {
             throw new WebApplicationException(400);
