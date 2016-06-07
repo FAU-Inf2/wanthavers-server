@@ -1,10 +1,9 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
-import de.fau.cs.mad.wanthavers.common.Desire;
-import de.fau.cs.mad.wanthavers.common.Haver;
-import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.HaverResource;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
+import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -19,9 +18,11 @@ public class HaverResourceImpl implements HaverResource {
     private static boolean dummyExecuted = false;
 
     private final HaverFacade facade;
+    private final DesireFacade desireFacade;
 
-    public HaverResourceImpl(HaverFacade facade) {
+    public HaverResourceImpl(HaverFacade facade, DesireFacade desireFacade ) {
         this.facade = facade;
+        this.desireFacade = desireFacade;
     }
 
     @Override
@@ -57,7 +58,23 @@ public class HaverResourceImpl implements HaverResource {
     @Override
     @UnitOfWork
     public Haver updateHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the haver", required = true) long id, @ApiParam(value = "new details of the specified haver", required = true) Haver haver) {
-        return facade.updateHaver(desireId, id, haver);
+        Haver h = facade.updateHaver(desireId, id, haver);
+
+        switch (h.getStatus()){
+            case HaverStatus.ACCEPTED:
+                //TODO: force that there can only be one accepted user
+                Desire d = desireFacade.getDesireByID(desireId);
+                d.setStatus(DesireStatus.STATUS_IN_PROGRESS);
+                desireFacade.updateDesire(desireId, d);
+                break;
+            case HaverStatus.ADDED:
+                break;
+            case HaverStatus.DELETED:
+                break;
+            case HaverStatus.REJECTED:
+                break;
+        }
+        return h;
     }
 
     @Override
