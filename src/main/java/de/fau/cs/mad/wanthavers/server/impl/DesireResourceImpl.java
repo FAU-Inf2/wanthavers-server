@@ -96,13 +96,16 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public Desire updateDesire(@ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new details of the specified Desire", required = true) Desire desire) {
+    public Desire updateDesire(@Auth User user, @ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new details of the specified Desire", required = true) Desire desire) {
+        checkPermission(user, id);
+        desire.setCreator(user);
         return desireFacade.updateDesire(id, desire);
     }
 
     @Override
     @UnitOfWork
-    public Desire updateDesireStatus(@ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new status of the specified Desire", required = true) int status) {
+    public Desire updateDesireStatus(@Auth User user, @ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new status of the specified Desire", required = true) int status) {
+        checkPermission(user, id);
         Desire ret = desireFacade.updateDesireStatus(id, status);
 
         if (ret == null) {
@@ -110,12 +113,6 @@ public class DesireResourceImpl implements DesireResource {
         }
 
         return ret;
-    }
-
-    @Override
-    @UnitOfWork
-    public void deleteDesire(@ApiParam(value = "id of the to be deleted Desire", required = true) long id) {
-        desireFacade.deleteDesire(id);
     }
 
 
@@ -136,6 +133,16 @@ public class DesireResourceImpl implements DesireResource {
         }
 
         dummyExecuted = true;
+    }
+
+    private void checkPermission(User u, long id) throws WebApplicationException{
+        Desire d = this.desireFacade.getDesireByID(id);
+        if(d == null){
+            throw new WebApplicationException(404);
+        }
+        if(u.getID() != d.getCreator().getID()){
+            throw new WebApplicationException(401);
+        }
     }
 
 
