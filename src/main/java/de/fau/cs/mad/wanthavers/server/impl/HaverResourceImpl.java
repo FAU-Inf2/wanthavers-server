@@ -63,11 +63,11 @@ public class HaverResourceImpl implements HaverResource {
         switch (h.getStatus()){
             case HaverStatus.ACCEPTED:
                 //TODO: force that there can only be one accepted user
-                break;
-            case HaverStatus.ADDED:
                 Desire d = desireFacade.getDesireByID(desireId);
                 d.setStatus(DesireStatus.STATUS_IN_PROGRESS);
                 desireFacade.updateDesire(desireId, d);
+                break;
+            case HaverStatus.ADDED:
                 break;
             case HaverStatus.DELETED:
                 break;
