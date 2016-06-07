@@ -53,13 +53,9 @@ public class UserDAO extends AbstractDAO<User> {
 
     public User update(long id, User modified) {
         User stored = findById(id);
-        stored.setName(modified.getName());
-        stored.setEmail(modified.getEmail());
-        stored.setImage(modified.getImage());
-        stored.setBirthday(modified.getBirthday());
-
-        persist(stored);
-        return stored;
+        modified.setId(stored.getID());
+        persist(modified);
+        return modified;
     }
 
     public boolean delete(User user) {

@@ -35,24 +35,10 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
 
     public Desire update(long id, Desire modified) {
         Desire stored = findById(id);
-
-        stored.setCreation_time(modified.getCreation_time());
-        stored.setCreator(modified.getCreator());
-        stored.setDescription(modified.getDescription());
-        stored.setDropzone_lat(modified.getDropzone_lat());
-        stored.setDropzone_long(modified.getDropzone_long());
-        stored.setDropzone_string(modified.getDropzone_string());
-        stored.setPrice(modified.getPrice());
-        stored.setReward(modified.getReward());
-        stored.setCurrency(modified.getCurrency());
-        stored.setTitle(modified.getTitle());
-        stored.setColorIndex(modified.getColorIndex());
-        stored.setImage(modified.getImage());
-        stored.setStatus(modified.getStatus());
+        modified.setId(stored.getID());
         //TODO: super.update(stored);
-
-        persist(stored);
-        return stored;
+        persist(modified);
+        return modified;
     }
 
     public Desire updateDesireStatus(long desireId, int status) {

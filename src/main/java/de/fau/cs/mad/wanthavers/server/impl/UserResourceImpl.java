@@ -74,6 +74,13 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public User updateUser(@ApiParam(value = "id of the user", required = true) long id, @ApiParam(value = "new details of the specified user", required = true) User user) {
+        User old = this.facade.getUserByID(id);
+        if(!old.getEmail().equals(user.getEmail().toLowerCase())){
+            User tmp = facade.getUserByEmail(user.getEmail().toLowerCase());
+            if ( tmp != null && tmp.getID() != old.getID()) {
+                throw new WebApplicationException(409);
+            }
+        }
         return facade.updateUser(id, user);
     }
 

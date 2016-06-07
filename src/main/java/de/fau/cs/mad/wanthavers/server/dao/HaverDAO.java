@@ -63,13 +63,9 @@ public class HaverDAO extends AbstractDAO<Haver>{
         Haver stored = findById(desireId, id);
         if(stored == null || checkForCorrectDesireId(desireId, stored) == null) return null;
 
-
-        stored.setCreationDate(newHaver.getCreationDate());
-        stored.setUser(newHaver.getUser());
-        stored.setStatus(newHaver.getStatus());
-
-        persist(stored);
-        return stored;
+        newHaver.setId(stored.getId());
+        persist(newHaver);
+        return newHaver;
     }
 
     public boolean delete(Haver haver) {

@@ -63,14 +63,9 @@ public class RatingDAO extends AbstractDAO<Rating>{
     public Rating update(long userId, long id, Rating newRating) {
         Rating stored = findById(userId, id);
         if(stored == null || checkForCorrectUserId(userId, stored) == null) return null;
-
-        stored.setRatedTime(newRating.getRatedTime());
-        stored.setStars(newRating.getStars());
-        stored.setComment(newRating.getComment());
-        stored.setRater(newRating.getRater());
-        stored.setRatedTransaction(newRating.getRatedTransaction());
-
-        return stored;
+        newRating.setId(stored.getId());
+        persist(newRating);
+        return newRating;
     }
 
     public boolean delete(Rating rating) {

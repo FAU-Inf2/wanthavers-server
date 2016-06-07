@@ -67,7 +67,7 @@ public class CloudMessageTokenDAO extends AbstractDAO<CloudMessageToken> {
         if(stored == null || checkForCorrectUserId(userId, stored) == null) return null;
 
         stored.setToken(token.getToken());
-
+        persist(stored);
         return stored;
     }
 

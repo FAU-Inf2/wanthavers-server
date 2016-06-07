@@ -50,12 +50,9 @@ public class CategoryDAO extends AbstractDAO<Category>{
 
     public Category update(long id, Category newCategory) {
         Category c = findById(id);
-        c.setImage(newCategory.getImage());
-        c.setName(newCategory.getName());
-        c.setParent(newCategory.getParent());
-
-        persist(c);
-        return c;
+        newCategory.setId(c.getId());
+        persist(newCategory);
+        return newCategory;
     }
 
     public List<Desire> getDesiresByCategoryFlat(long id){
