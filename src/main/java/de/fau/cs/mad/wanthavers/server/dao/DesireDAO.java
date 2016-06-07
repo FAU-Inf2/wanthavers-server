@@ -2,8 +2,10 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
@@ -83,78 +85,30 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
     }
 
     public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius) {
-        String queryString = "SELECT d from Desire d";
-        boolean whereAdded = false;
+        Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class);
+        if (price_min != null)
+            criteria.add(Restrictions.ge("price", price_min));
 
-        if (price_min != null) {
-            queryString += " WHERE";
-            whereAdded = true;
-            queryString += " price >= :price_min";
-        }
+        if (price_max != null && price_max > price_min)
+            criteria.add(Restrictions.le("price", price_max));
 
-        if (price_max != null && price_max > price_min) {
-            if (!whereAdded) {
-                queryString += " WHERE";
-                whereAdded = true;
-                queryString += " price <= :price_max";
-            } else {
-                queryString += " AND price <= :price_max";
-            }
-        }
+        if (reward_min != null)
+            criteria.add(Restrictions.ge("reward", reward_min));
 
-        if (reward_min != null) {
-            if (!whereAdded) {
-                queryString += " WHERE";
-                queryString += " reward >= :reward_min";
-                whereAdded = true;
-            } else {
-                queryString += " AND reward >= :reward_min";
-            }
-        }
-
-        double latMin = 0., latMax = 0., lonMin = 0., lonMax = 0.;
-
-        if (radius != null && lat != null && lon != null /*radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)*/) {
+        if (radius != null && lon != null && lat != null) {
             double latDiff = getLatDiff(radius);
             double lonDiff = getLonDiff(lon, radius);
-            latMin = lat - latDiff;
-            latMax = lat + latDiff;
-            lonMin = lon - lonDiff;
-            lonMax = lon + lonDiff;
-
-            if (!whereAdded) {
-                queryString += " WHERE";
-                queryString += " dropzone_lat BETWEEN :lat_min AND :lat_max AND dropzone_long BETWEEN :lon_min AND lon_max";
-                whereAdded = true;
-            } else {
-                queryString += " AND dropzone_lat BETWEEN :lat_min AND :lat_max AND dropzone_long BETWEEN :lon_min AND lon_max";
-            }
+            double latMin = lat - latDiff;
+            double latMax = lat + latDiff;
+            double lonMin = lon - lonDiff;
+            double lonMax = lon + lonDiff;
+            criteria.add(Restrictions.between("dropzone_lat", latMin, latMax));
+            criteria.add(Restrictions.between("dropzone_long", lonMin, lonMax));
         }
 
-        Query query = currentSession().createQuery(queryString);
+        criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 
-        if (price_min != null) {
-            query.setParameter("price_min", price_min);
-        }
-
-        if (price_max != null && price_max > price_min) {
-            query.setParameter("price_max", price_max);
-        }
-
-        if (reward_min != null) {
-            query.setParameter("reward_min", reward_min);
-        }
-
-        if (radius != null && lat != null && lon != null /*radius > 0 && (lat >= -90. && lat <= 90.) && (lon >= -180. && lon <= 180.)*/) {
-            query.setParameter("lat_min", latMin);
-            query.setParameter("lat_max", latMax);
-            query.setParameter("lon_min", lonMin);
-            query.setParameter("lon_max", lonMax);
-        }
-
-        List<Desire> ret = query.list();
-
-        return ret;
+        return criteria.list();
     }
 
     public List<Desire> findAllByLocation(double lat, double lon, double radius) {
