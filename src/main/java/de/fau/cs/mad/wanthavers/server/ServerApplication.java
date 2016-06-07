@@ -123,7 +123,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final RatingResourceImpl ratingResource = new RatingResourceImpl(ratingFacade);
         environment.jersey().register(ratingResource);
 
-        final HaverResourceImpl haverResource = new HaverResourceImpl(haverFacade);
+        final HaverResourceImpl haverResource = new HaverResourceImpl(haverFacade, desireFacade);
         environment.jersey().register(haverResource);
 
         final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade, userFacade, desireFacade);
