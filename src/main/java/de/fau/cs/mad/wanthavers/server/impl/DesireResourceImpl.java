@@ -35,12 +35,6 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public List<Desire> getByLocation(double lat, double lon, double radius) {
-        return this.desireFacade.getAllDesiresByLocation(lat, lon, radius);
-    }
-
-    @Override
-    @UnitOfWork
     public List<Desire> getByFilters(Long category, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius) {
         List<Desire> desiresByFilter = desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, lat, lon, radius);
         List<Desire> desires;
