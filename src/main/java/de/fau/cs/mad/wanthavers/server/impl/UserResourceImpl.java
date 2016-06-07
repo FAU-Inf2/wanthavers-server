@@ -73,21 +73,20 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     @UnitOfWork
-    public User updateUser(@ApiParam(value = "id of the user", required = true) long id, @ApiParam(value = "new details of the specified user", required = true) User user) {
-        User old = this.facade.getUserByID(id);
-        if(!old.getEmail().equals(user.getEmail().toLowerCase())){
-            User tmp = facade.getUserByEmail(user.getEmail().toLowerCase());
-            if ( tmp != null && tmp.getID() != old.getID()) {
+    public User updateUser(@Auth User user, @ApiParam(value = "new details of the specified user", required = true) User newUser) {
+        if(!user.getEmail().equals(newUser.getEmail().toLowerCase())){
+            User tmp = facade.getUserByEmail(newUser.getEmail().toLowerCase());
+            if ( tmp != null && tmp.getID() != user.getID()) {
                 throw new WebApplicationException(409);
             }
         }
-        return facade.updateUser(id, user);
+        return facade.updateUser(user.getID(), newUser);
     }
 
     @Override
     @UnitOfWork
-    public void deleteUser(@ApiParam(value = "id of the to be deleted user", required = true) long id) {
-        facade.deleteUser(id);
+    public void deleteUser(@Auth User user) {
+        facade.deleteUser(user.getID());
     }
 
     @Override
