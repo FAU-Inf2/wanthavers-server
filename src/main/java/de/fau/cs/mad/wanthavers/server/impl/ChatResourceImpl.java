@@ -35,13 +35,6 @@ public class ChatResourceImpl implements ChatResource {
             throw new WebApplicationException(404);
         }
 
-        for(int i = 0; i < tmp.size(); i++) {
-            Chat c = tmp.get(i);
-            c.setDesire(desireFacade.getDesireByID(c.getDesireId()));
-            c.setUserObject1(userFacade.getUserByID(c.getUser1()));
-            c.setUserObject2(userFacade.getUserByID(c.getUser2()));
-        }
-
         return tmp;
     }
 
@@ -63,10 +56,6 @@ public class ChatResourceImpl implements ChatResource {
         if(tmp == null){
             throw new WebApplicationException(400);
         }
-
-        tmp.setDesire(desireFacade.getDesireByID(tmp.getDesireId()));
-        tmp.setUserObject1(userFacade.getUserByID(tmp.getUser1()));
-        tmp.setUserObject2(userFacade.getUserByID(tmp.getUser2()));
 
         return tmp;
     }

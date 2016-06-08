@@ -68,31 +68,48 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
         final RatingFacade ratingFacade = new RatingFacade(ratingDAO);
+        SingletonManager.add(ratingDAO);
+        SingletonManager.add(ratingFacade);
 
         final CloudMessageTokenDAO tokenDAO = new CloudMessageTokenDAO(hibernate.getSessionFactory());
         final CloudMessageTokenFacade tokenFacade = new CloudMessageTokenFacade(tokenDAO);
+        SingletonManager.add(tokenDAO);
+        SingletonManager.add(tokenFacade);
 
         final UserDAO userDAO = new UserDAO(hibernate.getSessionFactory());
         final UserFacade userFacade = new UserFacade(userDAO);
+        SingletonManager.add(userDAO);
+        SingletonManager.add(userFacade);
 
         final DesireDAO desireDAO = new DesireDAO(hibernate.getSessionFactory());
         final DesireFacade desireFacade = new DesireFacade(desireDAO);
+        SingletonManager.add(desireDAO);
+        SingletonManager.add(desireFacade);
 
         final HaverDAO haverDAO = new HaverDAO(hibernate.getSessionFactory());
         final HaverFacade haverFacade = new HaverFacade(haverDAO);
+        SingletonManager.add(haverDAO);
+        SingletonManager.add(haverFacade);
 
         final ChatDAO chatDAO = new ChatDAO();
         final ChatFacade chatFacade = new ChatFacade(chatDAO, tokenDAO);
+        SingletonManager.add(chatDAO);
+        SingletonManager.add(chatFacade);
 
         final MediaDAO mediaDAO = new MediaDAO(hibernate.getSessionFactory());
         final MediaFacade mediaFacade = new MediaFacade(mediaDAO);
+        SingletonManager.add(mediaDAO);
+        SingletonManager.add(mediaFacade);
 
         final CategoryDAO categoryDAO = new CategoryDAO(hibernate.getSessionFactory());
         final CategoryFacade categoryFacade = new CategoryFacade(categoryDAO);
+        SingletonManager.add(categoryDAO);
+        SingletonManager.add(categoryFacade);
 
         final LocationDAO locationDAO = new LocationDAO(hibernate.getSessionFactory());
         final LocationFacade locationFacade = new LocationFacade(locationDAO);
-
+        SingletonManager.add(locationDAO);
+        SingletonManager.add(locationFacade);
 
         /** create resources and register **/
 

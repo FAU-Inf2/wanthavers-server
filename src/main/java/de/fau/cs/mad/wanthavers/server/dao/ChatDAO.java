@@ -18,6 +18,8 @@ import java.util.List;
 
 public class ChatDAO{
 
+
+
     public ChatDAO() {
         ParseRegistry.registerSubclass(ParseChat.class);
         ParseRegistry.registerSubclass(ParseMessage.class);
