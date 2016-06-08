@@ -63,6 +63,11 @@ public class ChatResourceImpl implements ChatResource {
         if(tmp == null){
             throw new WebApplicationException(400);
         }
+
+        tmp.setDesire(desireFacade.getDesireByID(tmp.getDesireId()));
+        tmp.setUserObject1(userFacade.getUserByID(tmp.getUser1()));
+        tmp.setUserObject2(userFacade.getUserByID(tmp.getUser2()));
+
         return tmp;
     }
 
