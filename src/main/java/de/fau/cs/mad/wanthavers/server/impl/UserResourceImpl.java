@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     @UnitOfWork
-    public User updateUser(@Auth User user, @ApiParam(value = "new details of the specified user", required = true) User newUser) {
+    public User updateUser(@Auth User user, long userId, @ApiParam(value = "new details of the specified user", required = true) User newUser) {
         if(!user.getEmail().equals(newUser.getEmail().toLowerCase())){
             User tmp = facade.getUserByEmail(newUser.getEmail().toLowerCase());
             if ( tmp != null && tmp.getID() != user.getID()) {
