@@ -120,6 +120,7 @@ public class DesireResourceImpl implements DesireResource {
     }
 
     @Override
+    @UnitOfWork
     public Chat getChat(@Auth User user, long user2, long desireId) {
         return this.chatFacade.getChat(user.getID(), user2, desireId);
     }
