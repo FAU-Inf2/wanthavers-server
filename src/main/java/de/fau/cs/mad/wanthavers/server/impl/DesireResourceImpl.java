@@ -1,10 +1,12 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
+import de.fau.cs.mad.wanthavers.common.Chat;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.DesireResource;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
+import de.fau.cs.mad.wanthavers.server.facade.ChatFacade;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import io.dropwizard.auth.Auth;
@@ -20,11 +22,13 @@ public class DesireResourceImpl implements DesireResource {
     private final DesireFacade desireFacade;
     private final CategoryFacade categoryFacade;
     private final RatingFacade ratingFacade;
+    private final ChatFacade chatFacade;
 
-    public DesireResourceImpl(DesireFacade desireFacade, CategoryFacade categoryFacade, RatingFacade ratingFacade) {
+    public DesireResourceImpl(DesireFacade desireFacade, CategoryFacade categoryFacade, RatingFacade ratingFacade, ChatFacade chatFacade) {
         this.desireFacade = desireFacade;
         this.categoryFacade = categoryFacade;
         this.ratingFacade = ratingFacade;
+        this.chatFacade = chatFacade;
     }
 
     @Override
@@ -113,6 +117,11 @@ public class DesireResourceImpl implements DesireResource {
         }
 
         return ret;
+    }
+
+    @Override
+    public Chat getChat(@Auth User user, long user2, long desireId) {
+        return this.chatFacade.getChat(user.getID(), user2, desireId);
     }
 
 

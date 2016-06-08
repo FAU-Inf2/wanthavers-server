@@ -45,7 +45,6 @@ public class ChatResourceImpl implements ChatResource {
         return tmp;
     }
 
-
     @UnitOfWork
     @Override
     public List<Message> getMessages(String id, @Auth User user) {

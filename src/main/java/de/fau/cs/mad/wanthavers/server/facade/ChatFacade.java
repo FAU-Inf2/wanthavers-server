@@ -5,6 +5,7 @@ import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
 import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessageSender;
 import de.fau.cs.mad.wanthavers.server.dao.ChatDAO;
 import de.fau.cs.mad.wanthavers.server.dao.CloudMessageTokenDAO;
+import io.dropwizard.auth.Auth;
 
 import java.util.List;
 
@@ -42,5 +43,9 @@ public class ChatFacade {
         CloudMessageSender.sendMessage(message);
         */
         return ret;
+    }
+
+    public Chat getChat(long user1, long user2, long desireId) {
+        return this.dao.getOrCreateChat(user1, user2, desireId);
     }
 }

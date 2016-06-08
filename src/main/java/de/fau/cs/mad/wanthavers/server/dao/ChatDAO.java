@@ -7,7 +7,6 @@ import de.fau.cs.mad.wanthavers.server.parse.mapper.ChatMapper;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.MessageMapper;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseChat;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseMessage;
-import io.dropwizard.auth.Auth;
 import org.parse4j.Parse;
 import org.parse4j.ParseException;
 import org.parse4j.ParseObject;
@@ -82,6 +81,36 @@ public class ChatDAO{
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    public Chat getOrCreateChat(long user1, long user2, long desireId) {
+        ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
+        query.whereEqualTo(ParseChat.user1, user1);
+        query.whereEqualTo(ParseChat.user2, user2);
+        query.whereEqualTo(ParseChat.desireId, desireId);
+
+        List<ParseChat> ret = null;
+        try {
+            ret = query.find();
+        } catch (ParseException e){}
+        if(ret != null && ret.size() > 1){
+            return ChatMapper.get(ret).get(0);
+        }
+
+        query = ParseQuery.getQuery(ParseChat.class);
+        query.whereEqualTo(ParseChat.user1, user2);
+        query.whereEqualTo(ParseChat.user2, user1);
+        query.whereEqualTo(ParseChat.desireId, desireId);
+
+        ret = null;
+        try {
+            ret = query.find();
+        } catch (ParseException e){}
+        if(ret != null && ret.size() > 1){
+            return ChatMapper.get(ret).get(0);
+        }
+
+        return createChat(user1, user2, desireId);
     }
 /*
     public Chat getChatByChatId(String chatId, User user) {
