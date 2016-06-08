@@ -64,7 +64,9 @@ public class RatingDAO extends AbstractDAO<Rating>{
         Rating stored = findById(userId, id);
         if(stored == null || checkForCorrectUserId(userId, stored) == null) return null;
         newRating.setId(stored.getId());
-        persist(newRating);
+        currentSession().merge(newRating);
+
+        //persist(newRating);
         return newRating;
     }
 

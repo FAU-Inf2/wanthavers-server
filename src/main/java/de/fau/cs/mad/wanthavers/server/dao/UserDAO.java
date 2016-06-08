@@ -54,7 +54,10 @@ public class UserDAO extends AbstractDAO<User> {
     public User update(long id, User modified) {
         User stored = findById(id);
         modified.setId(stored.getID());
-        persist(modified);
+        modified.setPassword(stored.getPassword());
+        currentSession().merge(modified);
+
+        //persist(modified);
         return modified;
     }
 

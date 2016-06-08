@@ -15,6 +15,7 @@ import io.swagger.annotations.ApiParam;
 
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
 import java.util.List;
 
