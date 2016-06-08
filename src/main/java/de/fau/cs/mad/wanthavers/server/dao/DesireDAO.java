@@ -37,7 +37,9 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         Desire stored = findById(id);
         modified.setId(stored.getID());
         //TODO: super.update(stored);
-        persist(modified);
+        currentSession().merge(modified);
+
+        //persist(modified);
         return modified;
     }
 
