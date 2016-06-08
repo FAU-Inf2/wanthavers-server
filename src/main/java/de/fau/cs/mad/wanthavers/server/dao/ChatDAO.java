@@ -93,7 +93,7 @@ public class ChatDAO{
         try {
             ret = query.find();
         } catch (ParseException e){}
-        if(ret != null && ret.size() > 1){
+        if(ret != null && ret.size() > 0){
             return ChatMapper.get(ret).get(0);
         }
 
@@ -106,7 +106,7 @@ public class ChatDAO{
         try {
             ret = query.find();
         } catch (ParseException e){}
-        if(ret != null && ret.size() > 1){
+        if(ret != null && ret.size() > 0){
             return ChatMapper.get(ret).get(0);
         }
 
