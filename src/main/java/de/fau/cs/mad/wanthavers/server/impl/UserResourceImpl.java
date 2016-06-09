@@ -3,6 +3,7 @@ package de.fau.cs.mad.wanthavers.server.impl;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.common.UserStatus;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
@@ -66,6 +67,7 @@ public class UserResourceImpl implements UserResource {
         try {
             newUser.setPassword(HashHelper.getSaltedHash(password));
             newUser.setEmail(newUser.getEmail().toLowerCase());
+            newUser.setStatus(UserStatus.ACTIVE);
             return facade.createNewUser(newUser, password);
         } catch (Exception e) {
             throw new WebApplicationException(400);
@@ -87,7 +89,8 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public void deleteUser(@Auth User user) {
-        facade.deleteUser(user.getID());
+        user.setStatus(UserStatus.INACTIVE);
+        facade.updateUser(user.getID(), user);
     }
 
     @Override
