@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.Date;
 import java.util.List;
 
 public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTimestampDAO<Desire> {
@@ -103,7 +104,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         }
 
         if (lastCreationTime != null) {
-            criteria.add(Restrictions.ge("creation_time", lastCreationTime));
+            criteria.add(Restrictions.ge("creation_time", new Date(lastCreationTime)));
         }
 
         if (limit != null && limit > 0) {
