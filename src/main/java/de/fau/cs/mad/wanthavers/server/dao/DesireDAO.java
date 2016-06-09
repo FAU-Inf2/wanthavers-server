@@ -7,7 +7,6 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Restrictions;
 
-import javax.swing.*;
 import java.util.List;
 
 public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTimestampDAO<Desire> {
@@ -73,16 +72,20 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         return result;
     }
 
-    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status) {
+    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastCreationTime, Integer limit) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class);
-        if (price_min != null)
+
+        if (price_min != null) {
             criteria.add(Restrictions.ge("price", price_min));
+        }
 
-        if (price_max != null && price_max > price_min)
+        if (price_max != null && price_max > price_min) {
             criteria.add(Restrictions.le("price", price_max));
+        }
 
-        if (reward_min != null)
+        if (reward_min != null) {
             criteria.add(Restrictions.ge("reward", reward_min));
+        }
 
         if (radius != null && lon != null && lat != null) {
             double latDiff = getLatDiff(radius);
@@ -95,8 +98,16 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
             criteria.add(Restrictions.between("dropzone_long", lonMin, lonMax));
         }
 
-        if(status != null && !status.isEmpty()){
+        if (status != null && !status.isEmpty()) {
             criteria.add(Restrictions.in("status", status));
+        }
+
+        if (lastCreationTime != null) {
+            criteria.add(Restrictions.ge("creation_time", lastCreationTime));
+        }
+
+        if (limit != null && limit > 0) {
+            criteria.setMaxResults(limit);
         }
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
