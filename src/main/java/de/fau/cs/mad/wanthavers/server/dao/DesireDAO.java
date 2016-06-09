@@ -95,7 +95,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
             criteria.add(Restrictions.between("dropzone_long", lonMin, lonMax));
         }
 
-        if(status != null){
+        if(status != null && !status.isEmpty()){
             criteria.add(Restrictions.in("status", status));
         }
 
