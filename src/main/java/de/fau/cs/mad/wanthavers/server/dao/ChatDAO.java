@@ -3,8 +3,6 @@ package de.fau.cs.mad.wanthavers.server.dao;
 import de.fau.cs.mad.wanthavers.common.Chat;
 import de.fau.cs.mad.wanthavers.common.Message;
 import de.fau.cs.mad.wanthavers.common.User;
-import de.fau.cs.mad.wanthavers.server.SingletonManager;
-import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.ChatMapper;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.MessageMapper;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseChat;
@@ -52,11 +50,10 @@ public class ChatDAO{
         c.setDesireId(desireId);
         c.setUser1(u1);
         c.setUser2(u2);
-        c.setChatId(c.getObjectId());
 
         try {
             c.save();
-            Chat chat = getChatByChatId(c.getChatId());
+            Chat chat = getChatByChatId(c.getObjectId());
             System.out.println("Chat: User1 "+chat.getUser1()+", User2 "+chat.getUser2());
             return ChatMapper.get(c);
         } catch (ParseException e) {
@@ -121,7 +118,7 @@ public class ChatDAO{
 
     public Chat getChatByChatId(String chatId) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
-        query.whereEqualTo(ParseChat.chatId, chatId);
+        query.whereEqualTo("objectId", chatId);
 
         List<Chat> list = new ArrayList<>();
         try {
