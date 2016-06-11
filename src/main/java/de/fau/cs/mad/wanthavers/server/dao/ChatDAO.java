@@ -3,6 +3,8 @@ package de.fau.cs.mad.wanthavers.server.dao;
 import de.fau.cs.mad.wanthavers.common.Chat;
 import de.fau.cs.mad.wanthavers.common.Message;
 import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
+import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.ChatMapper;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.MessageMapper;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseChat;
@@ -50,10 +52,12 @@ public class ChatDAO{
         c.setDesireId(desireId);
         c.setUser1(u1);
         c.setUser2(u2);
-        c.setChatId(c.getChatId());
+        c.setChatId(c.getObjectId());
 
         try {
             c.save();
+            Chat chat = getChatByChatId(c.getChatId());
+            System.out.println("Chat: User1 "+chat.getUser1()+", User2 "+chat.getUser2());
             return ChatMapper.get(c);
         } catch (ParseException e) {
             return null;
@@ -79,8 +83,6 @@ public class ChatDAO{
 
         try {
             m.save();
-            Chat chat = getChatByChatId(chatId, user);
-            System.out.println("Chat: User1 "+chat.getUser1()+", User2 "+chat.getUser2());
             return MessageMapper.get(m);
         } catch (ParseException e) {
             return null;
@@ -117,7 +119,7 @@ public class ChatDAO{
         return createChat(user1, user2, desireId);
     }
 
-    public Chat getChatByChatId(String chatId, User user) {
+    public Chat getChatByChatId(String chatId) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
         query.whereEqualTo(ParseChat.chatId, chatId);
 
