@@ -66,7 +66,7 @@ public class DesireResourceImpl implements DesireResource {
                     avgUserRating.put(userId, ratingFacade.avgRating(userId).getStars());
                 }
 
-                if (avgUserRating.get(userId) > rating_min) {
+                if (avgUserRating.get(userId) >= rating_min) {
                     ret.add(d);
                 }
             }
