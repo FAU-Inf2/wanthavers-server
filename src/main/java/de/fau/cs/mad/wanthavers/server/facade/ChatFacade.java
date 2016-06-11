@@ -1,6 +1,7 @@
 package de.fau.cs.mad.wanthavers.server.facade;
 
 import de.fau.cs.mad.wanthavers.common.*;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
 import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessageSender;
 import de.fau.cs.mad.wanthavers.server.dao.ChatDAO;
@@ -11,11 +12,9 @@ import java.util.List;
 
 public class ChatFacade {
     private final ChatDAO dao;
-    private final CloudMessageTokenDAO tokenDAO;
 
-    public ChatFacade(ChatDAO dao, CloudMessageTokenDAO tokenDAO){
+    public ChatFacade(ChatDAO dao){
         this.dao = dao;
-        this.tokenDAO = tokenDAO;
     }
 
     public List<Chat> getChatsByUser(User u){
@@ -32,15 +31,21 @@ public class ChatFacade {
 
     public Message createMessage(String chatId, User user, String body){
         Message ret = this.dao.createMessage(chatId, user, body);
+
         /*
+        CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
+
         Chat chat = this.dao.getChatByChatId(chatId, user);
 
         User reciever = user;//chat.getUser1() != user.getID() ? chat.getUserObject1() : chat.getUserObject2();
 
         List<CloudMessageToken> tokens = tokenDAO.findAll(reciever.getID());
 
-        CloudMessage message = new CloudMessage("to", CloudMessageSubject.NEWMESSAGE, ret.getFrom()+": "+ret.getBody());
-        CloudMessageSender.sendMessage(message);
+        for(CloudMessageToken token : tokens) {
+            CloudMessage message = new CloudMessage(token.getToken(), CloudMessageSubject.NEWMESSAGE, ret.getFrom()+": "+ret.getBody());
+            CloudMessageSender.sendMessage(message);
+        }
+
         */
         return ret;
     }

@@ -92,7 +92,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         SingletonManager.add(haverFacade);
 
         final ChatDAO chatDAO = new ChatDAO();
-        final ChatFacade chatFacade = new ChatFacade(chatDAO, tokenDAO);
+        final ChatFacade chatFacade = new ChatFacade(chatDAO);
         SingletonManager.add(chatDAO);
         SingletonManager.add(chatFacade);
 

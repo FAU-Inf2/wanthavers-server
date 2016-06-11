@@ -12,7 +12,7 @@ public class CloudMessage {
     /**
      *
      * @param to: API token, which identifies reciever
-     * @param subject: data field used for storing a String to identify furhter procedure of the app for this notification
+     * @param subject: data field used for storing a String to identify further procedure of the app for this notification
      * @param title: title to display in notification center
      * @param message: message to display in notification center
      */

@@ -50,7 +50,7 @@ public class ChatDAO{
         c.setDesireId(desireId);
         c.setUser1(u1);
         c.setUser2(u2);
-        //c.setChatId(Long.valueOf(c.getChatId()));
+        c.setChatId(c.getChatId());
 
         try {
             c.save();
@@ -79,6 +79,8 @@ public class ChatDAO{
 
         try {
             m.save();
+            Chat chat = getChatByChatId(chatId, user);
+            System.out.println("Chat: User1 "+chat.getUser1()+", User2 "+chat.getUser2());
             return MessageMapper.get(m);
         } catch (ParseException e) {
             return null;
@@ -114,7 +116,7 @@ public class ChatDAO{
 
         return createChat(user1, user2, desireId);
     }
-/*
+
     public Chat getChatByChatId(String chatId, User user) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
         query.whereEqualTo(ParseChat.chatId, chatId);
@@ -128,5 +130,4 @@ public class ChatDAO{
         }
     }
 
-*/
 }
