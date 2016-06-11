@@ -53,8 +53,6 @@ public class ChatDAO{
 
         try {
             c.save();
-            Chat chat = getChatByChatId(c.getObjectId());
-            System.out.println("Chat: User1 "+chat.getUser1()+", User2 "+chat.getUser2());
             return ChatMapper.get(c);
         } catch (ParseException e) {
             return null;
