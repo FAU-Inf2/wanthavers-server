@@ -1,6 +1,7 @@
 package de.fau.cs.mad.wanthavers.server.facade;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.Location;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.dao.UserDAO;
 
@@ -43,6 +44,10 @@ public class UserFacade {
 
     public boolean resetPassword(String token, String newPassword){
         return this.dao.resetPassword(token, newPassword);
+    }
+
+    public List<Location> getSavedLocations(long userid){
+        return this.dao.getSavedLocations(userid);
     }
 
 }

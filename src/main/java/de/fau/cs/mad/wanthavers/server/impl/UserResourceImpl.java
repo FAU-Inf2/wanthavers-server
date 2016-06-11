@@ -1,9 +1,6 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
-import de.fau.cs.mad.wanthavers.common.Desire;
-import de.fau.cs.mad.wanthavers.common.Rating;
-import de.fau.cs.mad.wanthavers.common.User;
-import de.fau.cs.mad.wanthavers.common.UserStatus;
+import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
@@ -103,6 +100,12 @@ public class UserResourceImpl implements UserResource {
     @UnitOfWork
     public List<Desire> getDesiresAsHaver(@ApiParam(value = "id of the user", required = true) long id,  List<Integer> status) {
         return facade.getDesiresAsHaver(id, status);
+    }
+
+    @Override
+    @UnitOfWork
+    public List<Location> getSavedLocations(@Auth User user) {
+        return this.facade.getSavedLocations(user.getID());
     }
 
     @Override

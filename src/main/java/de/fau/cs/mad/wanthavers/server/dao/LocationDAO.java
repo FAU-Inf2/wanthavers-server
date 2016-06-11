@@ -1,25 +1,28 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
 
-import de.fau.cs.mad.wanthavers.common.Category;
 import de.fau.cs.mad.wanthavers.common.Location;
 import io.dropwizard.hibernate.AbstractDAO;
-import org.glassfish.jersey.client.ClientResponse;
 import org.hibernate.SessionFactory;
 import org.json.JSONObject;
+
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public class LocationDAO extends AbstractDAO<Category>{
+public class LocationDAO extends AbstractDAO<Location>{
 
     private final SessionFactory sessionFactory;
 
     public LocationDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
         this.sessionFactory = sessionFactory;
+    }
+
+    public Location findById(long id) {
+        return super.get(id);
     }
 
     public Location getReverseGeo(double lat, double lon){
@@ -35,6 +38,17 @@ public class LocationDAO extends AbstractDAO<Category>{
         String tmp = address.getString("road")+" "+address.getString("house_number")+", "+address.getString("postcode")+" "+address.getString("city")+", "+address.getString("country");
         l.setFullAddress(tmp);
         return l;
+    }
+
+    public Location createLocation(Location l){
+        return persist(l);
+    }
+
+    public Location updateLocation(long id, Location modified){
+        Location stored = findById(id);
+        modified.setId(stored.getId());
+        currentSession().merge(modified);
+        return modified;
     }
 
 

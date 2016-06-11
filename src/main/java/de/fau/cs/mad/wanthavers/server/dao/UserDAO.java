@@ -1,9 +1,6 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
-import de.fau.cs.mad.wanthavers.common.Desire;
-import de.fau.cs.mad.wanthavers.common.Haver;
-import de.fau.cs.mad.wanthavers.common.Rating;
-import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
@@ -109,6 +106,15 @@ public class UserDAO extends AbstractDAO<User> {
         List<Desire> desires = query2.list();
 
         return desires;
+    }
+
+    public List<Location> getSavedLocations(long id) {
+        final Session session = currentSession();
+
+        Criteria criteria = session.createCriteria(Location.class)
+                .add(Restrictions.eq(USER_ID, id));
+
+        return criteria.list();
     }
 
     public User getUserByEmail(String email) {
