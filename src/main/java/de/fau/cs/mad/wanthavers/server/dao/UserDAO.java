@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
+import de.fau.cs.mad.wanthavers.server.misc.Mailer;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -128,11 +129,16 @@ public class UserDAO extends AbstractDAO<User> {
         return user;
     }
 
-    public void sendResetToken(String email){
+    public boolean sendResetToken(String email){
         User user = getUserByEmail(email);
+        if(user == null){
+            return false;
+        }
         String token = user.createPasswordToken();
         persist(user);
-        System.out.println(token);
+        //System.out.println(token);
+        Mailer.send("Password Reset", token, email);
+        return true;
     }
 
     public boolean resetPassword(String token, String newPassword){

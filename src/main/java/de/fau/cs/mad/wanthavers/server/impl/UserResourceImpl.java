@@ -119,7 +119,9 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public void sendToken(String email) {
-        this.facade.sendResetToken(email);
+        if(!this.facade.sendResetToken(email)){
+            throw new WebApplicationException(400);
+        }
     }
 
     /**

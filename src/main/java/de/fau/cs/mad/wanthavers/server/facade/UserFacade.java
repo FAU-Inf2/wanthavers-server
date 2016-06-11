@@ -40,7 +40,7 @@ public class UserFacade {
 
     public User getUserByEmail(String email) { return this.dao.getUserByEmail(email); }
 
-    public void sendResetToken(String email){ this.dao.sendResetToken(email);}
+    public boolean sendResetToken(String email){ return this.dao.sendResetToken(email);}
 
     public boolean resetPassword(String token, String newPassword){
         return this.dao.resetPassword(token, newPassword);

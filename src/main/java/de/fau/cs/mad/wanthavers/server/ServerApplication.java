@@ -1,6 +1,7 @@
 package de.fau.cs.mad.wanthavers.server;
 
 
+import com.amazonaws.regions.Regions;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
@@ -9,6 +10,7 @@ import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
 import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
+import de.fau.cs.mad.wanthavers.server.misc.Mailer;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -64,6 +66,10 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
+        /** configure mail **/
+        Mailer.configure("wanthavers@i2.cs.fau.de", Regions.US_WEST_2);
+        Mailer.enableFake("wanthavers@i2.cs.fau.de");
+
         /** create DAOs and facades **/
 
         final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
