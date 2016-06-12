@@ -11,11 +11,9 @@ import java.util.Set;
 public class UserAuthorizer implements Authorizer<User> {
     @Override
     public boolean authorize(User principal, String role) {
-        Set<String> roles = principal.getRoles();
-
-        if(roles == null)
+        if(principal.getRole() == null)
             return false;
 
-        return roles.contains(role);
+        return principal.getRole().equals(role);
     }
 }
