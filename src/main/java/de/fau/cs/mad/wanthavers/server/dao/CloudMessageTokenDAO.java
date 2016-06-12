@@ -52,7 +52,7 @@ public class CloudMessageTokenDAO extends AbstractDAO<CloudMessageToken> {
         List<CloudMessageToken> registered = findTokensByUserId(userId);
         for(CloudMessageToken token : registered)
             if(token.getToken().equals(newToken.getToken()))
-                return null;
+                return token;
 
         return persist(newToken);
     }
