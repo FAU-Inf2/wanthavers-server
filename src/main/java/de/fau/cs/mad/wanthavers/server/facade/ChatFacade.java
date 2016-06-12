@@ -32,21 +32,20 @@ public class ChatFacade {
     public Message createMessage(String chatId, User user, String body){
         Message ret = this.dao.createMessage(chatId, user, body);
 
-        /*
         CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
 
-        Chat chat = this.dao.getChatByChatId(chatId, user);
+        Chat chat = this.dao.getChatByChatId(chatId);
 
+        // Send message to sender for testing
         User reciever = user;//chat.getUser1() != user.getID() ? chat.getUserObject1() : chat.getUserObject2();
 
         List<CloudMessageToken> tokens = tokenDAO.findAll(reciever.getID());
 
         for(CloudMessageToken token : tokens) {
-            CloudMessage message = new CloudMessage(token.getToken(), CloudMessageSubject.NEWMESSAGE, ret.getFrom()+": "+ret.getBody());
+            CloudMessage message = new CloudMessage(token.getToken(), CloudMessageSubject.NEWMESSAGE, user.getName(), ret.getBody());
             CloudMessageSender.sendMessage(message);
         }
 
-        */
         return ret;
     }
 
