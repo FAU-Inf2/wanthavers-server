@@ -51,7 +51,7 @@ public class UserDAO extends AbstractDAO<User> {
 
     public User update(long id, User modified) {
         User stored = findById(id);
-        modified.setId(stored.getID());
+        modified.setId(stored.getId());
         modified.setPassword(stored.getPassword());
         currentSession().merge(modified);
 
@@ -60,7 +60,7 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public boolean delete(User user) {
-        if (findById(user.getID()) == null) {
+        if (findById(user.getId()) == null) {
             return false;
         }
 

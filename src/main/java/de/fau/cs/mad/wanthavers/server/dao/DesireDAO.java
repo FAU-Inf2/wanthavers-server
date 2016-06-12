@@ -35,7 +35,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
 
     public Desire update(long id, Desire modified) {
         Desire stored = findById(id);
-        modified.setId(stored.getID());
+        modified.setId(stored.getId());
         //TODO: super.update(stored);
         currentSession().merge(modified);
 

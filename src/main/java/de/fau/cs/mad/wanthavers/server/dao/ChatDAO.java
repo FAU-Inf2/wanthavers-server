@@ -28,7 +28,7 @@ public class ChatDAO{
 
     public List<Chat> getChatsByUser(User u) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
-        query.whereEqualTo(ParseChat.user1, u.getID());
+        query.whereEqualTo(ParseChat.user1, u.getId());
 
         List<Chat> list = new ArrayList<>();
         try {
@@ -36,7 +36,7 @@ public class ChatDAO{
         } catch (ParseException e) {}
 
         ParseQuery<ParseChat> query2 = ParseQuery.getQuery(ParseChat.class);
-        query2.whereEqualTo(ParseChat.user2, u.getID());
+        query2.whereEqualTo(ParseChat.user2, u.getId());
 
         try {
             list.addAll(ChatMapper.get(query2.find()));
@@ -73,7 +73,7 @@ public class ChatDAO{
     public Message createMessage(String chatId, User user, String body){
         ParseMessage m = new ParseMessage();
         m.setBody(body);
-        m.setFrom(user.getID());
+        m.setFrom(user.getId());
         m.setChatId(chatId);
 
         try {

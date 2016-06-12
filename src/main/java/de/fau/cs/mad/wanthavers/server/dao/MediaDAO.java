@@ -57,7 +57,7 @@ public class MediaDAO extends AbstractDAO<Media>{
 
     public Media create(User u, String base64, String filename) {
         Media m = new Media();
-        m.setCreator(u.getID());
+        m.setCreator(u.getId());
 
         String accessKey = System.getenv("S3_ACCESS_KEY");
         String secretKey = System.getenv("S3_SECRET_KEY");

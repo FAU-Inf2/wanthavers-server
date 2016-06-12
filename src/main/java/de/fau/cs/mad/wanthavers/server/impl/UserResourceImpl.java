@@ -33,7 +33,7 @@ public class UserResourceImpl implements UserResource {
     public List<User> get() {
         List<User> list = this.facade.getAllUsers();
         for (User u : list) {
-            Rating r = ratingFacade.avgRating(u.getID());
+            Rating r = ratingFacade.avgRating(u.getId());
             u.setRating(r.getStars());
         }
         return list;
@@ -76,18 +76,18 @@ public class UserResourceImpl implements UserResource {
     public User updateUser(@Auth User user, @ApiParam(value = "new details of the specified user", required = true) User newUser) {
         if(!user.getEmail().equals(newUser.getEmail().toLowerCase())){
             User tmp = facade.getUserByEmail(newUser.getEmail().toLowerCase());
-            if ( tmp != null && tmp.getID() != user.getID()) {
+            if ( tmp != null && tmp.getId() != user.getId()) {
                 throw new WebApplicationException(409);
             }
         }
-        return facade.updateUser(user.getID(), newUser);
+        return facade.updateUser(user.getId(), newUser);
     }
 
     @Override
     @UnitOfWork
     public void deleteUser(@Auth User user) {
         user.setStatus(UserStatus.INACTIVE);
-        facade.updateUser(user.getID(), user);
+        facade.updateUser(user.getId(), user);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class UserResourceImpl implements UserResource {
     @Override
     @UnitOfWork
     public List<Location> getSavedLocations(@Auth User user) {
-        return this.facade.getSavedLocations(user.getID());
+        return this.facade.getSavedLocations(user.getId());
     }
 
     @Override

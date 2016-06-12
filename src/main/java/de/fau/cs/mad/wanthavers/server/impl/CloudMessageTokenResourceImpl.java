@@ -23,19 +23,19 @@ public class CloudMessageTokenResourceImpl implements CloudMessageTokenResource 
     @Override
     @UnitOfWork
     public List<CloudMessageToken> getAllTokens(@Auth User user) {
-        return facade.getAllTokens(user.getID());
+        return facade.getAllTokens(user.getId());
     }
 
     @Override
     @UnitOfWork
     public CloudMessageToken createToken(@Auth User user, @ApiParam(value = "Token to create", required = true) CloudMessageToken newToken) {
-        return facade.createNewToken(user.getID(), newToken);
+        return facade.createNewToken(user.getId(), newToken);
     }
 
     @Override
     @UnitOfWork
     public CloudMessageToken get(@Auth User user, @ApiParam(value = "id of the token", required = true) long id) {
-        CloudMessageToken token = facade.getTokenById(user.getID(), id);
+        CloudMessageToken token = facade.getTokenById(user.getId(), id);
 
         if(token == null)
             throw new WebApplicationException(404);
@@ -46,12 +46,12 @@ public class CloudMessageTokenResourceImpl implements CloudMessageTokenResource 
     @Override
     @UnitOfWork
     public CloudMessageToken updateToken(@Auth User user, @ApiParam(value = "id of the token", required = true) long id, @ApiParam(value = "new details of the specified token", required = true) CloudMessageToken token) {
-        return facade.updateToken(user.getID(), id, token);
+        return facade.updateToken(user.getId(), id, token);
     }
 
     @Override
     @UnitOfWork
     public void deleteToken(@Auth User user, @ApiParam(value = "id of the to be deleted token", required = true) long id) {
-        facade.deleteToken(user.getID(), id);
+        facade.deleteToken(user.getId(), id);
     }
 }

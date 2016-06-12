@@ -61,7 +61,7 @@ public class DesireResourceImpl implements DesireResource {
             HashMap<Long, Float> avgUserRating = new HashMap<>();
 
             for (Desire d : desires) {
-                long userId = d.getCreator().getID();
+                long userId = d.getCreator().getId();
                 if (!avgUserRating.containsKey(userId)) {
                     avgUserRating.put(userId, ratingFacade.avgRating(userId).getStars());
                 }
@@ -122,7 +122,7 @@ public class DesireResourceImpl implements DesireResource {
     @Override
     @UnitOfWork
     public Chat getChat(@Auth User user, long user2, long desireId) {
-        return this.chatFacade.getChat(user.getID(), user2, desireId);
+        return this.chatFacade.getChat(user.getId(), user2, desireId);
     }
 
 
@@ -150,7 +150,7 @@ public class DesireResourceImpl implements DesireResource {
         if(d == null){
             throw new WebApplicationException(404);
         }
-        if(u.getID() != d.getCreator().getID()){
+        if(u.getId() != d.getCreator().getId()){
             throw new WebApplicationException(401);
         }
     }

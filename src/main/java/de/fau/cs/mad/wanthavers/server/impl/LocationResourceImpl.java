@@ -34,14 +34,14 @@ public class LocationResourceImpl implements LocationResource {
     @Override
     @UnitOfWork
     public Location createLocation(@Auth User user, @ApiParam(value = "Location to create", required = true) Location location) {
-        location.setUserId(user.getID());
+        location.setUserId(user.getId());
         return this.facade.createLocation(location);
     }
 
     @Override
     @UnitOfWork
     public Location updateLocation(@Auth User user, @ApiParam(value = "id of the location", required = true) long id, @ApiParam(value = "Location to create", required = true) Location location) {
-        location.setUserId(user.getID());
+        location.setUserId(user.getId());
         return this.facade.updateLocation(id, location);
     }
 

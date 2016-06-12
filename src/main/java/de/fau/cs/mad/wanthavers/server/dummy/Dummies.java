@@ -172,31 +172,31 @@ public class Dummies {
 
         setDesireIds(desires, media.length, users.length);
 
-        Haver accepted = new Haver(users[0], new Date(System.currentTimeMillis()), desires[1].getID());
+        Haver accepted = new Haver(users[0], new Date(System.currentTimeMillis()), desires[1].getId());
         accepted.setStatus(HaverStatus.ACCEPTED);
 
         return new Haver[]{
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[3], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[4], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[5], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[6], new Date(System.currentTimeMillis()), desires[0].getID()),
-                new Haver(users[7], new Date(System.currentTimeMillis()), desires[0].getID()),
+                new Haver(users[1], new Date(System.currentTimeMillis()), desires[0].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[0].getId()),
+                new Haver(users[3], new Date(System.currentTimeMillis()), desires[0].getId()),
+                new Haver(users[4], new Date(System.currentTimeMillis()), desires[0].getId()),
+                new Haver(users[5], new Date(System.currentTimeMillis()), desires[0].getId()),
+                new Haver(users[6], new Date(System.currentTimeMillis()), desires[0].getId()),
+                new Haver(users[7], new Date(System.currentTimeMillis()), desires[0].getId()),
                 accepted,
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[1].getID()),
-                new Haver(users[0], new Date(System.currentTimeMillis()), desires[2].getID()),
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[2].getID()),
-                new Haver(users[0], new Date(System.currentTimeMillis()), desires[3].getID()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[3].getID()),
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[4].getID()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[4].getID()),
-                new Haver(users[0], new Date(System.currentTimeMillis()), desires[5].getID()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[5].getID()),
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[6].getID()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[6].getID()),
-                new Haver(users[0], new Date(System.currentTimeMillis()), desires[7].getID()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[7].getID())
+                new Haver(users[1], new Date(System.currentTimeMillis()), desires[1].getId()),
+                new Haver(users[0], new Date(System.currentTimeMillis()), desires[2].getId()),
+                new Haver(users[1], new Date(System.currentTimeMillis()), desires[2].getId()),
+                new Haver(users[0], new Date(System.currentTimeMillis()), desires[3].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[3].getId()),
+                new Haver(users[1], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[0], new Date(System.currentTimeMillis()), desires[5].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[5].getId()),
+                new Haver(users[1], new Date(System.currentTimeMillis()), desires[6].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[6].getId()),
+                new Haver(users[0], new Date(System.currentTimeMillis()), desires[7].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[7].getId())
         };
     }
 
