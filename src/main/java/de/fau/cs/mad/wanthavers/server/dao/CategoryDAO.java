@@ -24,7 +24,7 @@ public class CategoryDAO extends AbstractDAO<Category>{
     }
 
     public List<Category> getSubCategories(long id) {
-        Query query = super.currentSession().createQuery("SELECT c FROM Category c WHERE parentId = "+id);
+        Query query = super.currentSession().createQuery("SELECT c FROM Category c WHERE parent = "+id);
         List<Category> result = super.list(query);
         return result;
     }
@@ -48,11 +48,12 @@ public class CategoryDAO extends AbstractDAO<Category>{
         query.executeUpdate();
     }
 
-    public Category update(long id, Category newCategory) {
-        Category c = findById(id);
-        newCategory.setId(c.getId());
-        persist(newCategory);
-        return newCategory;
+    public Category update(long id, Category modified) {
+        Category stored = findById(id);
+        modified.setId(stored.getId());
+        currentSession().merge(modified);
+
+        return modified;
     }
 
     public List<Desire> getDesiresByCategoryFlat(long id){

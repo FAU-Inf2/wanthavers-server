@@ -127,13 +127,20 @@
             }
 
             $scope.new = function(){
-
-                Media.create($scope.server, window.filename, window.base64).then(function(resp){
-                    Category.create($scope.server,$scope.name, $scope.parentid, resp.data).then(function(resp){
+                console.log($scope.parentid);
+                if(window.base64 != undefined){
+                    Media.create($scope.server, window.filename, window.base64).then(function(resp){
+                        Category.create($scope.server,$scope.name, $scope.parentid, resp.data).then(function(resp){
+                            $scope.clearAll();
+                            $scope.start();
+                        });
+                    });
+                }else{
+                    Category.create($scope.server,$scope.name, $scope.parentid, null).then(function(resp){
                         $scope.clearAll();
                         $scope.start();
-                    })
-                });
+                    });
+                }
             }
 
             $scope.update = function(){
@@ -171,7 +178,8 @@
                 $scope.media = item.image;
                 $scope.parentid = item.parent;
                 $scope.name = item.name;
-                document.getElementById("preview").src = item.image.lowRes;
+                if(item.image != undefined)
+                    document.getElementById("preview").src = item.image.lowRes;
             }
 
             $scope.clearAll = function(){
