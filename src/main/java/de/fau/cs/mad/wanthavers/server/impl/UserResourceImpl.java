@@ -48,8 +48,8 @@ public class UserResourceImpl implements UserResource {
             throw new WebApplicationException(404);
         }
 
-        //Rating r = ratingFacade.avgRating(id);
-        //ret.setRating(r.getStars());
+        Rating r = ratingFacade.avgRating(id);
+        ret.setRating(r.getStars());
 
         return ret;
     }

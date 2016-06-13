@@ -63,9 +63,7 @@ public class DesireResourceImpl implements DesireResource {
             desires = new ArrayList<>(desiresByFilterSet);
         }
 
-        return desires;
-
-/*        List<Desire> ret = new ArrayList<>();
+        List<Desire> ret = new ArrayList<>();
 
         if (rating_min != null && rating_min >= 0) {
             HashMap<Long, Float> avgUserRating = new HashMap<>();
@@ -84,7 +82,7 @@ public class DesireResourceImpl implements DesireResource {
             ret = desires;
         }
 
-        return ret;*/
+        return ret;
     }
 
     @Override
