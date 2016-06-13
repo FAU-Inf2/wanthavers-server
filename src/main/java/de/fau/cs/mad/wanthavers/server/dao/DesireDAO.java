@@ -10,33 +10,16 @@ import org.hibernate.criterion.Restrictions;
 import java.util.Date;
 import java.util.List;
 
-public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTimestampDAO<Desire> {
+public class DesireDAO extends AbstractSuperDAO<Desire> {
 
-    private final SessionFactory sessionFactory; //TODO: remove
-
-    /**
-     * Creates a new DAO with a given session provider.
-     *
-     * @param sessionFactory a session provider
-     */
     public DesireDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory; //TODO: remove
-
     }
 
-    public Desire findById(long id) {
-        return super.get(id);
-    }
-
-    public Desire create(Desire desire) {
-        return persist(desire);
-    }
 
     public Desire update(long id, Desire modified) {
-        Desire stored = findById(id);
+        Desire stored = super.findById(id);
         modified.setId(stored.getId());
-        //TODO: super.update(stored);
         currentSession().merge(modified);
 
         //persist(modified);
@@ -44,7 +27,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
     }
 
     public Desire updateDesireStatus(long desireId, int status) {
-        Desire stored = findById(desireId);
+        Desire stored = super.findById(desireId);
 
         if (stored == null) {
             return null;
@@ -55,19 +38,7 @@ public class DesireDAO extends AbstractDAO<Desire> { //TODO: extends AbstractTim
         return persist(stored);
     }
 
-    public boolean delete(Desire Desire) {
-        if (Desire == null) {
-            return false;
-        }
-
-        currentSession().delete(Desire);
-
-        return true;
-    }
-
-    //TODO: change DesireResource to expect a Desire object for simple get call
     public List<Desire> findAll() {
-        //TODO: if param Desire object == null -> call super.findAllNew(0), so that it returns every Desire
         Query query = super.currentSession().createQuery("SELECT d FROM Desire d");
         List<Desire> result = super.list(query);
         return result;

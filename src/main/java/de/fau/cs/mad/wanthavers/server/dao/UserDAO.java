@@ -17,20 +17,14 @@ import java.util.List;
 
 import static de.fau.cs.mad.wanthavers.common.User.USER_ID;
 
-public class UserDAO extends AbstractDAO<User> {
+public class UserDAO extends AbstractSuperDAO<User> {
 
-    private final SessionFactory sessionFactory;
-
-    /**
-     * Creates a new DAO with a given session provider.
-     *
-     * @param sessionFactory a session provider
-     */
     public UserDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
+
+    @Override
     public User findById(long id) {
         Session session = sessionFactory.openSession();
 
@@ -46,7 +40,7 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     public User create(User user, String password) throws Exception {
-        return persist(user);
+        return super.create(user);
     }
 
     public User update(long id, User modified) {
@@ -57,16 +51,6 @@ public class UserDAO extends AbstractDAO<User> {
 
         //persist(modified);
         return modified;
-    }
-
-    public boolean delete(User user) {
-        if (findById(user.getId()) == null) {
-            return false;
-        }
-
-        currentSession().delete(user);
-
-        return true;
     }
 
     public List<User> findAll() {

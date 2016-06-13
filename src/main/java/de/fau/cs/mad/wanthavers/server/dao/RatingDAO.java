@@ -11,13 +11,10 @@ import java.util.List;
 
 import static de.fau.cs.mad.wanthavers.common.User.USER_ID;
 
-public class RatingDAO extends AbstractDAO<Rating>{
-
-    private final SessionFactory sessionFactory;
+public class RatingDAO extends AbstractSuperDAO<Rating>{
 
     public RatingDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
 
@@ -52,31 +49,18 @@ public class RatingDAO extends AbstractDAO<Rating>{
     }
 
     public Rating findById(long userId, long id) {
-        Rating rating = super.get(id);
+        Rating rating = super.findById(id);
         return checkForCorrectUserId(userId, rating);
     }
 
-    public Rating create(long userId, Rating newRating) {
-        return persist(newRating);
-    }
-
     public Rating update(long userId, long id, Rating newRating) {
-        Rating stored = findById(userId, id);
+        Rating stored = this.findById(userId, id);
         if(stored == null || checkForCorrectUserId(userId, stored) == null) return null;
         newRating.setId(stored.getId());
         currentSession().merge(newRating);
 
         //persist(newRating);
         return newRating;
-    }
-
-    public boolean delete(Rating rating) {
-        if(rating == null)
-            return false;
-
-        currentSession().delete(rating);
-
-        return true;
     }
 
     public Rating average(long userId) {

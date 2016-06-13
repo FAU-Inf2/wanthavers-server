@@ -12,18 +12,12 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public class LocationDAO extends AbstractDAO<Location>{
-
-    private final SessionFactory sessionFactory;
+public class LocationDAO extends AbstractSuperDAO<Location>{
 
     public LocationDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
-    public Location findById(long id) {
-        return super.get(id);
-    }
 
     public Location getReverseGeo(double lat, double lon){
         Client client = ClientBuilder.newClient();
@@ -38,10 +32,6 @@ public class LocationDAO extends AbstractDAO<Location>{
         String tmp = address.getString("road")+" "+address.getString("house_number")+", "+address.getString("postcode")+" "+address.getString("city")+", "+address.getString("country");
         l.setFullAddress(tmp);
         return l;
-    }
-
-    public Location createLocation(Location l){
-        return persist(l);
     }
 
     public Location updateLocation(long id, Location modified){

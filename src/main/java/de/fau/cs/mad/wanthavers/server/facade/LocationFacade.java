@@ -14,7 +14,7 @@ public class LocationFacade {
         return this.dao.getReverseGeo(lat, lon);
     }
 
-    public Location createLocation(Location location){return this.dao.createLocation(location);}
+    public Location createLocation(Location location){return this.dao.create(location);}
 
     public Location updateLocation(long id, Location location){return this.dao.updateLocation(id, location);}
 }

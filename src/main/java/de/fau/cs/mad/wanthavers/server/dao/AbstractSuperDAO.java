@@ -9,14 +9,32 @@ import org.hibernate.SessionFactory;
 import java.sql.Timestamp;
 import java.util.List;
 
-public abstract class AbstractTimestampDAO<E extends AbstractModel> extends AbstractDAO<E> {
+public abstract class AbstractSuperDAO<E extends AbstractModel> extends AbstractDAO<E> {
     protected final SessionFactory sessionFactory;
 
-    public AbstractTimestampDAO(SessionFactory sessionFactory) {
+    public AbstractSuperDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
         this.sessionFactory = sessionFactory;
     }
 
+    public E findById(long id) {
+        return super.get(id);
+    }
+
+    public E create(E newE) {
+        return persist(newE);
+    }
+
+    public boolean delete(E e) {
+        if (e == null)
+            return false;
+
+        currentSession().delete(e);
+
+        return true;
+    }
+
+    /*
     public List<E> findAllNew(E last) {
         long timestamp = last.getLastModified().getTime();
         String className = last.getClass().getSimpleName();
@@ -32,5 +50,5 @@ public abstract class AbstractTimestampDAO<E extends AbstractModel> extends Abst
         update.setLastModified(new Timestamp(System.currentTimeMillis()));
         return update;
     }
-
+    */
 }

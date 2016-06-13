@@ -18,13 +18,12 @@ import java.util.List;
 
 public class ChatDAO{
 
-
-
     public ChatDAO() {
         ParseRegistry.registerSubclass(ParseChat.class);
         ParseRegistry.registerSubclass(ParseMessage.class);
         Parse.initialize("wanthavers", "", "http://chat:8090/parse");
     }
+
 
     public List<Chat> getChatsByUser(User u) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);

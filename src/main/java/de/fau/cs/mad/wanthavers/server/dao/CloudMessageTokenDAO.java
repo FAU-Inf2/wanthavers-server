@@ -13,14 +13,12 @@ import java.util.List;
 import static de.fau.cs.mad.wanthavers.common.User.USER_ID;
 
 
-public class CloudMessageTokenDAO extends AbstractDAO<CloudMessageToken> {
-
-    private final SessionFactory sessionFactory;
+public class CloudMessageTokenDAO extends AbstractSuperDAO<CloudMessageToken> {
 
     public CloudMessageTokenDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
+
 
     private List<CloudMessageToken> findTokensByUserId(long userId) {
         final Session session = currentSession();
@@ -54,16 +52,16 @@ public class CloudMessageTokenDAO extends AbstractDAO<CloudMessageToken> {
             if(token.getToken().equals(newToken.getToken()))
                 return token;
 
-        return persist(newToken);
+        return super.create(newToken);
     }
 
     public CloudMessageToken findById(long userId, long id) {
-        CloudMessageToken token = super.get(id);
+        CloudMessageToken token = super.findById(id);
         return checkForCorrectUserId(userId, token);
     }
 
     public CloudMessageToken update(long userId, long id, CloudMessageToken token) {
-        CloudMessageToken stored = findById(userId, id);
+        CloudMessageToken stored = this.findById(userId, id);
         if(stored == null || checkForCorrectUserId(userId, stored) == null) return null;
 
         stored.setToken(token.getToken());
@@ -71,12 +69,4 @@ public class CloudMessageTokenDAO extends AbstractDAO<CloudMessageToken> {
         return stored;
     }
 
-    public boolean delete(CloudMessageToken token) {
-        if(token == null)
-            return false;
-
-        currentSession().delete(token);
-
-        return true;
-    }
 }

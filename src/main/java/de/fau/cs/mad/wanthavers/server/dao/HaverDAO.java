@@ -10,13 +10,10 @@ import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
 
-public class HaverDAO extends AbstractDAO<Haver> {
-
-    private final SessionFactory sessionFactory;
+public class HaverDAO extends AbstractSuperDAO<Haver> {
 
     public HaverDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
 
@@ -49,16 +46,12 @@ public class HaverDAO extends AbstractDAO<Haver> {
     }
 
     public Haver findById(long desireId, long id) {
-        Haver haver = super.get(id);
+        Haver haver = super.findById(id);
         return checkForCorrectDesireId(desireId, haver);
     }
 
-    public Haver create(long desireId, Haver newHaver) {
-        return persist(newHaver);
-    }
-
     public Haver update(long desireId, long id, Haver newHaver) {
-        Haver stored = findById(desireId, id);
+        Haver stored = this.findById(desireId, id);
         if (stored == null || checkForCorrectDesireId(desireId, stored) == null) return null;
 
         newHaver.setId(stored.getId());
@@ -66,15 +59,6 @@ public class HaverDAO extends AbstractDAO<Haver> {
 
         //persist(newHaver);
         return newHaver;
-    }
-
-    public boolean delete(Haver haver) {
-        if (haver == null)
-            return false;
-
-        currentSession().delete(haver);
-
-        return true;
     }
 
     public Haver getAccepted(long desireId) {

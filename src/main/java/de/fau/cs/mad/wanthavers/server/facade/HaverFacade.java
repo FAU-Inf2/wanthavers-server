@@ -21,7 +21,7 @@ public class HaverFacade {
     }
 
     public Haver createNewHaver(long desireId, Haver newHaver) {
-        return this.dao.create(desireId, newHaver);
+        return this.dao.create(newHaver);
     }
 
     public Haver updateHaver(long desireId, long id, Haver haver) {

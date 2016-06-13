@@ -21,7 +21,7 @@ public class RatingFacade {
     }
 
     public Rating createNewRating(long userId, Rating newRating) {
-        return this.dao.create(userId, newRating);
+        return this.dao.create(newRating);
     }
 
     public Rating updateRating(long userId, long id, Rating rating) {

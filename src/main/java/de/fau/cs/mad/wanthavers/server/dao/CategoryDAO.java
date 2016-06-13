@@ -10,18 +10,12 @@ import org.hibernate.SessionFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryDAO extends AbstractDAO<Category>{
-
-    private final SessionFactory sessionFactory;
+public class CategoryDAO extends AbstractSuperDAO<Category>{
 
     public CategoryDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
-    public Category findById(long id) {
-        return super.get(id);
-    }
 
     public List<Category> getSubCategories(long id) {
         Query query = super.currentSession().createQuery("SELECT c FROM Category c WHERE parentId = "+id);
@@ -39,17 +33,13 @@ public class CategoryDAO extends AbstractDAO<Category>{
         return result;
     }
 
-    public Category create(Category newCategory) {
-        return persist(newCategory);
-    }
-
     public void delete(long id) {
         Query query = super.currentSession().createQuery("DELETE FROM Category WHERE id="+id);
         query.executeUpdate();
     }
 
     public Category update(long id, Category newCategory) {
-        Category c = findById(id);
+        Category c = super.findById(id);
         newCategory.setId(c.getId());
         persist(newCategory);
         return newCategory;

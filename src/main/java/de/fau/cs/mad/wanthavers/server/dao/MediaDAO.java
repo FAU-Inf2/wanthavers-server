@@ -31,13 +31,10 @@ import java.io.*;
 import java.util.List;
 import java.util.UUID;
 
-public class MediaDAO extends AbstractDAO<Media>{
-
-    private final SessionFactory sessionFactory;
+public class MediaDAO extends AbstractSuperDAO<Media>{
 
     public MediaDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
-        this.sessionFactory = sessionFactory;
     }
 
 
@@ -45,14 +42,6 @@ public class MediaDAO extends AbstractDAO<Media>{
         Query query = super.currentSession().createQuery("SELECT m FROM Media m");
         List<Media> result = super.list(query);
         return result;
-    }
-
-    public Media findById(long id) {
-        return super.get(id);
-    }
-
-    public Media create(Media media) {
-        return persist(media);
     }
 
     public Media create(User u, String base64, String filename) {
