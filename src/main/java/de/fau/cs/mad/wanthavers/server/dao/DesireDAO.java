@@ -45,7 +45,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return result;
     }
 
-    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastCreationTime, Integer limit) {
+    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastCreationTime, Integer limit, Long creatorId, Long haverId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class);
 
         if (price_min != null) {
@@ -81,6 +81,10 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
 
         if (limit != null && limit > 0) {
             criteria.setMaxResults(limit);
+        }
+
+        if(creatorId != null) {
+            criteria.add(Restrictions.eq("creator.id", creatorId));
         }
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
