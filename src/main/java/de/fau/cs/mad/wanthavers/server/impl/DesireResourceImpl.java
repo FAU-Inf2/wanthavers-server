@@ -39,7 +39,7 @@ public class DesireResourceImpl implements DesireResource {
     @Override
     @UnitOfWork
     public List<Desire> getByFilters(Long category, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastCreationTime, Integer limit, Long creatorId, Long haverId, List<Integer> haverStatus) {
-        List<Desire> desiresByFilter = desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, lat, lon, radius, status, lastCreationTime, limit, creatorId);
+        List<Desire> desiresByFilter = desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, rating_min, lat, lon, radius, status, lastCreationTime, limit, creatorId);
         List<Desire> desires;
 
         if (category != null) {
@@ -63,7 +63,9 @@ public class DesireResourceImpl implements DesireResource {
             desires = new ArrayList<>(desiresByFilterSet);
         }
 
-        List<Desire> ret = new ArrayList<>();
+        return desires;
+
+/*        List<Desire> ret = new ArrayList<>();
 
         if (rating_min != null && rating_min >= 0) {
             HashMap<Long, Float> avgUserRating = new HashMap<>();
@@ -82,7 +84,7 @@ public class DesireResourceImpl implements DesireResource {
             ret = desires;
         }
 
-        return ret;
+        return ret;*/
     }
 
     @Override

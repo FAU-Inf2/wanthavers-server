@@ -1,7 +1,6 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.Desire;
-import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -45,7 +44,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return result;
     }
 
-    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastCreationTime, Integer limit, Long creatorId) {
+    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastCreationTime, Integer limit, Long creatorId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class, "d");
 
         if (price_min != null) {
@@ -58,6 +57,10 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
 
         if (reward_min != null) {
             criteria.add(Restrictions.ge("reward", reward_min));
+        }
+
+        if(rating_min != null) {
+            criteria.add(Restrictions.ge("avgRating", rating_min));
         }
 
         if (radius != null && lon != null && lat != null) {
