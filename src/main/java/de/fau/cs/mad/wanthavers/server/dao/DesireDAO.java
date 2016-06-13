@@ -5,6 +5,7 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.Date;
@@ -75,7 +76,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         }
 
         if (lastCreationTime != null) {
-            criteria.add(Restrictions.ge("creation_time", new Date(lastCreationTime)));
+            criteria.add(Restrictions.le("creation_time", new Date(lastCreationTime)));
         }
 
         if (limit != null && limit > 0) {
@@ -83,6 +84,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         }
 
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+        criteria.addOrder(Order.desc("creation_time"));
 
         return criteria.list();
     }
