@@ -79,7 +79,7 @@ public class UserDAO extends AbstractSuperDAO<User> {
                 .setProjection(Projections.property(Desire.DESIRE_ID))
                 .add(Restrictions.eq("user.id", userId));
 
-        if(status != null) {
+        if(status != null && !status.isEmpty()) {
             criteria.add(Restrictions.in("status", status));
         }
 
