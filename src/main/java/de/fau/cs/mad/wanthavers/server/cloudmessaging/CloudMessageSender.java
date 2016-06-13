@@ -35,8 +35,6 @@ public class CloudMessageSender {
                 sendData.put("notification", message.getNotification());
                 sendData.put("data", message.getData());
 
-                System.out.println("JSON SENDDATA: "+sendData.toString());
-
                 URL url = new URL(FIREBASE_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Authorization", "key=" + API_KEY);
