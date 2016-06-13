@@ -59,6 +59,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.ge("reward", reward_min));
         }
 
+        //TODO
 /*        if(rating_min != null) {
             criteria.add(Restrictions.ge("avgRating", rating_min));
         }*/
