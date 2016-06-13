@@ -5,19 +5,18 @@ import org.json.JSONObject;
 
 
 public class CloudMessage {
-    private String to;
+    private long userId;
     private JSONObject data;
     private JSONObject notification;
 
     /**
-     *
-     * @param to: API token, which identifies reciever
+     * @param userId: id of receiver
      * @param subject: data field used for storing a String to identify further procedure of the app for this notification
      * @param title: title to display in notification center
      * @param message: message to display in notification center
      */
-    public CloudMessage(String to, String subject, String title, String message) {
-        this.to = to;
+    public CloudMessage(long userId, String subject, String title, String message) {
+        this.userId = userId;
 
         notification = new JSONObject();
         notification.put("body", message);
@@ -27,17 +26,17 @@ public class CloudMessage {
         data = new JSONObject();
         data.put("subject", subject);
     }
-    
+
+    public long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+
     public void addKeyValue(String key, String value) {
         data.put(key, value);
-    }
-
-    public String getTo() {
-        return to;
-    }
-
-    public void setTo(String to) {
-        this.to = to;
     }
 
     public JSONObject getData() {

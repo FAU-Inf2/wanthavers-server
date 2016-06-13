@@ -33,18 +33,13 @@ public class ChatFacade {
         Message ret = this.dao.createMessage(chatId, user, body);
 
         CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
-
         Chat chat = this.dao.getChatByChatId(chatId);
 
         // Send message to sender for testing
         User reciever = user;//chat.getUser1() != user.getId() ? chat.getUserObject1() : chat.getUserObject2();
 
-        List<CloudMessageToken> tokens = tokenDAO.findAll(reciever.getId());
-
-        for(CloudMessageToken token : tokens) {
-            CloudMessage message = new CloudMessage(token.getToken(), CloudMessageSubject.NEWMESSAGE, user.getName(), ret.getBody());
-            CloudMessageSender.sendMessage(message);
-        }
+        CloudMessage message = new CloudMessage(reciever.getId(), CloudMessageSubject.NEWMESSAGE, user.getName(), ret.getBody());
+        CloudMessageSender.sendMessage(message);
 
         return ret;
     }
