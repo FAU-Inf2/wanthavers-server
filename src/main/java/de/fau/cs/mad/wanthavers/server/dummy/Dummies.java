@@ -202,4 +202,25 @@ public class Dummies {
         };
     }
 
+    public static DesireFlag[] getFlags() {
+
+        Media[] media = getMedia();
+
+        setMediaIds(media);
+
+        User[] users = getUsers();
+
+        setUserIds(users, media.length);
+
+        Desire[] desires = getDesires();
+
+        setDesireIds(desires, media.length, users.length);
+
+        return new DesireFlag[]{
+                new DesireFlag(desires[0].getId(), FlagReason.IMPOSSIBLE, "Geht nicht"),
+                new DesireFlag(desires[0].getId(), FlagReason.INAPPROPRIATE, "Ih"),
+                new DesireFlag(desires[0].getId(), FlagReason.SPAM, "..."),
+                new DesireFlag(desires[0].getId(), FlagReason.SPAM, "....")
+        };
+    }
 }

@@ -3,6 +3,7 @@ package de.fau.cs.mad.wanthavers.server;
 
 import com.amazonaws.regions.Regions;
 import de.fau.cs.mad.wanthavers.common.*;
+import de.fau.cs.mad.wanthavers.common.rest.api.FlagResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
@@ -36,7 +37,7 @@ import java.util.EnumSet;
 
 public class ServerApplication extends Application<ServerConfiguration> {
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -117,6 +118,11 @@ public class ServerApplication extends Application<ServerConfiguration> {
         SingletonManager.add(locationDAO);
         SingletonManager.add(locationFacade);
 
+        final DesireFlagDAO desireFlagDAO = new DesireFlagDAO(hibernate.getSessionFactory());
+        final DesireFlagFacade desireFlagFacade = new DesireFlagFacade(desireFlagDAO, desireDAO);
+        SingletonManager.add(desireFlagDAO);
+        SingletonManager.add(desireFlagFacade);
+
         /** create resources and register **/
 
         environment.jersey().register(MultiPartFeature.class);
@@ -163,6 +169,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final CloudMessageTokenResourceImpl tokenResource = new CloudMessageTokenResourceImpl(tokenFacade);
         environment.jersey().register(tokenResource);
+
+        final FlagResourceImpl flagResource = new FlagResourceImpl(desireFlagFacade);
+        environment.jersey().register(flagResource);
         
 	    final LoginResource loginResource = new LoginResourceImpl();
         environment.jersey().register(loginResource);
