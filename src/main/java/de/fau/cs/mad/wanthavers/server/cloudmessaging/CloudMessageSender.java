@@ -28,38 +28,33 @@ public class CloudMessageSender {
         try {
             CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
             List<CloudMessageToken> tokens = tokenDAO.findAll(message.getUserId());
-            List<JSONObject> sendDatas = new ArrayList<>();
 
             for (CloudMessageToken token : tokens) {
                 JSONObject sendData = new JSONObject();
                 sendData.put("to", token.getToken());
                 sendData.put("notification", message.getNotification());
                 sendData.put("data", message.getData());
-                sendDatas.add(sendData);
-            }
 
-            URL url = new URL(FIREBASE_URL);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Authorization", "key=" + API_KEY);
-            conn.setRequestProperty("Content-Type", "application/json");
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
+                URL url = new URL(FIREBASE_URL);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestProperty("Authorization", "key=" + API_KEY);
+                conn.setRequestProperty("Content-Type", "application/json");
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
 
-            OutputStream outputStream = conn.getOutputStream();
-            InputStream inputStream = conn.getInputStream();
-
-            for (JSONObject data : sendDatas) {
-                outputStream.write(data.toString().getBytes());
+                OutputStream outputStream = conn.getOutputStream();
+                InputStream inputStream = conn.getInputStream();
+                outputStream.write(sendData.toString().getBytes());
 
                 String resp = IOUtils.toString(inputStream);
                 System.out.println("Send CloudMessage to User "+message.getUserId());
-                System.out.println("with token "+data.getString("to"));
+                System.out.println("with token "+token.getToken());
                 System.out.println("Answer: " + resp);
-            }
 
-            inputStream.close();
-            outputStream.close();
-            conn.disconnect();
+                inputStream.close();
+                outputStream.close();
+                conn.disconnect();
+            }
 
         } catch (IOException e) {
             System.out.println("Unable to send CloudMessage to User "+message.getUserId());
