@@ -25,8 +25,8 @@ public class ChatFacade {
         return this.dao.createChat(u1, u2, desireId);
     }
 
-    public List<Message> getMessagesByChat(String chatId, User user){
-        return this.dao.getMessages(chatId, user);
+    public List<Message> getMessagesByChat(String chatId, User user, Long lastCreationTime, Integer limit){
+        return this.dao.getMessages(chatId, user, lastCreationTime, limit);
     }
 
     public Message createMessage(String chatId, User user, String body){

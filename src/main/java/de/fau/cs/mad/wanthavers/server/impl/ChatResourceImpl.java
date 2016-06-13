@@ -40,8 +40,8 @@ public class ChatResourceImpl implements ChatResource {
 
     @UnitOfWork
     @Override
-    public List<Message> getMessages(String id, @Auth User user) {
-        List<Message> tmp = this.chatFacade.getMessagesByChat(id, user);
+    public List<Message> getMessages(@Auth User user, String id, Long lastCreationTime, Integer limit) {
+        List<Message> tmp = this.chatFacade.getMessagesByChat(id, user, lastCreationTime, limit);
         if(tmp == null){
             throw new WebApplicationException(404);
         }

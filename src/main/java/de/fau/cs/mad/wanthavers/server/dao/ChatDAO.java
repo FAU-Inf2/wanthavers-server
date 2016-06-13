@@ -14,6 +14,7 @@ import org.parse4j.ParseQuery;
 import org.parse4j.util.ParseRegistry;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChatDAO{
@@ -58,9 +59,18 @@ public class ChatDAO{
         }
     }
 
-    public List<Message> getMessages(String chatId, User user){
+    public List<Message> getMessages(String chatId, User user, Long lastCreationTime, Integer limit){
         ParseQuery<ParseMessage> query = ParseQuery.getQuery(ParseMessage.class);
         query.whereEqualTo(ParseMessage.chatId, ParseObject.createWithoutData("Chat", chatId));
+
+        if(lastCreationTime != null) {
+            query.whereLessThan("createdAt", new Date(lastCreationTime));
+        }
+
+        if(limit != null && limit > 0) {
+            query.limit(limit);
+        }
+
         try {
             return MessageMapper.get(query.find());
         } catch (ParseException e) {
