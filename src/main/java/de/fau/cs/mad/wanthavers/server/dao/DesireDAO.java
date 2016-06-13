@@ -76,7 +76,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         }
 
         if (lastCreationTime != null) {
-            criteria.add(Restrictions.lt("creation_time", new Date(lastCreationTime)));
+            criteria.add(Restrictions.le("creation_time", new Date(lastCreationTime)));
         }
 
         if (limit != null && limit > 0) {

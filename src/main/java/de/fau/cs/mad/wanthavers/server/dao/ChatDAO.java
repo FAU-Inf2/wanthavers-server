@@ -66,7 +66,7 @@ public class ChatDAO{
         query.orderByDescending("createdAt");
 
         if(lastCreationTime != null) {
-            query.whereLessThan("createdAt", new Date(lastCreationTime));
+            query.whereLessThanOrEqualTo("createdAt", new Date(lastCreationTime));
         }
 
         if(limit != null && limit > 0) {

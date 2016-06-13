@@ -94,6 +94,7 @@ public class DesireResourceImpl implements DesireResource {
     public Desire createDesire(@Auth User user, @ApiParam(value = "Desire to create", required = true) Desire newDesire) {
         //set desire creator
         newDesire.setCreator(user);
+        newDesire.setCreation_time(new Date(System.currentTimeMillis()));
 
         return desireFacade.createNewDesire(newDesire);
     }
