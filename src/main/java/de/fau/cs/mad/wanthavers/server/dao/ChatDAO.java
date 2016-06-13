@@ -63,6 +63,8 @@ public class ChatDAO{
         ParseQuery<ParseMessage> query = ParseQuery.getQuery(ParseMessage.class);
         query.whereEqualTo(ParseMessage.chatId, ParseObject.createWithoutData("Chat", chatId));
 
+        query.orderByDescending("createdAt");
+
         if(lastCreationTime != null) {
             query.whereLessThan("createdAt", new Date(lastCreationTime));
         }
