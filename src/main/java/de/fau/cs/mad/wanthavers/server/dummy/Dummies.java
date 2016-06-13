@@ -62,10 +62,12 @@ public class Dummies {
         yoda.setImage(media[0]);
         yoda.setPassword("test");
 
-        Set<String> roles = new HashSet<>();
+        yoda.setRole(UserRoles.USER_ROLE_ADMIN);
+
+/*        Set<String> roles = new HashSet<>();
         roles.add(UserRoles.USER_ROLE_USER);
         roles.add(UserRoles.USER_ROLE_ADMIN);
-        yoda.setRoles(roles);
+        yoda.setRoles(roles);*/
 
         User jon = new User("Jon Doe", "jon@doe.com");
         jon.setImage(media[2]);

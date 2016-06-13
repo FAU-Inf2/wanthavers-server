@@ -73,8 +73,13 @@ public class MediaDAO extends AbstractSuperDAO<Media>{
                 String tmpName = UUID.randomUUID().toString() + extension;
                 File out = File.createTempFile(tmpName, extension);
 
-                BufferedImage imageTmp = ImageIO.read(image);
-                int size = Math.min(imageTmp.getHeight(), imageTmp.getWidth());
+                int size;
+                try{
+                    BufferedImage imageTmp = ImageIO.read(image);
+                    size = Math.min(imageTmp.getHeight(), imageTmp.getWidth());
+                }catch(Exception e){
+                    return null; // not an image
+                }
 
                 Thumbnails.of(image)
                         .sourceRegion(Positions.CENTER, size, size)
