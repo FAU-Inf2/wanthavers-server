@@ -35,6 +35,8 @@ public class CloudMessageSender {
                 sendData.put("notification", message.getNotification());
                 sendData.put("data", message.getData());
 
+                System.out.println("JSON SENDDATA: "+sendData.toString());
+
                 URL url = new URL(FIREBASE_URL);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Authorization", "key=" + API_KEY);
@@ -43,9 +45,9 @@ public class CloudMessageSender {
                 conn.setDoOutput(true);
 
                 OutputStream outputStream = conn.getOutputStream();
-                InputStream inputStream = conn.getInputStream();
                 outputStream.write(sendData.toString().getBytes());
 
+                InputStream inputStream = conn.getInputStream();
                 String resp = IOUtils.toString(inputStream);
                 System.out.println("Send CloudMessage to User "+message.getUserId());
                 System.out.println("with token "+token.getToken());
@@ -58,6 +60,7 @@ public class CloudMessageSender {
 
         } catch (IOException e) {
             System.out.println("Unable to send CloudMessage to User "+message.getUserId());
+
             e.printStackTrace();
         }
     }
