@@ -124,7 +124,7 @@ public class UserDAO extends AbstractSuperDAO<User> {
         //System.out.println(token);
         String url = ServerApplication.SERVER_URL+"/static/password.html#"+token;
         String body = "Hi "+ user.getName()+"!<br><br>";
-        body += "We got a request to reset your password. Click on following link to set a new password or ignore this mail if you did not do this intentionally. <br>";
+        body += "We got a request to reset your password. Click on the following link to set a new password or ignore this mail if you did not do this intentionally. <br>";
         body += ("<a href='"+ url + "'>Reset your password here</a>");
         body += "<br><br>";
         body += "Cheers, Wanthavers-Team";

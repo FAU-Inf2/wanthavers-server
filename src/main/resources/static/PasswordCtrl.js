@@ -1,6 +1,5 @@
 app.controller('PasswordCtrl',  function($scope, Password){
-    //$scope.server = "http://faui21f.informatik.uni-erlangen.de:9090";
-    $scope.server = "http://localhost:8080";
+    $scope.server = "http://faui21f.informatik.uni-erlangen.de:9090";
     
     $scope.save = function(){
         $scope.error = false;
