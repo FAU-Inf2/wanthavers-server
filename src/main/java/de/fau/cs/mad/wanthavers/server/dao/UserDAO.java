@@ -1,6 +1,7 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.*;
+import de.fau.cs.mad.wanthavers.server.ServerApplication;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -121,7 +122,13 @@ public class UserDAO extends AbstractSuperDAO<User> {
         String token = user.createPasswordToken();
         persist(user);
         //System.out.println(token);
-        Mailer.send("Password Reset", token, email);
+        String url = ServerApplication.SERVER_URL+"/static/password.html#"+token;
+        String body = "Hi "+ user.getName()+"!<br><br>";
+        body += "We got a request to reset your password. Click on following link to set a new password or ignore this mail if you did not do this intentionally. <br>";
+        body += ("<a href='"+ url + "'>Reset your password here</a>");
+        body += "<br><br>";
+        body += "Cheers, Wanthavers-Team";
+        Mailer.send("Password Reset", body, email);
         return true;
     }
 

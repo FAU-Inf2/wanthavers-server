@@ -36,6 +36,8 @@ import javax.servlet.FilterRegistration;
 import java.util.EnumSet;
 
 public class ServerApplication extends Application<ServerConfiguration> {
+    public static final String SERVER_URL = "http://faui21f.informatik.uni-erlangen.de:9090";
+
     private final HibernateBundle<ServerConfiguration> hibernate =
             new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class) {
                 @Override
@@ -67,6 +69,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
     @Override
     public void run(ServerConfiguration configuration, Environment environment) throws Exception {
+
         /** configure mail **/
         Mailer.configure("wanthavers@i2.cs.fau.de", Regions.US_WEST_2);
         Mailer.enableFake("wanthavers@i2.cs.fau.de");
