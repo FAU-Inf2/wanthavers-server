@@ -54,35 +54,7 @@ public class DesireResourceImpl implements DesireResource {
             desires = desiresByFilter;
         }
 
-        if (haverId != null) {
-            List<Desire> desiresForHaver = userFacade.getDesiresAsHaver(haverId, haverStatus);
-
-            Set<Desire> desiresByFilterSet = new HashSet<>(desires);
-            Set<Desire> desiresForHaverSet = new HashSet<>(desiresForHaver);
-            desiresByFilterSet.retainAll(desiresForHaverSet);
-            desires = new ArrayList<>(desiresByFilterSet);
-        }
-
-        List<Desire> ret = new ArrayList<>();
-
-        if (rating_min != null && rating_min >= 0) {
-            HashMap<Long, Float> avgUserRating = new HashMap<>();
-
-            for (Desire d : desires) {
-                long userId = d.getCreator().getId();
-                if (!avgUserRating.containsKey(userId)) {
-                    avgUserRating.put(userId, ratingFacade.avgRating(userId).getStars());
-                }
-
-                if (avgUserRating.get(userId) >= rating_min) {
-                    ret.add(d);
-                }
-            }
-        } else {
-            ret = desires;
-        }
-
-        return ret;
+        return desires;
     }
 
     @Override

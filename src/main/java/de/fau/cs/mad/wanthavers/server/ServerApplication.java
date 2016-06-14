@@ -149,7 +149,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final DesireResourceImpl desireResource = new DesireResourceImpl(desireFacade, categoryFacade, ratingFacade, chatFacade, userFacade);
         environment.jersey().register(desireResource);
 
-        final RatingResourceImpl ratingResource = new RatingResourceImpl(ratingFacade);
+        final RatingResourceImpl ratingResource = new RatingResourceImpl(ratingFacade, userFacade);
         environment.jersey().register(ratingResource);
 
         final HaverResourceImpl haverResource = new HaverResourceImpl(haverFacade, desireFacade);

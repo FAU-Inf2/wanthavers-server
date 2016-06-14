@@ -59,10 +59,10 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.ge("reward", reward_min));
         }
 
-        //TODO
-/*        if(rating_min != null) {
-            criteria.add(Restrictions.ge("avgRating", rating_min));
-        }*/
+        if (rating_min != null) {
+            criteria.createAlias("creator", "u");
+            criteria.add(Restrictions.ge("u.avgRating", rating_min));
+        }
 
         if (radius != null && lon != null && lat != null) {
             double latDiff = getLatDiff(radius);

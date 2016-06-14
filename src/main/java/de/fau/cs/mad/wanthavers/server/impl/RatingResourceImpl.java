@@ -1,6 +1,5 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
-import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
@@ -10,31 +9,31 @@ import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
-import javax.ws.rs.PathParam;
 import javax.ws.rs.WebApplicationException;
-import java.util.Date;
 import java.util.List;
 
 
 public class RatingResourceImpl implements RatingResource {
     private static int dummyExecuted = 0;
 
-    private final RatingFacade facade;
+    private final RatingFacade ratingFacade;
+    private final UserFacade userFacade;
 
-    public RatingResourceImpl(RatingFacade facade) {
-        this.facade = facade;
+    public RatingResourceImpl(RatingFacade ratingFacade, UserFacade userFacade) {
+        this.ratingFacade = ratingFacade;
+        this.userFacade = userFacade;
     }
 
     @Override
     @UnitOfWork
     public List<Rating> getAllRatings(@ApiParam(value = "id of the desired user", required = true) long userId) {
-        return this.facade.getAllRatings(userId);
+        return this.ratingFacade.getAllRatings(userId);
     }
 
     @Override
     @UnitOfWork
     public Rating get(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "id of the rating", required = true) long id) {
-        Rating rating = facade.getRatingByID(userId, id);
+        Rating rating = ratingFacade.getRatingByID(userId, id);
 
         if(rating == null)
             throw new WebApplicationException(404);
@@ -45,25 +44,30 @@ public class RatingResourceImpl implements RatingResource {
     @Override
     @UnitOfWork
     public Rating createRating(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "Rating to create", required = true) Rating newRating) {
-        return facade.createNewRating(userId, newRating);
+        Rating ret = ratingFacade.createNewRating(userId, newRating);
+        updateUserAvgRating(userId);
+        return ret;
     }
 
     @Override
     @UnitOfWork
     public Rating updateRating(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "id of the rating", required = true) long id, @ApiParam(value = "new details of the specified rating", required = true) Rating rating) {
-        return facade.updateRating(userId, id, rating);
+        Rating ret = ratingFacade.updateRating(userId, id, rating);
+        updateUserAvgRating(userId);
+        return ret;
     }
 
     @Override
     @UnitOfWork
     public void deleteRating(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "id of the to be deleted rating", required = true) long id) {
-        facade.deleteRating(userId, id);
+        ratingFacade.deleteRating(userId, id);
+        updateUserAvgRating(userId);
     }
 
     @Override
     @UnitOfWork
     public Rating avgRating(@ApiParam(value = "id of the desired user", required = true) long userId) {
-        return facade.avgRating(userId);
+        return ratingFacade.avgRating(userId);
     }
 
     @Override
@@ -79,6 +83,13 @@ public class RatingResourceImpl implements RatingResource {
             createRating(userId, r);
 
         dummyExecuted++;
+    }
+
+    private void updateUserAvgRating(long userId) {
+        Rating avgRating = ratingFacade.avgRating(userId);
+        User user = userFacade.getUserByID(userId);
+        user.setRating(avgRating.getStars());
+        userFacade.updateUser(userId, user);
     }
 
 }
