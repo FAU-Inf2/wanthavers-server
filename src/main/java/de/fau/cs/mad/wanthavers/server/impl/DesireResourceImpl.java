@@ -32,26 +32,8 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public List<Desire> getByFilters(Long category, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId) {
-        //TODO: Filter by category
-        return desireFacade.getAllDesiresByFilter(category, price_min, price_max, reward_min, rating_min, lat, lon, radius, status, lastDesireId, limit, creatorId);
-
-/*        List<Desire> desiresByFilter = desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, rating_min, lat, lon, radius, status, lastCreationTime, limit, creatorId);
-        List<Desire> desires;
-
-        if (category != null) {
-            List<Desire> desiresByCategory = categoryFacade.getDesiresByCategoryDeep(category);
-
-            Set<Desire> desiresByFilterSet = new HashSet<>(desiresByFilter);
-            Set<Desire> desiresByCategorySet = new HashSet<>(desiresByCategory);
-
-            desiresByFilterSet.retainAll(desiresByCategorySet);
-            desires = new ArrayList<>(desiresByFilterSet);
-        } else {
-            desires = desiresByFilter;
-        }
-
-        return desires;*/
+    public List<Desire> getByFilters(Long category, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId, Long haverId, List<Integer> haverStatus) {
+        return desireFacade.getAllDesiresByFilter(category, price_min, price_max, reward_min, rating_min, lat, lon, radius, status, lastDesireId, limit, creatorId, haverId, haverStatus);
     }
 
     @Override

@@ -4,6 +4,7 @@ import de.fau.cs.mad.wanthavers.common.Category;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
+import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -42,7 +43,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return persist(stored);
     }
 
-    public List<Desire> findAllByFilter(Long categoryId, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId) {
+    public List<Desire> findAllByFilter(Long categoryId, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId, Long haverId, List<Integer> haverStatus) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class, "d");
 
         if(categoryId != null && categoryId!=0){
@@ -51,7 +52,6 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             ArrayList<Long> ids = new ArrayList<>();
             for (Category c: categories) {
                 ids.add(c.getId());
-                System.out.println(c.getId());
             }
             if(!ids.isEmpty()){
                 criteria.add(Restrictions.in("categoryId", ids));
@@ -104,8 +104,24 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.eq("creator.id", creatorId));
         }
 
+        if(haverId != null) {
+            UserFacade userFacade = (UserFacade) SingletonManager.get(UserFacade.class);
+            List<Desire> desiresAsHaver = userFacade.getDesiresAsHaver(haverId, haverStatus);
+
+            ArrayList<Long> ids = new ArrayList<>();
+            for(Desire d : desiresAsHaver) {
+                ids.add(d.getId());
+            }
+
+            if(!ids.isEmpty()) {
+                criteria.add(Restrictions.in("id", ids));
+            } else {
+                return new ArrayList<>(); //return empty desire list if a user has no desires as Haver
+            }
+        }
+
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
-        criteria.addOrder(Order.desc("creation_time"));
+        criteria.addOrder(Order.desc("id"));
 
         return criteria.list();
     }
