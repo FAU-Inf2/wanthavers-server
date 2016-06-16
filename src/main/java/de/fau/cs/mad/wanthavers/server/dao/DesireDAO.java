@@ -38,12 +38,6 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return persist(stored);
     }
 
-    public List<Desire> findAll() {
-        Query query = super.currentSession().createQuery("SELECT d FROM Desire d");
-        List<Desire> result = super.list(query);
-        return result;
-    }
-
     public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class, "d");
 

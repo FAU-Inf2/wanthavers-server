@@ -32,10 +32,6 @@ public class DesireFacade {
         return dao.delete(dao.findById(id));
     }
 
-    public List<Desire> getAllDesires(){
-        return dao.findAll();
-    }
-
     public Desire updateDesireStatus(long desireId, int status) {
         return this.dao.updateDesireStatus(desireId, status);
     }

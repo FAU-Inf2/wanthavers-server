@@ -32,12 +32,6 @@ public class DesireResourceImpl implements DesireResource {
 
     @Override
     @UnitOfWork
-    public List<Desire> get() {
-        return this.desireFacade.getAllDesires();
-    }
-
-    @Override
-    @UnitOfWork
     public List<Desire> getByFilters(Long category, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId) {
         //TODO: Filter by category
         return desireFacade.getAllDesiresByFilter(price_min, price_max, reward_min, rating_min, lat, lon, radius, status, lastDesireId, limit, creatorId);
