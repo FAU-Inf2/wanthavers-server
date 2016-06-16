@@ -121,18 +121,18 @@ public class Dummies {
 
         setUserIds(users, media.length);
 
-        Desire kisteBier = new Desire("Bier", "Kiste Bier", users[0], 15., 5., "EUR", new Date(System.currentTimeMillis()), "Todesstern", 49.589674, 11.011961, 0);
+        Desire kisteBier = new Desire("Bier", "Kiste Bier", users[0], 15., 5., "EUR", new Date(System.currentTimeMillis() - 7 * 5 * 60 * 1000), "Todesstern", 49.589674, 11.011961, 0);
         kisteBier.setImage(media[3]);
 
         return new Desire[]{
                 kisteBier,
-                new Desire("Bagger", "Loch baggern", users[2], 155., 35., "EUR", new Date(System.currentTimeMillis() - 1 * 5 * 60 * 1000), "TechFak", 49.589674, 11.011961, 1),
-                new Desire("Pizza", "Pizza Fungi", users[2], 8.5, 3., "EUR", new Date(System.currentTimeMillis() - 2 * 5 * 60 * 1000), "Wohnheim", 49.452030, 11.076750, 2),
-                new Desire("Jeans", "Graue Jeans", users[1], 79., 8., "EUR", new Date(System.currentTimeMillis() - 3 * 5 * 60 * 1000), "Schlosspark", 49.452030, 11.076750, 3),
-                new Desire("Doener", "Doener vegetarisch", users[0], 4., 2.5, "USD", new Date(System.currentTimeMillis() - 4 * 5 * 60 * 1000), "Arcaden", 52.520007, 13.404954, 1),
-                new Desire("Mineralwasser", "Kasten stilles Mineralwasser", users[1], 6.99, 3., "USD", new Date(System.currentTimeMillis() - 5 * 5 * 60 * 1000), "Daheim", 52.520007, 13.404954, 0),
-                new Desire("Fass Bier", "5l-Fass Bier", users[0], 9.95, 5., "USD", new Date(System.currentTimeMillis() - 6 * 5 * 60 * 1000), "Star Wars", 52.520007, 13.404954, 2),
-                new Desire("Router", "WLAN-Router mit Setup", users[1], 49., 6., "USD", new Date(System.currentTimeMillis() - 7 * 5 * 60 * 1000), "Schule", 49.452030, 11.076750, 1)
+                new Desire("Bagger", "Loch baggern", users[2], 155., 35., "EUR", new Date(System.currentTimeMillis() - 6 * 5 * 60 * 1000), "TechFak", 49.589674, 11.011961, 1),
+                new Desire("Pizza", "Pizza Fungi", users[2], 8.5, 3., "EUR", new Date(System.currentTimeMillis() - 5 * 5 * 60 * 1000), "Wohnheim", 49.452030, 11.076750, 2),
+                new Desire("Jeans", "Graue Jeans", users[1], 79., 8., "EUR", new Date(System.currentTimeMillis() - 4 * 5 * 60 * 1000), "Schlosspark", 49.452030, 11.076750, 3),
+                new Desire("Doener", "Doener vegetarisch", users[0], 4., 2.5, "USD", new Date(System.currentTimeMillis() - 3 * 5 * 60 * 1000), "Arcaden", 52.520007, 13.404954, 1),
+                new Desire("Mineralwasser", "Kasten stilles Mineralwasser", users[1], 6.99, 3., "USD", new Date(System.currentTimeMillis() - 2 * 5 * 60 * 1000), "Daheim", 52.520007, 13.404954, 0),
+                new Desire("Fass Bier", "5l-Fass Bier", users[0], 9.95, 5., "USD", new Date(System.currentTimeMillis() - 1 * 5 * 60 * 1000), "Star Wars", 52.520007, 13.404954, 2),
+                new Desire("Router", "WLAN-Router mit Setup", users[1], 49., 6., "USD", new Date(System.currentTimeMillis()), "Schule", 49.452030, 11.076750, 1)
         };
     }
 

@@ -93,7 +93,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         }
 
         if (lastDesireId != null) {
-            criteria.add(Restrictions.gt("id", lastDesireId));
+            criteria.add(Restrictions.lt("id", lastDesireId));
         }
 
         if (limit != null && limit > 0) {
