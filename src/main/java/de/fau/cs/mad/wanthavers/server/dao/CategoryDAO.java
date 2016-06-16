@@ -27,6 +27,11 @@ public class CategoryDAO extends AbstractSuperDAO<Category>{
         List<Category> sub = getSubCategories(id);
         List<Category> result = new ArrayList<>();
         result.addAll(sub);
+        Category thisCat = super.findById(id);
+        if(thisCat != null){
+            result.add(super.findById(id));
+        }
+
         for (Category c : sub){
             result.addAll(getSubCategoriesRecursive(c.getId()));
         }

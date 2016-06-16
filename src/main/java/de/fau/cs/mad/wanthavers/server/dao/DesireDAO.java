@@ -1,12 +1,16 @@
 package de.fau.cs.mad.wanthavers.server.dao;
 
+import de.fau.cs.mad.wanthavers.common.Category;
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
+import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,8 +42,23 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return persist(stored);
     }
 
-    public List<Desire> findAllByFilter(Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId) {
+    public List<Desire> findAllByFilter(Long categoryId, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class, "d");
+
+        if(categoryId != null && categoryId!=0){
+            CategoryFacade categoryFacade = (CategoryFacade)SingletonManager.get(CategoryFacade.class);
+            List<Category> categories = categoryFacade.getSubCategoriesDeep(categoryId);
+            ArrayList<Long> ids = new ArrayList<>();
+            for (Category c: categories) {
+                ids.add(c.getId());
+                System.out.println(c.getId());
+            }
+            if(!ids.isEmpty()){
+                criteria.add(Restrictions.in("categoryId", ids));
+            }else{
+                return new ArrayList<>(); //return empty desire list if a non-existing category is given
+            }
+        }
 
         if (price_min != null) {
             criteria.add(Restrictions.ge("price", price_min));
