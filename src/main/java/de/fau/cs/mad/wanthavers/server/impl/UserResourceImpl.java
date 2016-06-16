@@ -92,18 +92,6 @@ public class UserResourceImpl implements UserResource {
 
     @Override
     @UnitOfWork
-    public List<Desire> getDesires(@ApiParam(value = "id of the desired user", required = true) long id) {
-        return facade.getDesires(id);
-    }
-
-    @Override
-    @UnitOfWork
-    public List<Desire> getDesiresAsHaver(@ApiParam(value = "id of the user", required = true) long id,  List<Integer> status) {
-        return facade.getDesiresAsHaver(id, status);
-    }
-
-    @Override
-    @UnitOfWork
     public List<Location> getSavedLocations(@Auth User user) {
         return this.facade.getSavedLocations(user.getId());
     }
