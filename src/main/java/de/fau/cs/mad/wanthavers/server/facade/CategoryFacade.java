@@ -26,14 +26,17 @@ public class CategoryFacade {
     }
 
     public Category create(Category newCategory){
+        dao.invalidateCache(); //invalidate cache when CRUD operation
         return dao.create(newCategory);
     }
 
     public void delete(long id){
+        dao.invalidateCache(); //invalidate cache when CRUD operation
         dao.delete(id);
     }
 
     public Category update(long id, Category newCategory) {
+        dao.invalidateCache(); //invalidate cache when CRUD operation
         return this.dao.update(id, newCategory);
     }
 

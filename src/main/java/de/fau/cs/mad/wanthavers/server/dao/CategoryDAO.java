@@ -8,9 +8,13 @@ import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CategoryDAO extends AbstractSuperDAO<Category>{
+
+    private static ConcurrentHashMap<Long, List<Category>> categoryCache = new ConcurrentHashMap<>();
 
     public CategoryDAO(SessionFactory sessionFactory) {
         super(sessionFactory);
@@ -18,8 +22,13 @@ public class CategoryDAO extends AbstractSuperDAO<Category>{
 
 
     public List<Category> getSubCategories(long id) {
+        if(categoryCache.get(id) != null){
+            return categoryCache.get(id);
+        }
+
         Query query = super.currentSession().createQuery("SELECT c FROM Category c WHERE parent = "+id);
         List<Category> result = super.list(query);
+        categoryCache.put(id, result);
         return result;
     }
 
@@ -49,7 +58,6 @@ public class CategoryDAO extends AbstractSuperDAO<Category>{
         currentSession().merge(modified);
 
         return modified;
-
     }
 
     public List<Desire> getDesiresByCategoryFlat(long id){
@@ -69,6 +77,10 @@ public class CategoryDAO extends AbstractSuperDAO<Category>{
             result.addAll(getDesiresByCategoryFlat(c.getId()));
         }
         return result;
+    }
+
+    public void invalidateCache(){
+        categoryCache.clear();
     }
 
 }
