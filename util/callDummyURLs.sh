@@ -9,7 +9,7 @@ dm=dummy
 curl $lh/$media/$dm
 curl $lh/$usr/$dm
 curl $lh/$des/$dm
-curl $lh/$usr/6/$rat/$dm
-curl $lh/$usr/7/$rat/$dm
+curl $lh/$usr/1/$rat/$dm
+curl $lh/$usr/2/$rat/$dm
 curl $lh/$des/0/havers/$dm
 curl $lh/$des/0/flags/$dm
