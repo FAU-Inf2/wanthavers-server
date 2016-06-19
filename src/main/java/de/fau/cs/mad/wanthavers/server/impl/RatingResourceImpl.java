@@ -104,6 +104,7 @@ public class RatingResourceImpl implements RatingResource {
         for (Rating r : ratings)
             ratingFacade.createNewRating(userId, r);
 
+        updateUserAvgRating(userId);
         dummyExecuted++;
     }
 
