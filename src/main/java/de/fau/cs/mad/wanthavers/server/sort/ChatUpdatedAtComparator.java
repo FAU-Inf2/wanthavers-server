@@ -10,6 +10,6 @@ import java.util.Comparator;
 public class ChatUpdatedAtComparator implements Comparator<Chat> {
     @Override
     public int compare(Chat o1, Chat o2) {
-        return o1.getUpdatedAt().compareTo(o2.getUpdatedAt());
+        return -o1.getUpdatedAt().compareTo(o2.getUpdatedAt());
     }
 }
