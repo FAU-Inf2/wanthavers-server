@@ -127,7 +127,7 @@ public class RatingResourceImpl implements RatingResource {
     private Desire getDesire(long desireId) throws WebApplicationException {
         Desire desire = ((DesireFacade) SingletonManager.get(DesireFacade.class)).getDesireByID(desireId);
         if (desire == null) {
-            throw new WebApplicationException(400);
+            throw new WebApplicationException("desire not found", 404);
         }
 
         return desire;
@@ -136,7 +136,7 @@ public class RatingResourceImpl implements RatingResource {
     private Haver getHaver(long desireId) throws WebApplicationException {
         Haver haver = ((HaverFacade) SingletonManager.get(HaverFacade.class)).getAccepted(desireId);
         if (haver == null) {
-            throw new WebApplicationException(400);
+            throw new WebApplicationException("accepted haver not found", 404);
         }
 
         return haver;
@@ -144,8 +144,12 @@ public class RatingResourceImpl implements RatingResource {
 
     private Rating getAndCheckRating(User rater, long userId, long id) throws WebApplicationException {
         Rating stored = ratingFacade.getRatingByID(userId, id);
+        if(stored == null) {
+            throw new WebApplicationException("rating not found", 404);
+        }
+
         if (stored.getRater().getId() != rater.getId()) {
-            throw new WebApplicationException(403);
+            throw new WebApplicationException("auth user is not the rater of rating", 403);
         }
 
         return stored;
