@@ -15,6 +15,7 @@ import org.parse4j.ParseQuery;
 import org.parse4j.util.ParseRegistry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class ChatDAO {
         } catch (ParseException e) {
         }
 
-        list.sort(new ChatUpdatedAtComparator());
+        Collections.sort(list, new ChatUpdatedAtComparator());
 
         return list;
     }
