@@ -29,18 +29,21 @@ public class ChatDAO{
     public List<Chat> getChatsByUser(User u) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
         query.whereEqualTo(ParseChat.user1, u.getId());
+        query.whereEqualTo(ParseChat.user2, u.getId());
+        query.orderByDescending("updatedAt");
 
         List<Chat> list = new ArrayList<>();
         try {
             list.addAll(ChatMapper.get(query.find()));
         } catch (ParseException e) {}
 
-        ParseQuery<ParseChat> query2 = ParseQuery.getQuery(ParseChat.class);
+/*        ParseQuery<ParseChat> query2 = ParseQuery.getQuery(ParseChat.class);
         query2.whereEqualTo(ParseChat.user2, u.getId());
+        query2.orderByDescending("updatedAt");
 
         try {
             list.addAll(ChatMapper.get(query2.find()));
-        } catch (ParseException e) {}
+        } catch (ParseException e) {}*/
 
         return list;
     }
