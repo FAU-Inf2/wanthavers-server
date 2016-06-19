@@ -124,6 +124,7 @@ public class Dummies {
 
         Desire kisteBier = new Desire("Bier", "Kiste Bier", users[0], 15., 5., "EUR", new Date(System.currentTimeMillis() - 7 * 5 * 60 * 1000), "Todesstern", 49.589674, 11.011961, 0);
         kisteBier.setImage(media[3]);
+        kisteBier.setCategoryId(8);
 
         return new Desire[]{
                 kisteBier,
