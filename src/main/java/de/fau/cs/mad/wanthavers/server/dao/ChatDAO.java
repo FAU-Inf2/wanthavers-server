@@ -7,6 +7,7 @@ import de.fau.cs.mad.wanthavers.server.parse.mapper.ChatMapper;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.MessageMapper;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseChat;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseMessage;
+import de.fau.cs.mad.wanthavers.server.sort.ChatUpdatedAtComparator;
 import org.parse4j.Parse;
 import org.parse4j.ParseException;
 import org.parse4j.ParseObject;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ChatDAO{
+public class ChatDAO {
 
     public ChatDAO() {
         ParseRegistry.registerSubclass(ParseChat.class);
@@ -29,26 +30,27 @@ public class ChatDAO{
     public List<Chat> getChatsByUser(User u) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
         query.whereEqualTo(ParseChat.user1, u.getId());
-        query.whereEqualTo(ParseChat.user2, u.getId());
-        query.orderByDescending("updatedAt");
 
         List<Chat> list = new ArrayList<>();
         try {
             list.addAll(ChatMapper.get(query.find()));
-        } catch (ParseException e) {}
+        } catch (ParseException e) {
+        }
 
-/*        ParseQuery<ParseChat> query2 = ParseQuery.getQuery(ParseChat.class);
+        ParseQuery<ParseChat> query2 = ParseQuery.getQuery(ParseChat.class);
         query2.whereEqualTo(ParseChat.user2, u.getId());
-        query2.orderByDescending("updatedAt");
 
         try {
             list.addAll(ChatMapper.get(query2.find()));
-        } catch (ParseException e) {}*/
+        } catch (ParseException e) {
+        }
+
+        list.sort(new ChatUpdatedAtComparator());
 
         return list;
     }
 
-    public Chat createChat(long u1, long u2, long desireId){
+    public Chat createChat(long u1, long u2, long desireId) {
         ParseChat c = new ParseChat();
         c.setDesireId(desireId);
         c.setUser1(u1);
@@ -62,17 +64,17 @@ public class ChatDAO{
         }
     }
 
-    public List<Message> getMessages(String chatId, User user, Long lastCreationTime, Integer limit){
+    public List<Message> getMessages(String chatId, User user, Long lastCreationTime, Integer limit) {
         ParseQuery<ParseMessage> query = ParseQuery.getQuery(ParseMessage.class);
         query.whereEqualTo(ParseMessage.chatId, ParseObject.createWithoutData("Chat", chatId));
 
         query.orderByDescending("createdAt");
 
-        if(lastCreationTime != null) {
+        if (lastCreationTime != null) {
             query.whereLessThanOrEqualTo("createdAt", new Date(lastCreationTime));
         }
 
-        if(limit != null && limit > 0) {
+        if (limit != null && limit > 0) {
             query.limit(limit);
         }
 
@@ -84,7 +86,7 @@ public class ChatDAO{
         }
     }
 
-    public Message createMessage(String chatId, User user, String body){
+    public Message createMessage(String chatId, User user, String body) {
         ParseMessage m = new ParseMessage();
         m.setBody(body);
         m.setFrom(user.getId());
@@ -107,8 +109,9 @@ public class ChatDAO{
         List<ParseChat> ret = null;
         try {
             ret = query.find();
-        } catch (ParseException e){}
-        if(ret != null && ret.size() > 0){
+        } catch (ParseException e) {
+        }
+        if (ret != null && ret.size() > 0) {
             return ChatMapper.get(ret).get(0);
         }
 
@@ -120,8 +123,9 @@ public class ChatDAO{
         ret = null;
         try {
             ret = query.find();
-        } catch (ParseException e){}
-        if(ret != null && ret.size() > 0){
+        } catch (ParseException e) {
+        }
+        if (ret != null && ret.size() > 0) {
             return ChatMapper.get(ret).get(0);
         }
 
