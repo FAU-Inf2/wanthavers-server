@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dummy;
 
 import de.fau.cs.mad.wanthavers.common.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -144,6 +145,15 @@ public class Dummies {
     }
 
     public static Rating[] getRatings(long userId) {
+        ArrayList<Integer> userIds = new ArrayList<>();
+        for(int i = 0; i < 3; i++) {
+            if(i+1 == userId)
+                continue;
+
+            userIds.add(i);
+        }
+
+        int desireId = userId == 0 ? 0 : 3;
 
         Media[] media = getMedia();
 
@@ -158,8 +168,8 @@ public class Dummies {
         setDesireIds(desires, media.length, users.length);
 
         return new Rating[]{
-                new Rating(userId, 5),
-                new Rating(userId, new Date(System.currentTimeMillis()), 3, "Awesome", users[0], desires[0])
+                new Rating(userId, new Date(System.currentTimeMillis()), 5, "Awesome", users[userIds.get(0)], desires[desireId]),
+                new Rating(userId, new Date(System.currentTimeMillis()), 3, "not bad", users[userIds.get(1)], desires[desireId])
         };
     }
 

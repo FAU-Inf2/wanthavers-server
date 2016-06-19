@@ -1,15 +1,22 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
+import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.Haver;
 import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
+import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
+import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
+import java.util.Date;
 import java.util.List;
 
 
@@ -32,10 +39,26 @@ public class RatingResourceImpl implements RatingResource {
 
     @Override
     @UnitOfWork
+    public Rating createRating(@Auth User rater, long userId, long desireId, float stars, String comment) {
+        Desire desire = getDesire(desireId);
+
+        Haver haver = getHaver(desireId);
+
+        checkPermission(rater.getId(), userId, desire, haver);
+
+        Rating newRating = new Rating(userId, new Date(System.currentTimeMillis()), stars, comment, rater, desire);
+        Rating ret = ratingFacade.createNewRating(userId, newRating);
+
+        updateUserAvgRating(userId);
+        return ret;
+    }
+
+    @Override
+    @UnitOfWork
     public Rating get(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "id of the rating", required = true) long id) {
         Rating rating = ratingFacade.getRatingByID(userId, id);
 
-        if(rating == null)
+        if (rating == null)
             throw new WebApplicationException(404);
 
         return rating;
@@ -43,16 +66,15 @@ public class RatingResourceImpl implements RatingResource {
 
     @Override
     @UnitOfWork
-    public Rating createRating(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "Rating to create", required = true) Rating newRating) {
-        Rating ret = ratingFacade.createNewRating(userId, newRating);
-        updateUserAvgRating(userId);
-        return ret;
-    }
+    public Rating updateRating(@Auth User rater, @ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "id of the rating", required = true) long id, float stars, String comment) {
+        getAndCheckRating(rater, userId, id);
 
-    @Override
-    @UnitOfWork
-    public Rating updateRating(@ApiParam(value = "id of the desired user", required = true) long userId, @ApiParam(value = "id of the rating", required = true) long id, @ApiParam(value = "new details of the specified rating", required = true) Rating rating) {
-        Rating ret = ratingFacade.updateRating(userId, id, rating);
+        Rating ret = ratingFacade.updateRating(userId, id, stars, comment);
+
+        if (ret == null) {
+            throw new WebApplicationException(400);
+        }
+
         updateUserAvgRating(userId);
         return ret;
     }
@@ -73,14 +95,14 @@ public class RatingResourceImpl implements RatingResource {
     @Override
     @UnitOfWork
     public void createDummies(@ApiParam(value = "id of the desired user", required = true) long userId) {
-        if(dummyExecuted > 1) {
+        if (dummyExecuted > 1) {
             return;
         }
 
         Rating[] ratings = Dummies.getRatings(userId);
 
-        for(Rating r : ratings)
-            createRating(userId, r);
+        for (Rating r : ratings)
+            ratingFacade.createNewRating(userId, r);
 
         dummyExecuted++;
     }
@@ -92,4 +114,40 @@ public class RatingResourceImpl implements RatingResource {
         userFacade.updateUser(userId, user);
     }
 
+    private void checkPermission(long raterId, long rateeId, Desire desire, Haver haver) throws WebApplicationException {
+        if (raterId != desire.getCreator().getId() && raterId != haver.getUser().getId()) {
+            throw new WebApplicationException(409);
+        }
+
+        if (rateeId != desire.getCreator().getId() && rateeId != haver.getUser().getId()) {
+            throw new WebApplicationException(409);
+        }
+    }
+
+    private Desire getDesire(long desireId) throws WebApplicationException {
+        Desire desire = ((DesireFacade) SingletonManager.get(DesireFacade.class)).getDesireByID(desireId);
+        if (desire == null) {
+            throw new WebApplicationException(400);
+        }
+
+        return desire;
+    }
+
+    private Haver getHaver(long desireId) throws WebApplicationException {
+        Haver haver = ((HaverFacade) SingletonManager.get(HaverFacade.class)).getAccepted(desireId);
+        if (haver == null) {
+            throw new WebApplicationException(400);
+        }
+
+        return haver;
+    }
+
+    private Rating getAndCheckRating(User rater, long userId, long id) throws WebApplicationException {
+        Rating stored = ratingFacade.getRatingByID(userId, id);
+        if (stored.getRater().getId() != rater.getId()) {
+            throw new WebApplicationException(403);
+        }
+
+        return stored;
+    }
 }

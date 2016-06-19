@@ -53,14 +53,15 @@ public class RatingDAO extends AbstractSuperDAO<Rating>{
         return checkForCorrectUserId(userId, rating);
     }
 
-    public Rating update(long userId, long id, Rating newRating) {
+    public Rating update(long userId, long id, float stars, String comment) {
         Rating stored = this.findById(userId, id);
         if(stored == null || checkForCorrectUserId(userId, stored) == null) return null;
-        newRating.setId(stored.getId());
-        currentSession().merge(newRating);
+        stored.setStars(stars);
+        stored.setComment(comment);
+        currentSession().merge(stored);
 
         //persist(newRating);
-        return newRating;
+        return stored;
     }
 
     public Rating average(long userId) {

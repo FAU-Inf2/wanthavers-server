@@ -24,8 +24,8 @@ public class RatingFacade {
         return this.dao.create(newRating);
     }
 
-    public Rating updateRating(long userId, long id, Rating rating) {
-        return this.dao.update(userId, id, rating);
+    public Rating updateRating(long userId, long id, float stars, String comment) {
+        return this.dao.update(userId, id, stars, comment);
     }
 
     public boolean deleteRating(long userId, long id) {
