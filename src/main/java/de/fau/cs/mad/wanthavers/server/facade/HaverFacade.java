@@ -1,6 +1,10 @@
 package de.fau.cs.mad.wanthavers.server.facade;
 
-import de.fau.cs.mad.wanthavers.common.Haver;
+import de.fau.cs.mad.wanthavers.common.*;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
+import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
+import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessageSender;
+import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
 import de.fau.cs.mad.wanthavers.server.dao.HaverDAO;
 
 import java.util.List;
@@ -25,7 +29,20 @@ public class HaverFacade {
     }
 
     public Haver updateHaver(long desireId, long id, Haver haver) {
-        return this.dao.update(desireId, id, haver);
+        Haver ret = this.dao.update(desireId, id, haver);
+
+        if(haver.getStatus() == HaverStatus.ACCEPTED) {
+            DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
+            Desire desire = desireDAO.findById(desireId);
+
+            CloudMessage message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERACCEPTED, "You were accepted!",
+                    "You were accepted for "+desire.getTitle()+" by "+desire.getCreator().getName()+".");
+            message.addKeyValue(CloudMessageSubject.HAVERACCEPTED_DESIREID, desireId);
+            message.addKeyValue(CloudMessageSubject.HAVERACCPETED_DESIRETITLE, desire.getTitle());
+            CloudMessageSender.sendMessage(message);
+        }
+
+        return ret;
     }
 
     public boolean deleteHaver(long desireId, long id) {
