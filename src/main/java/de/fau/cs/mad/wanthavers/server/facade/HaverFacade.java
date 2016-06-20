@@ -25,7 +25,18 @@ public class HaverFacade {
     }
 
     public Haver createNewHaver(long desireId, Haver newHaver) {
-        return this.dao.create(newHaver);
+        Haver ret = this.dao.create(newHaver);
+
+        DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
+        Desire desire = desireDAO.findById(desireId);
+
+        CloudMessage message = new CloudMessage(desire.getCreator().getId(), CloudMessageSubject.NEWHAVER, "New Haver!",
+                "A new Haver would like to help you out with "+desire.getTitle()+".");
+        message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIREID, desireId);
+        message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIRETITLE, desire.getTitle());
+        CloudMessageSender.sendMessage(message);
+
+        return ret;
     }
 
     public Haver updateHaver(long desireId, long id, Haver haver) {
