@@ -17,8 +17,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.sun.tools.javac.jvm.ByteCodes.ret;
-
 public class ChatDAO{
 
     public ChatDAO() {
