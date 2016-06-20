@@ -35,7 +35,7 @@ public class CloudMessage {
         this.userId = userId;
     }
 
-    public void addKeyValue(String key, String value) {
+    public void addKeyValue(String key, Object value) {
         data.put(key, value);
     }
 
