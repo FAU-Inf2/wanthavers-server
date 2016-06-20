@@ -33,7 +33,7 @@ public class DesireFlagFacade {
         desire.setFlagCounter(desire.getFlagCounter() + 1);
         desireDAO.update(id, desire);
 
-        if(desire.getFlagCounter() >= 5) {
+        if(desire.getFlagCounter() % 5 == 0) {
             List<DesireFlag> flags = dao.getDesireFlagsByDesireId(id);
             String reasons = "";
             for(DesireFlag f : flags)
