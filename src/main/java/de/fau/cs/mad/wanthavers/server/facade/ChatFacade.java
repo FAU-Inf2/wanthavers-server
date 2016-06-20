@@ -39,7 +39,9 @@ public class ChatFacade {
         User reciever = user;//chat.getUser1() != user.getId() ? chat.getUserObject1() : chat.getUserObject2();
 
         CloudMessage message = new CloudMessage(reciever.getId(), CloudMessageSubject.NEWMESSAGE, user.getName(), ret.getBody());
-        message.addKeyValue("sender", user);
+        message.addKeyValue(CloudMessageSubject.NEWMESSAGE_SENDER, user.getName());
+        message.addKeyValue(CloudMessageSubject.NEWMESSAGE_SENDERID, user.getId());
+        message.addKeyValue(CloudMessageSubject.NEWMESSAGE_CHATID, chatId);
         CloudMessageSender.sendMessage(message);
 
         return ret;
