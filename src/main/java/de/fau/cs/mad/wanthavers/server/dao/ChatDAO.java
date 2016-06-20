@@ -7,6 +7,7 @@ import de.fau.cs.mad.wanthavers.server.parse.mapper.ChatMapper;
 import de.fau.cs.mad.wanthavers.server.parse.mapper.MessageMapper;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseChat;
 import de.fau.cs.mad.wanthavers.server.parse.models.ParseMessage;
+import de.fau.cs.mad.wanthavers.server.sort.ChatUpdatedAtComparator;
 import org.parse4j.Parse;
 import org.parse4j.ParseException;
 import org.parse4j.ParseObject;
@@ -14,6 +15,7 @@ import org.parse4j.ParseQuery;
 import org.parse4j.util.ParseRegistry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -42,6 +44,8 @@ public class ChatDAO{
             list.addAll(ChatMapper.get(query2.find()));
         } catch (ParseException e) {}
 
+
+        Collections.sort(list, new ChatUpdatedAtComparator());
         return list;
     }
 
