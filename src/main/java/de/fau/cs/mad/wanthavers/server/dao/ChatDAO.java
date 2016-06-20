@@ -87,11 +87,21 @@ public class ChatDAO{
         m.setFrom(user.getId());
         m.setChatId(chatId);
 
-        ParseChat pc = m.getChat();
-        pc.increment(ParseChat.counter);
+        ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
+        query.whereEqualTo("objectId", chatId);
 
         try {
-            pc.save();
+            List<ParseChat> tmp = query.find();
+            if(!tmp.isEmpty()){
+                ParseChat chat = tmp.get(0);
+                chat.increment(ParseChat.counter);
+                chat.save();
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        try {
             m.save();
             return MessageMapper.get(m);
         } catch (ParseException e) {

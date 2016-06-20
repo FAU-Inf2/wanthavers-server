@@ -24,10 +24,6 @@ public class ParseMessage extends ParseObject {
         put(chatId, ParseObject.createWithoutData("Chat", value));
     }
 
-    public ParseChat getChat(){
-        return (ParseChat) getParseObject(chatId);
-    }
-
     public void setBody(String value) {
         put(body, value);
     }
