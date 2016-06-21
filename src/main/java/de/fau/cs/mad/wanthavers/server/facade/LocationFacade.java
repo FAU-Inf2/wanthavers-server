@@ -17,4 +17,8 @@ public class LocationFacade {
     public Location createLocation(Location location){return this.dao.create(location);}
 
     public Location updateLocation(long id, Location location){return this.dao.updateLocation(id, location);}
+
+    public void deleteLocation(long id){
+        this.dao.deleteById(id);
+    }
 }

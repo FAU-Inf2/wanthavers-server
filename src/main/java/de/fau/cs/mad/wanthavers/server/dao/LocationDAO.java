@@ -41,5 +41,4 @@ public class LocationDAO extends AbstractSuperDAO<Location>{
         return modified;
     }
 
-
 }
