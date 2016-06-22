@@ -11,6 +11,7 @@ import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
 import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
+import de.fau.cs.mad.wanthavers.server.misc.DynamicStringParser;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
@@ -39,7 +40,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public static final String SERVER_URL = "http://faui21f.informatik.uni-erlangen.de:9090";
 
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class, LangString.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -126,6 +127,11 @@ public class ServerApplication extends Application<ServerConfiguration> {
         SingletonManager.add(desireFlagDAO);
         SingletonManager.add(desireFlagFacade);
 
+        final LangStringDAO langStringDAO = new LangStringDAO(hibernate.getSessionFactory());
+        final LangStringFacade langStringFacade = new LangStringFacade(langStringDAO);
+        SingletonManager.add(langStringDAO);
+        SingletonManager.add(langStringFacade);
+
         /** create resources and register **/
 
         environment.jersey().register(MultiPartFeature.class);
@@ -175,7 +181,10 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final FlagResourceImpl flagResource = new FlagResourceImpl(desireFlagFacade);
         environment.jersey().register(flagResource);
-        
+
+        final LangStringResourceImpl langStringResource = new LangStringResourceImpl(langStringFacade);
+        environment.jersey().register(langStringResource);
+
 	    final LoginResource loginResource = new LoginResourceImpl();
         environment.jersey().register(loginResource);
 
