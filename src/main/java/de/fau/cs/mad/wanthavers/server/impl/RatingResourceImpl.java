@@ -49,6 +49,16 @@ public class RatingResourceImpl implements RatingResource {
         Rating newRating = new Rating(userId, new Date(System.currentTimeMillis()), stars, comment, rater, desire);
         Rating ret = ratingFacade.createNewRating(userId, newRating);
 
+        if (rater.getId() == desire.getCreator().getId()) {
+            desire.setCreatorHasRated(true);
+        }
+
+        if (rater.getId() == haver.getUser().getId()) {
+            desire.setHaverHasRated(true);
+        }
+
+        ((DesireFacade)SingletonManager.get(DesireFacade.class)).updateDesire(desireId, desire);
+
         updateUserAvgRating(userId);
         return ret;
     }
@@ -145,7 +155,7 @@ public class RatingResourceImpl implements RatingResource {
 
     private Rating getAndCheckRating(User rater, long userId, long id) throws WebApplicationException {
         Rating stored = ratingFacade.getRatingByID(userId, id);
-        if(stored == null) {
+        if (stored == null) {
             throw new WebApplicationException("rating not found", 404);
         }
 
