@@ -154,7 +154,7 @@ public class Dummies {
             userIds.add(i);
         }
 
-        int desireId = userId == 0 ? 0 : 3;
+        int desireId = userId == 1 ? 0 : 3;
 
         Media[] media = getMedia();
 

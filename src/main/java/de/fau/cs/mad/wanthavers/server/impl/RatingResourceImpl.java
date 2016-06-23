@@ -40,6 +40,8 @@ public class RatingResourceImpl implements RatingResource {
     @Override
     @UnitOfWork
     public Rating createRating(@Auth User rater, long userId, long desireId, float stars, String comment) {
+        checkIfAlreadyRated(rater, desireId);
+
         Desire desire = getDesire(desireId);
 
         Haver haver = getHaver(desireId);
@@ -57,7 +59,7 @@ public class RatingResourceImpl implements RatingResource {
             desire.setHaverHasRated(true);
         }
 
-        ((DesireFacade)SingletonManager.get(DesireFacade.class)).updateDesire(desireId, desire);
+        ((DesireFacade) SingletonManager.get(DesireFacade.class)).updateDesire(desireId, desire);
 
         updateUserAvgRating(userId);
         return ret;
@@ -111,10 +113,16 @@ public class RatingResourceImpl implements RatingResource {
 
         Rating[] ratings = Dummies.getRatings(userId);
 
-        for (Rating r : ratings)
+        for (Rating r : ratings) {
             ratingFacade.createNewRating(userId, r);
+            List<Rating> rat = ratingFacade.getRatingsForDesire(r.getRatedTransaction().getId());
+            for(Rating r2 : rat) {
+                System.out.println("Desire: " + r.getRatedTransaction().getId() + ", Rating: " + r2.getId());
+            }
+        }
 
         updateUserAvgRating(userId);
+
         dummyExecuted++;
     }
 
@@ -164,5 +172,14 @@ public class RatingResourceImpl implements RatingResource {
         }
 
         return stored;
+    }
+
+    private void checkIfAlreadyRated(User rater, long desireId) {
+        List<Rating> ratings = ratingFacade.getRatingsForDesire(desireId);
+        for (Rating r : ratings) {
+            if (rater.getId() == r.getRater().getId()) {
+                throw new WebApplicationException("already rated", 409);
+            }
+        }
     }
 }
