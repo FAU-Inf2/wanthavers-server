@@ -115,10 +115,6 @@ public class RatingResourceImpl implements RatingResource {
 
         for (Rating r : ratings) {
             ratingFacade.createNewRating(userId, r);
-            List<Rating> rat = ratingFacade.getRatingsForDesire(r.getRatedTransaction().getId());
-            for(Rating r2 : rat) {
-                System.out.println("Desire: " + r.getRatedTransaction().getId() + ", Rating: " + r2.getId());
-            }
         }
 
         updateUserAvgRating(userId);
