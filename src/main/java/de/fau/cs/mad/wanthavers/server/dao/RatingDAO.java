@@ -77,4 +77,9 @@ public class RatingDAO extends AbstractSuperDAO<Rating>{
         return new Rating(userId, stars / (float) ratings.size());
     }
 
+    public List<Rating> getRatingsForDesire(long desireId) {
+        Criteria criteria = currentSession().createCriteria(Rating.class)
+                .add(Restrictions.eq("ratedTransaction.id", desireId));
+        return criteria.list();
+    }
 }

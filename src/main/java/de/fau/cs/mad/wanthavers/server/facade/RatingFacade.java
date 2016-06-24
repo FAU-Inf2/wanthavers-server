@@ -35,4 +35,8 @@ public class RatingFacade {
     public Rating avgRating(long userId) {
         return this.dao.average(userId);
     }
+
+    public List<Rating> getRatingsForDesire(long desireId) {
+        return dao.getRatingsForDesire(desireId);
+    }
 }

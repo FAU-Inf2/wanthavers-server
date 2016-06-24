@@ -34,6 +34,10 @@ public abstract class AbstractSuperDAO<E extends AbstractModel> extends Abstract
         return true;
     }
 
+    public void deleteById(long id){
+        delete(findById(id));
+    }
+
     /*
     public List<E> findAllNew(E last) {
         long timestamp = last.getLastModified().getTime();

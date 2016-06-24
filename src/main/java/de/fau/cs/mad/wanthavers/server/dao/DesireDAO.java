@@ -64,7 +64,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.ge("price", price_min));
         }
 
-        if (price_max != null && price_max > price_min) {
+        if (price_max != null) {
             criteria.add(Restrictions.le("price", price_max));
         }
 

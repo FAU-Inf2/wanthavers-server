@@ -40,6 +40,8 @@ public class RatingResourceImpl implements RatingResource {
     @Override
     @UnitOfWork
     public Rating createRating(@Auth User rater, long userId, long desireId, float stars, String comment) {
+        checkIfAlreadyRated(rater, desireId);
+
         Desire desire = getDesire(desireId);
 
         Haver haver = getHaver(desireId);
@@ -48,6 +50,16 @@ public class RatingResourceImpl implements RatingResource {
 
         Rating newRating = new Rating(userId, new Date(System.currentTimeMillis()), stars, comment, rater, desire);
         Rating ret = ratingFacade.createNewRating(userId, newRating);
+
+        if (rater.getId() == desire.getCreator().getId()) {
+            desire.setCreatorHasRated(true);
+        }
+
+        if (rater.getId() == haver.getUser().getId()) {
+            desire.setHaverHasRated(true);
+        }
+
+        ((DesireFacade) SingletonManager.get(DesireFacade.class)).updateDesire(desireId, desire);
 
         updateUserAvgRating(userId);
         return ret;
@@ -101,10 +113,12 @@ public class RatingResourceImpl implements RatingResource {
 
         Rating[] ratings = Dummies.getRatings(userId);
 
-        for (Rating r : ratings)
+        for (Rating r : ratings) {
             ratingFacade.createNewRating(userId, r);
+        }
 
         updateUserAvgRating(userId);
+
         dummyExecuted++;
     }
 
@@ -145,7 +159,7 @@ public class RatingResourceImpl implements RatingResource {
 
     private Rating getAndCheckRating(User rater, long userId, long id) throws WebApplicationException {
         Rating stored = ratingFacade.getRatingByID(userId, id);
-        if(stored == null) {
+        if (stored == null) {
             throw new WebApplicationException("rating not found", 404);
         }
 
@@ -154,5 +168,14 @@ public class RatingResourceImpl implements RatingResource {
         }
 
         return stored;
+    }
+
+    private void checkIfAlreadyRated(User rater, long desireId) {
+        List<Rating> ratings = ratingFacade.getRatingsForDesire(desireId);
+        for (Rating r : ratings) {
+            if (rater.getId() == r.getRater().getId()) {
+                throw new WebApplicationException("already rated", 409);
+            }
+        }
     }
 }
