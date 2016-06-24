@@ -9,6 +9,8 @@ import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
+import javax.ws.rs.WebApplicationException;
+
 public class LocationResourceImpl implements LocationResource {
 
     private final LocationFacade facade;
@@ -27,6 +29,21 @@ public class LocationResourceImpl implements LocationResource {
     public Location createLocation(@Auth User user, @ApiParam(value = "Location to create", required = true) Location location) {
         location.setUserId(user.getId());
         return this.facade.createLocation(location);
+    }
+
+    @Override
+    @UnitOfWork
+    public Location get(@Auth User user, long id) {
+        Location location = facade.getLocation(id);
+        if (location == null) {
+            throw new WebApplicationException(404);
+        }
+
+        if (location.getUserId() != user.getId()) {
+            throw new WebApplicationException(401);
+        }
+
+        return location;
     }
 
     @Override
