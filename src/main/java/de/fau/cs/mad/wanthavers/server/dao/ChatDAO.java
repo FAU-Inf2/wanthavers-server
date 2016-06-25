@@ -24,7 +24,7 @@ public class ChatDAO{
     public ChatDAO() {
         ParseRegistry.registerSubclass(ParseChat.class);
         ParseRegistry.registerSubclass(ParseMessage.class);
-        Parse.initialize("wanthavers", "", "http://localhost:8090/parse");
+        Parse.initialize("wanthavers", "", "http://chat:8090/parse");
     }
 
 
