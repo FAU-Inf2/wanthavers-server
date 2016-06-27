@@ -30,7 +30,7 @@ public class CreateCategoriesTask extends SessionContextTask {
         registerLangString(DE, CAR_KEY, "Auto & Motorrad");
         registerLangString(EN, CAR_KEY, "Cars & Bicycles");
 
-        final String BEAUTY_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/377fcd6d-ed71-466b-b9ad-2681cf82e874.png";
+        final String BEAUTY_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/hospital.png";
         final String BEAUTY_KEY     = "CATEGORY_BEAUTY";
         registerLangString(DE, BEAUTY_KEY, "Beauty & Gesundheit");
         registerLangString(EN, BEAUTY_KEY, "Beauty & Health");
@@ -75,7 +75,7 @@ public class CreateCategoriesTask extends SessionContextTask {
         registerLangString(DE, CLOTHES_KEY, "Kleidung & Schumck");
         registerLangString(EN, CLOTHES_KEY, "Clothes & Jewellery");
 
-        final String LIVING_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/fc74e92d-5b34-4fac-a6d9-d025ba59cc18.png";
+        final String LIVING_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/desk.png";
         final String LIVING_KEY     = "CATEGORY_LIVING";
         registerLangString(DE, LIVING_KEY, "Möbel & Wohnen");
         registerLangString(EN, LIVING_KEY, "Furniture & Lifestyle");
@@ -90,12 +90,12 @@ public class CreateCategoriesTask extends SessionContextTask {
         registerLangString(DE, TRAVEL_KEY, "Reisen");
         registerLangString(EN, TRAVEL_KEY, "Travelling");
 
-        final String TICKETS_IMAGE  = "https://s3.eu-central-1.amazonaws.com/whimages/eb094f67-e2cc-442a-bf1b-13c88d7e83be.png";
+        final String TICKETS_IMAGE  = "https://s3.eu-central-1.amazonaws.com/whimages/tickets.png";
         final String TICKETS_KEY     = "CATEGORY_TICKETS";
         registerLangString(DE, TICKETS_KEY, "Tickets");
         registerLangString(EN, TICKETS_KEY, "Tickets");
 
-        final String ESTATE_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/341fce8d-f751-4286-8a58-ed981593447f.png";
+        final String ESTATE_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/house.png";
         final String ESTATE_KEY     = "CATEGORY_ESTATE";
         registerLangString(DE, ESTATE_KEY, "Immobilien");
         registerLangString(EN, ESTATE_KEY, "Real Estate");
