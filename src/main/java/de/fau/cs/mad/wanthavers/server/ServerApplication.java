@@ -191,15 +191,15 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         /** register or run tasks **/
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
-        environment.admin().addTask(createCategoriesTask);
-        //createCategoriesTask.executeNow();
+        //environment.admin().addTask(createCategoriesTask);
+        createCategoriesTask.executeNow();
 
         DummyDataTask dummyDataTask = new DummyDataTask("DummyDataTask", hibernate.getSessionFactory());
-        environment.admin().addTask(dummyDataTask);
-        //dummyDataTask.executeNow();
+        //environment.admin().addTask(dummyDataTask);
+        dummyDataTask.executeNow();
 
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
-        //createStringsTask.executeNow();
+        createStringsTask.executeNow();
     }
 
     public static void main(String[] args) {

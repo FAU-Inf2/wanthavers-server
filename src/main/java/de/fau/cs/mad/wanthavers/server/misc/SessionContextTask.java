@@ -27,6 +27,7 @@ public abstract class SessionContextTask extends Task{
         try {
             /** excecute template method **/
             run(parameters, output);
+            transaction.commit();
         }catch(Exception e) {
             transaction.rollback();
             throw new RuntimeException(e);

@@ -3,6 +3,7 @@ package de.fau.cs.mad.wanthavers.server.tasks;
 import com.google.common.collect.ImmutableMultimap;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
+import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.dao.MediaDAO;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.UserResourceImpl;
@@ -28,20 +29,16 @@ public class DummyDataTask extends SessionContextTask {
     @Override
     public void run(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
         users = getUsers();
-        //categories = getCategories();
-        //desires = getDesires();
-
-        System.out.println("users.length: " + users.length);
+        categories = getCategories();
+        desires = getDesires();
 
         UserResourceImpl userImpl = (UserResourceImpl) SingletonManager.get(UserResourceImpl.class);
 
-        for (int i = 0; i < users.length; i++) {
+        for(int i = 0; i < users.length; i++) {
             User u = users[i];
             users[i] = userImpl.createUser(u, u.getPassword());
-            System.out.println("Id: " + u.getId() + ", Name:" + u.getName());
         }
 
-        /*
         DesireFacade desireFacade = (DesireFacade) SingletonManager.get(DesireFacade.class);
 
         for (int i = 0; i < desires.length; i++) {
@@ -72,10 +69,9 @@ public class DummyDataTask extends SessionContextTask {
         for (DesireFlag df : desireFlags) {
             desireFlagFacade.flagDesire(df.getDesireId(), df);
         }
-        */
     }
 
-    public static User[] getUsers() {
+    public static User[] getUsers() throws Exception {
         String adminPw = System.getenv("ADMIN_PW") == null ? "test" : System.getenv("ADMIN_PW");
         String adminEmail = System.getenv("ADMIN_EMAIL") == null ? "wanthavers" : System.getenv("ADMIN_EMAIL");
         User admin = new User("Admin", adminEmail);
@@ -83,7 +79,8 @@ public class DummyDataTask extends SessionContextTask {
         admin.setLangCode("en_EN");
 
         User yoda = new User("Yoda", "com.mail@yoda");
-        yoda.setPassword("test");
+        yoda.setPassword(HashHelper.getSaltedHash("test"));
+        yoda.setStatus(UserStatus.ACTIVE);
         yoda.setLangCode("de_DE");
         yoda.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/64a842da-46b3-4e85-9dd8-a5e15ad3e9e7.jpg"));
 
@@ -116,7 +113,15 @@ public class DummyDataTask extends SessionContextTask {
         dagobert.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/0fe5a41a-1a49-4b26-b383-39b01643f948.jpg"));
 
         return new User[]{
-                yoda
+                yoda,
+                jon,
+                max,
+                tick,
+                trick,
+                track,
+                donald,
+                dagobert,
+                admin
         };
     }
 
@@ -146,12 +151,12 @@ public class DummyDataTask extends SessionContextTask {
         abgeschlossen.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
 
         return new Desire[]{
-                kastenBier,
-                doener,
-                aldi,
-                autowaschen,
+                abgeschlossen,
                 konzertticket,
-                abgeschlossen
+                autowaschen,
+                aldi,
+                doener,
+                kastenBier
         };
     }
 
