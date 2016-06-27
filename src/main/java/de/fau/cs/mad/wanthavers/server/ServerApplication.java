@@ -191,6 +191,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
         environment.admin().addTask(createCategoriesTask);
 
+        CreateCategoriesTask dummyDataTask = new CreateCategoriesTask("DummyDataTast", hibernate.getSessionFactory());
+        environment.admin().addTask(dummyDataTask);
+
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
         createStringsTask.executeNow();
 
