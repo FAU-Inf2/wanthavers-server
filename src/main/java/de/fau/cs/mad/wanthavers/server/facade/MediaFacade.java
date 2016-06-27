@@ -25,7 +25,7 @@ public class MediaFacade {
         return dao.findAll();
     }
 
-    public Media createNewDesire(User user, String base64, String filename){
+    public Media createNewMedia(User user, String base64, String filename){
         return dao.create(user, base64, filename);
     }
 

@@ -46,7 +46,7 @@ public class MediaResourceImpl implements MediaResource {
     @Override
     @UnitOfWork
     public Media createMedia(@Auth User user, String base64, String filename) {
-        return this.facade.createNewDesire(user, base64, filename);
+        return this.facade.createNewMedia(user, base64, filename);
     }
 
     @UnitOfWork
