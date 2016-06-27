@@ -79,6 +79,7 @@ public class DummyDataTask extends SessionContextTask {
         admin.setLangCode("en_EN");
 
         User yoda = new User("Yoda", "com.mail@yoda");
+        yoda.setPassword("test");
         yoda.setLangCode("de_DE");
         yoda.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/64a842da-46b3-4e85-9dd8-a5e15ad3e9e7.jpg"));
 
