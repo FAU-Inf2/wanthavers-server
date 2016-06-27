@@ -62,7 +62,7 @@ public class Dummies {
         User yoda = new User("Yoda", "com.mail@yoda");
         yoda.setImage(media[0]);
         yoda.setPassword("test");
-
+        yoda.setLangCode("de_DE");
         yoda.setRole(UserRoles.USER_ROLE_ADMIN);
 
 /*        Set<String> roles = new HashSet<>();

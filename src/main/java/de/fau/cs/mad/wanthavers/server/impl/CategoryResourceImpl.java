@@ -3,19 +3,16 @@ package de.fau.cs.mad.wanthavers.server.impl;
 
 import de.fau.cs.mad.wanthavers.common.Category;
 import de.fau.cs.mad.wanthavers.common.Desire;
-import de.fau.cs.mad.wanthavers.common.Media;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.CategoryResource;
-import de.fau.cs.mad.wanthavers.common.rest.api.MediaResource;
 import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
-import de.fau.cs.mad.wanthavers.server.facade.MediaFacade;
+import de.fau.cs.mad.wanthavers.server.misc.TranslationHelper;
+import de.fau.cs.mad.wanthavers.server.sort.CategoryNameComperator;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
-import javax.ws.rs.WebApplicationException;
-import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 public class CategoryResourceImpl implements CategoryResource {
@@ -29,18 +26,24 @@ public class CategoryResourceImpl implements CategoryResource {
 
     @Override
     @UnitOfWork
-    public Category get(@ApiParam(value = "id of the desired Category", required = true) long id) {
-        return this.facade.getById(id);
+    public Category get(@Auth User user, @ApiParam(value = "id of the desired Category", required = true) long id) {
+        return TranslationHelper.translate(this.facade.getById(id), user.getLangCode());
     }
 
     @Override
     @UnitOfWork
-    public List<Category> getSub(@ApiParam(value = "id of the desired Category", required = true) long id, boolean recursive) {
+    public List<Category> getSub(@Auth User user, @ApiParam(value = "id of the desired Category", required = true) long id, boolean recursive) {
+
+        List<Category> ret;
+
         if(recursive){
-            return this.facade.getSubCategoriesDeep(id);
+            ret = TranslationHelper.translate(this.facade.getSubCategoriesDeep(id), user.getLangCode());
         }else{
-            return this.facade.getSubCategoriesFlat(id);
+            ret = TranslationHelper.translate(this.facade.getSubCategoriesFlat(id), user.getLangCode());
         }
+
+        Collections.sort(ret, new CategoryNameComperator());
+        return ret;
     }
 
     @Override

@@ -3,7 +3,6 @@ package de.fau.cs.mad.wanthavers.server;
 
 import com.amazonaws.regions.Regions;
 import de.fau.cs.mad.wanthavers.common.*;
-import de.fau.cs.mad.wanthavers.common.rest.api.FlagResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
@@ -11,8 +10,9 @@ import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
 import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
-import de.fau.cs.mad.wanthavers.server.misc.DynamicStringParser;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
+import de.fau.cs.mad.wanthavers.server.tasks.CreateCategoriesTask;
+import de.fau.cs.mad.wanthavers.server.tasks.CreateStringsTask;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -26,18 +26,12 @@ import io.federecio.dropwizard.swagger.SwaggerBundle;
 import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
 import io.swagger.jaxrs.config.BeanConfig;
 import io.swagger.jaxrs.listing.ApiListingResource;
-import org.eclipse.jetty.server.Dispatcher;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
-import org.eclipse.jetty.util.resource.FileResource;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import java.util.EnumSet;
-
 public class ServerApplication extends Application<ServerConfiguration> {
     public static final String SERVER_URL = "http://faui21f.informatik.uni-erlangen.de:9090";
+    public static final String DEFAULT_LANGCODE = "en_EN";
 
     private final HibernateBundle<ServerConfiguration> hibernate =
             new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class, LangString.class) {
@@ -192,6 +186,13 @@ public class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(api);
         //configureSwagger(environment);
 
+
+        /** register or run tasks **/
+        CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
+        environment.admin().addTask(createCategoriesTask);
+
+        CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
+        createStringsTask.executeNow();
 
 
     }

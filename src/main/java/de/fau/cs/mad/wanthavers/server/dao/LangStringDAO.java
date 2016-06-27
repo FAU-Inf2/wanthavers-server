@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 
 import de.fau.cs.mad.wanthavers.common.LangString;
+import de.fau.cs.mad.wanthavers.server.ServerApplication;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -21,6 +22,15 @@ public class LangStringDAO extends AbstractSuperDAO<LangString>{
                 .add(Restrictions.eq("langCode", code));
 
         LangString ls = (LangString)criteria.uniqueResult();
+
+        /** use default language as fallback **/
+        if(ls == null){
+            criteria = currentSession().createCriteria(LangString.class)
+                    .add(Restrictions.eq("key", key))
+                    .add(Restrictions.eq("langCode", ServerApplication.DEFAULT_LANGCODE));
+
+            ls = (LangString)criteria.uniqueResult();
+        }
         return ls;
     }
 
