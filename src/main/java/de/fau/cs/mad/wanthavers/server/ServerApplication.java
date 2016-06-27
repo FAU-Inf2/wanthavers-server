@@ -13,6 +13,7 @@ import de.fau.cs.mad.wanthavers.server.impl.*;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
 import de.fau.cs.mad.wanthavers.server.tasks.CreateCategoriesTask;
 import de.fau.cs.mad.wanthavers.server.tasks.CreateStringsTask;
+import de.fau.cs.mad.wanthavers.server.tasks.DummyDataTask;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -132,6 +133,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(CORSResponseFilter.class);
 
         final UserResourceImpl userResource = new UserResourceImpl(userFacade, ratingFacade);
+        SingletonManager.add(userResource);
         environment.jersey().register(userResource);
 
         environment.jersey().register(new AuthDynamicFeature(
@@ -190,14 +192,14 @@ public class ServerApplication extends Application<ServerConfiguration> {
         /** register or run tasks **/
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
         environment.admin().addTask(createCategoriesTask);
+        //createCategoriesTask.executeNow();
 
-        CreateCategoriesTask dummyDataTask = new CreateCategoriesTask("DummyDataTast", hibernate.getSessionFactory());
+        DummyDataTask dummyDataTask = new DummyDataTask("DummyDataTask", hibernate.getSessionFactory());
         environment.admin().addTask(dummyDataTask);
+        //dummyDataTask.executeNow();
 
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
-        createStringsTask.executeNow();
-
-
+        //createStringsTask.executeNow();
     }
 
     public static void main(String[] args) {
