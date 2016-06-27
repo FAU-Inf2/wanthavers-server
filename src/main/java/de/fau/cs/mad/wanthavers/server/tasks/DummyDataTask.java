@@ -6,6 +6,7 @@ import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.dao.MediaDAO;
 import de.fau.cs.mad.wanthavers.server.facade.*;
+import de.fau.cs.mad.wanthavers.server.impl.RatingResourceImpl;
 import de.fau.cs.mad.wanthavers.server.impl.UserResourceImpl;
 import de.fau.cs.mad.wanthavers.server.misc.SessionContextTask;
 import org.hibernate.SessionFactory;
@@ -77,11 +78,13 @@ public class DummyDataTask extends SessionContextTask {
         User admin = new User("Admin", adminEmail);
         admin.setPassword(adminPw);
         admin.setLangCode("en_EN");
+        admin.setRole(UserRoles.USER_ROLE_ADMIN);
 
         User yoda = new User("Yoda", "com.mail@yoda");
         yoda.setPassword("test");
         yoda.setLangCode("de_DE");
         yoda.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/64a842da-46b3-4e85-9dd8-a5e15ad3e9e7.jpg"));
+        yoda.setRating(4.F);
 
         User jon = new User("Jon Doe", "jon@doe.com");
         jon.setPassword("test");
@@ -148,6 +151,8 @@ public class DummyDataTask extends SessionContextTask {
         Desire abgeschlossen = new Desire("Kuchen", "Mamorkuchen vom Bäcker", users[0], 5., 0., "EUR", new Date(System.currentTimeMillis() - 20 * 5 * 60 * 1000), "Abgeschlossenstraße 321", 49.589674, 11.011961, 0);
         abgeschlossen.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
         abgeschlossen.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
+        abgeschlossen.setStatus(DesireStatus.STATUS_DONE);
+        abgeschlossen.setHaverHasRated(true);
 
         return new Desire[]{
                 abgeschlossen,
@@ -161,7 +166,7 @@ public class DummyDataTask extends SessionContextTask {
 
     public static Rating[] getRatings() {
         return new Rating[]{
-                new Rating(1, new Date(System.currentTimeMillis()), 5, "Awesome", users[2], desires[5]),
+                new Rating(1, new Date(System.currentTimeMillis()), 4, "Awesome", users[2], desires[0]),
         };
     }
 
