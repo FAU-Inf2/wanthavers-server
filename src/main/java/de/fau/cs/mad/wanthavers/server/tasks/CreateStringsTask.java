@@ -1,14 +1,14 @@
 package de.fau.cs.mad.wanthavers.server.tasks;
 
 import com.google.common.collect.ImmutableMultimap;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
+import de.fau.cs.mad.wanthavers.server.facade.LangStringFacade;
 import de.fau.cs.mad.wanthavers.server.misc.SessionContextTask;
 import org.hibernate.SessionFactory;
 
 import java.io.PrintWriter;
-import java.util.HashMap;
 
 public class CreateStringsTask extends SessionContextTask {
-    private static HashMap<String, HashMap> strings = new HashMap<>();
     private static String DE = "de_DE";
     private static String EN = "en_EN";
 
@@ -29,12 +29,8 @@ public class CreateStringsTask extends SessionContextTask {
     }
 
     private void setTranslation(String key, String value, String langCode){
-        HashMap tmp = strings.get(key);
-        if(tmp == null){
-            tmp = new HashMap();
-        }
-        tmp.put(langCode, value);
-        strings.put(key, tmp);
+        LangStringFacade lsf = (LangStringFacade) SingletonManager.get(LangStringFacade.class);
+        lsf.createLangString(key, value, langCode);
     }
 
 
