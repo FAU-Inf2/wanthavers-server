@@ -3,10 +3,8 @@ package de.fau.cs.mad.wanthavers.server.tasks;
 import com.google.common.collect.ImmutableMultimap;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
-import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.dao.MediaDAO;
 import de.fau.cs.mad.wanthavers.server.facade.*;
-import de.fau.cs.mad.wanthavers.server.impl.RatingResourceImpl;
 import de.fau.cs.mad.wanthavers.server.impl.UserResourceImpl;
 import de.fau.cs.mad.wanthavers.server.misc.SessionContextTask;
 import org.hibernate.SessionFactory;
@@ -35,7 +33,7 @@ public class DummyDataTask extends SessionContextTask {
 
         UserResourceImpl userImpl = (UserResourceImpl) SingletonManager.get(UserResourceImpl.class);
 
-        for(int i = 0; i < users.length; i++) {
+        for (int i = 0; i < users.length; i++) {
             User u = users[i];
             users[i] = userImpl.createUser(u, u.getPassword());
         }
@@ -171,23 +169,26 @@ public class DummyDataTask extends SessionContextTask {
     }
 
     public static Haver[] getHavers() {
+        Haver accepted = new Haver(users[1], new Date(System.currentTimeMillis()), desires[0].getId());
+        accepted.setStatus(HaverStatus.ACCEPTED);
         return new Haver[]{
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[1].getId()),
-                new Haver(users[2], new Date(System.currentTimeMillis()), desires[1].getId()),
-                new Haver(users[3], new Date(System.currentTimeMillis()), desires[1].getId()),
-                new Haver(users[4], new Date(System.currentTimeMillis()), desires[1].getId()),
-                new Haver(users[5], new Date(System.currentTimeMillis()), desires[1].getId()),
-                new Haver(users[6], new Date(System.currentTimeMillis()), desires[1].getId()),
-                new Haver(users[7], new Date(System.currentTimeMillis()), desires[1].getId()),
+                new Haver(users[1], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[2], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[3], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[4], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[5], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[6], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[7], new Date(System.currentTimeMillis()), desires[4].getId()),
+                accepted
         };
     }
 
     public static DesireFlag[] getFlags() {
         return new DesireFlag[]{
-                new DesireFlag(desires[0].getId(), FlagReason.IMPOSSIBLE, "Geht nicht"),
-                new DesireFlag(desires[0].getId(), FlagReason.INAPPROPRIATE, "Ih"),
-                new DesireFlag(desires[0].getId(), FlagReason.SPAM, "..."),
-                new DesireFlag(desires[0].getId(), FlagReason.SPAM, "....")
+                new DesireFlag(desires[2].getId(), FlagReason.IMPOSSIBLE, "Geht nicht"),
+                new DesireFlag(desires[2].getId(), FlagReason.INAPPROPRIATE, "Ih"),
+                new DesireFlag(desires[2].getId(), FlagReason.SPAM, "..."),
+                new DesireFlag(desires[2].getId(), FlagReason.SPAM, "....")
         };
     }
 
