@@ -1,11 +1,10 @@
 package de.fau.cs.mad.wanthavers.server.impl;
 
-import de.fau.cs.mad.wanthavers.common.Location;
-import de.fau.cs.mad.wanthavers.common.Rating;
-import de.fau.cs.mad.wanthavers.common.User;
-import de.fau.cs.mad.wanthavers.common.UserStatus;
+import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
+import de.fau.cs.mad.wanthavers.server.facade.MediaFacade;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.auth.Auth;
@@ -58,7 +57,9 @@ public class UserResourceImpl implements UserResource {
         }
 
         if(newUser.getImage() == null) {
-            newUser.setImage(User.DefaultUserImage.get());
+            MediaFacade mediaFacade = (MediaFacade) SingletonManager.get(MediaFacade.class);
+            Media def = mediaFacade.createNewMedia(User.DefaultUserImage.get());
+            newUser.setImage(def);
         }
 
         try {
