@@ -147,7 +147,6 @@ public class ServerApplication extends Application<ServerConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
 
-
         //UserAuthenticator authenticator = new UserAuthenticator(userFacade);
         //environment.jersey().register(AuthFactory.binder(new BasicAuthFactory<>(authenticator, "SECRET", User.class)));
 
@@ -181,7 +180,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final LangStringResourceImpl langStringResource = new LangStringResourceImpl(langStringFacade);
         environment.jersey().register(langStringResource);
 
-	    final LoginResource loginResource = new LoginResourceImpl();
+        final LoginResource loginResource = new LoginResourceImpl();
         environment.jersey().register(loginResource);
 
         final ApiListingResource api = new ApiListingResource();
@@ -190,13 +189,15 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
 
         /** register or run tasks **/
+        String isProduction = System.getenv("IS_PRODUCTION") == null ? "false" : System.getenv("IS_PRODUCTION");
+
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
-        //environment.admin().addTask(createCategoriesTask);
         createCategoriesTask.executeNow();
 
         DummyDataTask dummyDataTask = new DummyDataTask("DummyDataTask", hibernate.getSessionFactory());
-        //environment.admin().addTask(dummyDataTask);
-        dummyDataTask.executeNow();
+        if (!isProduction.equals("true")) {
+            dummyDataTask.executeNow();
+        }
 
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
         createStringsTask.executeNow();
