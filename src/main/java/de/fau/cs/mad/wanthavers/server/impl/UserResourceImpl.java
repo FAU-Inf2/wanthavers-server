@@ -57,6 +57,10 @@ public class UserResourceImpl implements UserResource {
             throw new WebApplicationException(409);
         }
 
+        if(newUser.getImage() == null) {
+            newUser.setImage(User.DefaultUserImage.get());
+        }
+
         try {
             newUser.setPassword(HashHelper.getSaltedHash(password));
             newUser.setEmail(newUser.getEmail().toLowerCase());
