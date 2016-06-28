@@ -3,6 +3,7 @@ package de.fau.cs.mad.wanthavers.server;
 
 import com.amazonaws.regions.Regions;
 import de.fau.cs.mad.wanthavers.common.*;
+import de.fau.cs.mad.wanthavers.common.rest.api.AppVersionResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
@@ -11,6 +12,7 @@ import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
+import de.fau.cs.mad.wanthavers.server.tasks.AppVersionsTask;
 import de.fau.cs.mad.wanthavers.server.tasks.CreateCategoriesTask;
 import de.fau.cs.mad.wanthavers.server.tasks.CreateStringsTask;
 import de.fau.cs.mad.wanthavers.server.tasks.DummyDataTask;
@@ -35,7 +37,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public static final String DEFAULT_LANGCODE = "en_EN";
 
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class, LangString.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class, LangString.class, AppVersion.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -127,6 +129,11 @@ public class ServerApplication extends Application<ServerConfiguration> {
         SingletonManager.add(langStringDAO);
         SingletonManager.add(langStringFacade);
 
+        final AppVersionDAO appVersionDAO = new AppVersionDAO(hibernate.getSessionFactory());
+        final AppVersionFacade appVersionFacade = new AppVersionFacade(appVersionDAO);
+        SingletonManager.add(appVersionDAO);
+        SingletonManager.add(appVersionFacade);
+
         /** create resources and register **/
 
         environment.jersey().register(MultiPartFeature.class);
@@ -183,6 +190,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final LoginResource loginResource = new LoginResourceImpl();
         environment.jersey().register(loginResource);
 
+        final AppVersionResource appVersionResource = new AppVersionResourceImpl(appVersionFacade);
+        environment.jersey().register(appVersionResource);
+
         final ApiListingResource api = new ApiListingResource();
         environment.jersey().register(api);
         //configureSwagger(environment);
@@ -201,6 +211,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
         createStringsTask.executeNow();
+
+        AppVersionsTask appVersionsTask = new AppVersionsTask("AppVersionsTask", hibernate.getSessionFactory());
+        appVersionsTask.executeNow();
     }
 
     public static void main(String[] args) {
