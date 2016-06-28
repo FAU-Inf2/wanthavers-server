@@ -87,10 +87,12 @@ public class DummyDataTask extends SessionContextTask {
         User jon = new User("Jon Doe", "jon@doe.com");
         jon.setPassword("test");
         jon.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/0fe5a41a-1a49-4b26-b383-39b01643f948.jpg"));
+        jon.setRating(2.5F);
 
         User max = new User("Max Muster", "m.muster@xyz.de");
         max.setPassword("test");
         max.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/0fe5a41a-1a49-4b26-b383-39b01643f948.jpg"));
+        max.setRating(5.F);
 
         User tick = new User("Tick", "tick@bla.de");
         tick.setPassword("test");
@@ -130,21 +132,21 @@ public class DummyDataTask extends SessionContextTask {
         kastenBier.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/805162ba-709c-482c-a44a-fffd3be4b963.png"));
         kastenBier.setCategoryId(categories.get(CreateCategoriesTask.DRINKS_KEY).getId());
 
-        Desire doener = new Desire("Döner", "Döner vom Ali.", users[0], 6., 0., "EUR", new Date(System.currentTimeMillis() - 1 * 5 * 60 * 1000), "Martenstraße 37", 49.589674, 11.011961, 0);
+        Desire doener = new Desire("Döner", "Döner vom Ali.", users[1], 6., 0., "EUR", new Date(System.currentTimeMillis() - 1 * 5 * 60 * 1000), "Martenstraße 37", 49.589674, 11.011961, 0);
         doener.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
         doener.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
 
-        Desire aldi = new Desire("Einkauf", "Brauche eine Packung Eier, zwei Packungen Milch und eine Packung Mehl.", users[0], 10., 0., "EUR", new Date(System.currentTimeMillis() - 2 * 5 * 60 * 1000), "Unter den Linden 127", 49.589674, 11.011961, 0);
-        aldi.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
-        aldi.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
-
-        Desire autowaschen = new Desire("Autowäsche", "Suche jemanden, der mir mein wunderschönes Auto wäscht.", users[0], 65., 0., "EUR", new Date(System.currentTimeMillis() - 3 * 5 * 60 * 1000), "Gebbertstraße 123", 49.589674, 11.011961, 0);
+        Desire autowaschen = new Desire("Autowäsche", "Suche jemanden, der mir mein wunderschönes Auto wäscht.", users[2], 65., 0., "EUR", new Date(System.currentTimeMillis() - 2 * 5 * 60 * 1000), "Gebbertstraße 123", 49.589674, 11.011961, 0);
         autowaschen.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/66bb8934-a953-48da-8d90-15e40a3d1255.jpg"));
         autowaschen.setCategoryId(categories.get(CreateCategoriesTask.SERVICE_KEY).getId());
 
-        Desire konzertticket = new Desire("Konzertticket", "Suche ein Ticket für das AC/DC-Konzert heute Abend in Nürnberg.", users[0], 90., 0., "EUR", new Date(System.currentTimeMillis() - 4 * 5 * 60 * 1000), "Bierweg 133", 49.589674, 11.011961, 0);
+        Desire konzertticket = new Desire("Konzertticket", "Suche ein Ticket für das AC/DC-Konzert heute Abend in Nürnberg.", users[0], 90., 0., "EUR", new Date(System.currentTimeMillis() - 3 * 5 * 60 * 1000), "Bierweg 133", 49.589674, 11.011961, 0);
         konzertticket.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/tickets.png"));
         konzertticket.setCategoryId(categories.get(CreateCategoriesTask.TICKETS_KEY).getId());
+
+        Desire aldi = new Desire("Einkauf", "Brauche eine Packung Eier, zwei Packungen Milch und eine Packung Mehl.", users[0], 10., 0., "EUR", new Date(System.currentTimeMillis() - 4 * 5 * 60 * 1000), "Unter den Linden 127", 49.589674, 11.011961, 0);
+        aldi.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
+        aldi.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
 
         Desire abgeschlossen = new Desire("Kuchen", "Mamorkuchen vom Bäcker", users[0], 5., 0., "EUR", new Date(System.currentTimeMillis() - 20 * 5 * 60 * 1000), "Abgeschlossenstraße 321", 49.589674, 11.011961, 0);
         abgeschlossen.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
@@ -154,9 +156,9 @@ public class DummyDataTask extends SessionContextTask {
 
         return new Desire[]{
                 abgeschlossen,
+                aldi,
                 konzertticket,
                 autowaschen,
-                aldi,
                 doener,
                 kastenBier
         };
