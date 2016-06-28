@@ -6,7 +6,6 @@ import de.fau.cs.mad.wanthavers.common.Rating;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.RatingResource;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
-import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
 import de.fau.cs.mad.wanthavers.server.facade.RatingFacade;
@@ -21,8 +20,6 @@ import java.util.List;
 
 
 public class RatingResourceImpl implements RatingResource {
-    private static int dummyExecuted = 0;
-
     private final RatingFacade ratingFacade;
     private final UserFacade userFacade;
 
@@ -102,24 +99,6 @@ public class RatingResourceImpl implements RatingResource {
     @UnitOfWork
     public Rating avgRating(@ApiParam(value = "id of the desired user", required = true) long userId) {
         return ratingFacade.avgRating(userId);
-    }
-
-    @Override
-    @UnitOfWork
-    public void createDummies(@ApiParam(value = "id of the desired user", required = true) long userId) {
-        if (dummyExecuted > 1) {
-            return;
-        }
-
-        Rating[] ratings = Dummies.getRatings(userId);
-
-        for (Rating r : ratings) {
-            ratingFacade.createNewRating(userId, r);
-        }
-
-        updateUserAvgRating(userId);
-
-        dummyExecuted++;
     }
 
     private void updateUserAvgRating(long userId) {

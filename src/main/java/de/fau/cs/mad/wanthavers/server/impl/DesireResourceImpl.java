@@ -4,18 +4,16 @@ import de.fau.cs.mad.wanthavers.common.Chat;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.DesireResource;
-import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 public class DesireResourceImpl implements DesireResource {
-    private static boolean dummyExecuted = false;
-
     private final DesireFacade desireFacade;
     private final CategoryFacade categoryFacade;
     private final RatingFacade ratingFacade;
@@ -85,26 +83,6 @@ public class DesireResourceImpl implements DesireResource {
         return this.chatFacade.getChat(user.getId(), user2, desireId);
     }
 
-
-    /**
-     * TODO: remove after tests
-     */
-    @Override
-    @UnitOfWork
-    public void createDummies() {
-        if (dummyExecuted) {
-            return;
-        }
-
-        Desire[] desires = Dummies.getDesires();
-
-        for (Desire d : desires) {
-            desireFacade.createNewDesire(d);
-        }
-
-        dummyExecuted = true;
-    }
-
     private void checkPermission(User u, long id) throws WebApplicationException {
         Desire d = this.desireFacade.getDesireByID(id);
         if (d == null) {
@@ -114,6 +92,4 @@ public class DesireResourceImpl implements DesireResource {
             throw new WebApplicationException(401);
         }
     }
-
-
 }

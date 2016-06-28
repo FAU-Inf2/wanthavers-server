@@ -2,7 +2,6 @@ package de.fau.cs.mad.wanthavers.server.impl;
 
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.HaverResource;
-import de.fau.cs.mad.wanthavers.server.dummy.Dummies;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
 import io.dropwizard.auth.Auth;
@@ -10,17 +9,14 @@ import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
 
 import javax.ws.rs.WebApplicationException;
-import java.util.Date;
 import java.util.List;
 
 
 public class HaverResourceImpl implements HaverResource {
-    private static boolean dummyExecuted = false;
-
     private final HaverFacade facade;
     private final DesireFacade desireFacade;
 
-    public HaverResourceImpl(HaverFacade facade, DesireFacade desireFacade ) {
+    public HaverResourceImpl(HaverFacade facade, DesireFacade desireFacade) {
         this.facade = facade;
         this.desireFacade = desireFacade;
     }
@@ -60,7 +56,7 @@ public class HaverResourceImpl implements HaverResource {
     public Haver updateHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the haver", required = true) long id, @ApiParam(value = "new details of the specified haver", required = true) Haver haver) {
         Haver h = facade.updateHaver(desireId, id, haver);
 
-        switch (h.getStatus()){
+        switch (h.getStatus()) {
             case HaverStatus.ACCEPTED:
                 //TODO: force that there can only be one accepted user
                 Desire d = desireFacade.getDesireByID(desireId);
@@ -82,20 +78,4 @@ public class HaverResourceImpl implements HaverResource {
     public void deleteHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the to be deleted haver", required = true) long id) {
         facade.deleteHaver(desireId, id);
     }
-
-    @Override
-    @UnitOfWork
-    public void createDummies() {
-        if(dummyExecuted) {
-            return;
-        }
-
-        Haver[] havers = Dummies.getHavers();
-
-        for(Haver h : havers)
-            createHaver(h.getUser(), h.getDesireId(), h);
-
-        dummyExecuted = true;
-    }
-
 }
