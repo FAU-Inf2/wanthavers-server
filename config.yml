@@ -7,7 +7,7 @@ database:
     url: ${DW_DATABASE_URL:-jdbc:h2:./wanthavers-db}
 
     properties:
-      hibernate.dialect: de.fau.cs.mad.wanthavers.server.misc.FixedHsqlDialect
+      hibernate.dialect: de.fau.cs.mad.wanthavers.server.misc.FixedH2Dialect
       hibernate.hbm2ddl.auto: ${DW_HBM2DDL:-validate}
 
 swagger:
