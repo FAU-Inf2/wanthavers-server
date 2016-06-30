@@ -21,6 +21,8 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
@@ -58,6 +60,12 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         bootstrap.addBundle(new AssetsBundle("/static", "/static", "index.html"));
 
+        // Enable variable substitution with environment variables
+        bootstrap.setConfigurationSourceProvider(
+                new SubstitutingSourceProvider(bootstrap.getConfigurationSourceProvider(),
+                        new EnvironmentVariableSubstitutor(false)
+                )
+        );
     }
 
     @Override
@@ -199,13 +207,13 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
 
         /** register or run tasks **/
-        String isProduction = System.getenv("IS_PRODUCTION") == null ? "false" : System.getenv("IS_PRODUCTION");
+        String isProduction = System.getenv("IS_PRODUCTION");
 
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
         createCategoriesTask.executeNow();
 
         DummyDataTask dummyDataTask = new DummyDataTask("DummyDataTask", hibernate.getSessionFactory());
-        if (!isProduction.equals("true")) {
+        if (isProduction != null && !isProduction.equals("true")) {
             dummyDataTask.executeNow();
         }
 
@@ -233,5 +241,4 @@ public class ServerApplication extends Application<ServerConfiguration> {
         config.setResourcePackage(pkg);
         config.setScan(true);
     }
-
 }

@@ -4,13 +4,11 @@ database:
     user: sa
     password:
     logValidationErrors: false
-    url: jdbc:h2:file:/opt/database/wanthavers-db
-    #url: jdbc:h2:./wanthavers-db
+    url: ${DW_DATABASE_URL:-jdbc:h2:./wanthavers-db}
 
     properties:
-      hibernate.dialect: org.hibernate.dialect.H2Dialect
-      #hibernate.hbm2ddl.auto: validate
-      hibernate.hbm2ddl.auto: 'create'
+      hibernate.dialect: de.fau.cs.mad.wanthavers.server.misc.FixedHsqlDialect
+      hibernate.hbm2ddl.auto: ${DW_HBM2DDL:-validate}
 
 swagger:
     resourcePackage: de.fau.cs.mad.wanthavers.common.rest.api
