@@ -12,10 +12,7 @@ import de.fau.cs.mad.wanthavers.server.dao.*;
 import de.fau.cs.mad.wanthavers.server.facade.*;
 import de.fau.cs.mad.wanthavers.server.impl.*;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
-import de.fau.cs.mad.wanthavers.server.tasks.AppVersionsTask;
-import de.fau.cs.mad.wanthavers.server.tasks.CreateCategoriesTask;
-import de.fau.cs.mad.wanthavers.server.tasks.CreateStringsTask;
-import de.fau.cs.mad.wanthavers.server.tasks.DummyDataTask;
+import de.fau.cs.mad.wanthavers.server.tasks.*;
 import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -216,6 +213,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         if (isProduction != null && !isProduction.equals("true")) {
             dummyDataTask.executeNow();
         }
+
+        CreateAdminUserTask createAdminUserTask = new CreateAdminUserTask("CreateAdminUserTask", hibernate.getSessionFactory());
+        createAdminUserTask.executeNow();
 
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
         createStringsTask.executeNow();

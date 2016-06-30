@@ -71,13 +71,6 @@ public class DummyDataTask extends SessionContextTask {
     }
 
     public static User[] getUsers() throws Exception {
-        String adminPw = System.getenv("ADMIN_PW") == null ? "test" : System.getenv("ADMIN_PW");
-        String adminEmail = System.getenv("ADMIN_EMAIL") == null ? "wanthavers" : System.getenv("ADMIN_EMAIL");
-        User admin = new User("Admin", adminEmail);
-        admin.setPassword(adminPw);
-        admin.setLangCode("en_EN");
-        admin.setRole(UserRoles.USER_ROLE_ADMIN);
-
         User yoda = new User("Yoda", "com.mail@yoda");
         yoda.setPassword("test");
         //yoda.setLangCode("de_DE");
@@ -116,8 +109,7 @@ public class DummyDataTask extends SessionContextTask {
                 trick,
                 track,
                 donald,
-                dagobert,
-                admin
+                dagobert
         };
     }
 
