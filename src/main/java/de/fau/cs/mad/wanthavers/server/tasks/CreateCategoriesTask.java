@@ -4,12 +4,10 @@ import com.google.common.collect.ImmutableMultimap;
 import de.fau.cs.mad.wanthavers.common.Category;
 import de.fau.cs.mad.wanthavers.common.LangString;
 import de.fau.cs.mad.wanthavers.common.Media;
-import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.dao.LangStringDAO;
 import de.fau.cs.mad.wanthavers.server.dao.MediaDAO;
 import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
-import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import de.fau.cs.mad.wanthavers.server.misc.SessionContextTask;
 import org.hibernate.SessionFactory;
 
@@ -41,6 +39,10 @@ public class CreateCategoriesTask extends SessionContextTask {
 
     @Override
     public void run(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
+        if(categoriesAlreadyExist()) {
+            return;
+        }
+
         final String DE = "de_DE";
         final String EN = "en_EN";
 
@@ -149,5 +151,13 @@ public class CreateCategoriesTask extends SessionContextTask {
         m.setMediumRes(url);
         m.setFullRes(url);
         return mediaDAO.create(m);
+    }
+
+    private boolean categoriesAlreadyExist() {
+        CategoryFacade categoryFacade = (CategoryFacade)SingletonManager.get(CategoryFacade.class);
+
+        List<Category> list = categoryFacade.getSubCategoriesDeep(0);
+
+        return list.size() > 0;
     }
 }
