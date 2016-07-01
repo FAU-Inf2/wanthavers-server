@@ -118,9 +118,9 @@ public class DummyDataTask extends SessionContextTask {
         kastenBier.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/805162ba-709c-482c-a44a-fffd3be4b963.png"));
         kastenBier.setCategoryId(categories.get(CreateCategoriesTask.DRINKS_KEY).getId());
 
-        Desire doener = new Desire("Pizza", "Schinken-Pizza von Tio.", users[1], 6., 0., "EUR", new Date(System.currentTimeMillis() - 1 * 5 * 60 * 1000), "Martenstrasse 37", 49.589674, 11.011961, 0);
-        doener.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
-        doener.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
+        Desire pizza = new Desire("Pizza", "Schinken-Pizza von Tio.", users[1], 6., 0., "EUR", new Date(System.currentTimeMillis() - 1 * 5 * 60 * 1000), "Martenstrasse 37", 49.589674, 11.011961, 0);
+        pizza.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/9a4709eb-7fe5-44ea-b122-050505217db2.png"));
+        pizza.setCategoryId(categories.get(CreateCategoriesTask.FOOD_KEY).getId());
 
         Desire autowaschen = new Desire("Autowaschen", "Suche jemanden, der mir mein wunderbares Auto reinigt.", users[2], 65., 0., "EUR", new Date(System.currentTimeMillis() - 2 * 5 * 60 * 1000), "Gebbertstrasse 123", 49.589674, 11.011961, 0);
         autowaschen.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/66bb8934-a953-48da-8d90-15e40a3d1255.jpg"));
@@ -145,7 +145,7 @@ public class DummyDataTask extends SessionContextTask {
                 aldi,
                 konzertticket,
                 autowaschen,
-                doener,
+                pizza,
                 kastenBier
         };
     }
@@ -160,7 +160,7 @@ public class DummyDataTask extends SessionContextTask {
         Haver accepted = new Haver(users[1], new Date(System.currentTimeMillis()), desires[0].getId());
         accepted.setStatus(HaverStatus.ACCEPTED);
         return new Haver[]{
-                new Haver(users[1], new Date(System.currentTimeMillis()), desires[4].getId()),
+                new Haver(users[0], new Date(System.currentTimeMillis()), desires[4].getId()),
                 new Haver(users[2], new Date(System.currentTimeMillis()), desires[4].getId()),
                 new Haver(users[3], new Date(System.currentTimeMillis()), desires[4].getId()),
                 new Haver(users[4], new Date(System.currentTimeMillis()), desires[4].getId()),
