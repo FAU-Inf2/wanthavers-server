@@ -158,6 +158,6 @@ public class CreateCategoriesTask extends SessionContextTask {
 
         List<Category> list = categoryFacade.getSubCategoriesDeep(0);
 
-        return list.size() > 0;
+        return list == null ? false : list.size() > 0;
     }
 }
