@@ -46,9 +46,16 @@ public class DesireFacade {
             Desire desire = getDesireByID(desireId);
             HaverDAO haverDAO = (HaverDAO) SingletonManager.get(HaverDAO.class);
 
+            User user1 = desire.getCreator();
+            System.out.println("UpdateDesireStatus: user1: "+user1+user1.getName());
+            User user2 = haverDAO.getAccepted(desireId).getUser();
+            System.out.println("UpdateDesireStatus: user2: "+user2+user2.getName());
+
+
+
             User[] users = new User[]{
-                    desire.getCreator(),
-                    haverDAO.getAccepted(desireId).getUser()
+                    user1,
+                    user2
             };
 
             for (User user : users) {
