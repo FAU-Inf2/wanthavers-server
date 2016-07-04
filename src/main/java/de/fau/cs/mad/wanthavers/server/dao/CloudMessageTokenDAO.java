@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 
 import de.fau.cs.mad.wanthavers.common.CloudMessageToken;
+import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -74,6 +75,10 @@ public class CloudMessageTokenDAO extends AbstractSuperDAO<CloudMessageToken> {
         Query query = super.currentSession().createQuery("FROM CloudMessageToken WHERE token = :token");
         query.setParameter("token", token);
 
-        return delete((CloudMessageToken) query.uniqueResult());
+        List<CloudMessageToken> tokens = query.list();
+        for(CloudMessageToken t : tokens)
+            delete(t);
+
+        return true;
     }
 }
