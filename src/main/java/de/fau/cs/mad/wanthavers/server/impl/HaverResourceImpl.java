@@ -72,4 +72,16 @@ public class HaverResourceImpl implements HaverResource {
         }
         return h;
     }
+
+    @Override
+    @UnitOfWork
+    public Haver updateHaverStatus(@ApiParam(value = "id of the desire", required = true) long desireId, @ApiParam(value = "id of the haver relation", required = true) long userId, int status) {
+        Haver stored = facade.getHaverByUserId(desireId, userId);
+
+        if(stored == null)
+            throw new WebApplicationException(404);
+
+        stored.setStatus(status);
+        return facade.updateHaver(desireId, userId, stored);
+    }
 }
