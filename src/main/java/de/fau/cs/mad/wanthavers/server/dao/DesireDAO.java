@@ -6,13 +6,11 @@ import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class DesireDAO extends AbstractSuperDAO<Desire> {
@@ -46,16 +44,16 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
     public List<Desire> findAllByFilter(Long categoryId, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId, Long haverId, List<Integer> haverStatus) {
         Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Desire.class, "d");
 
-        if(categoryId != null && categoryId!=0){
-            CategoryFacade categoryFacade = (CategoryFacade)SingletonManager.get(CategoryFacade.class);
+        if (categoryId != null && categoryId != 0) {
+            CategoryFacade categoryFacade = (CategoryFacade) SingletonManager.get(CategoryFacade.class);
             List<Category> categories = categoryFacade.getSubCategoriesDeep(categoryId);
             ArrayList<Long> ids = new ArrayList<>();
-            for (Category c: categories) {
+            for (Category c : categories) {
                 ids.add(c.getId());
             }
-            if(!ids.isEmpty()){
+            if (!ids.isEmpty()) {
                 criteria.add(Restrictions.in("categoryId", ids));
-            }else{
+            } else {
                 return new ArrayList<>(); //return empty desire list if a non-existing category is given
             }
         }
@@ -104,16 +102,16 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.eq("creator.id", creatorId));
         }
 
-        if(haverId != null) {
+        if (haverId != null) {
             UserFacade userFacade = (UserFacade) SingletonManager.get(UserFacade.class);
             List<Desire> desiresAsHaver = userFacade.getDesiresAsHaver(haverId, haverStatus);
 
             ArrayList<Long> ids = new ArrayList<>();
-            for(Desire d : desiresAsHaver) {
+            for (Desire d : desiresAsHaver) {
                 ids.add(d.getId());
             }
 
-            if(!ids.isEmpty()) {
+            if (!ids.isEmpty()) {
                 criteria.add(Restrictions.in("id", ids));
             } else {
                 return new ArrayList<>(); //return empty desire list if a user has no desires as Haver
@@ -123,7 +121,19 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
         criteria.addOrder(Order.desc("id"));
 
-        return criteria.list();
+        List<Desire> retList = criteria.list();
+
+        if (lon != null && lat != null) {
+            for(int i = 0; i < retList.size(); i++) {
+                Desire d = retList.get(i);
+                double desireLat = d.getDropzone_lat();
+                double desireLon = d.getDropzone_long();
+                long distanceToUserPosition = Math.round(distanceBetween(lat, lon, desireLat, desireLon));
+                retList.get(i).setDistanceToUserPosition(distanceToUserPosition);
+            }
+        }
+
+        return retList;
     }
 
     private double getLatDiff(double radius) {
@@ -136,4 +146,14 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return tmp;
     }
 
+    private double distanceBetween(double lat1, double lon1, double lat2, double lon2) {
+        double earthRadius = 6371000; //meters
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLng = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                        Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadius * c;
+    }
 }

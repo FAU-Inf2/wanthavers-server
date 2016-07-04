@@ -73,4 +73,6 @@ public class HaverFacade {
     }
 
     public Haver getAccepted(long desireId){return  this.dao.getAccepted(desireId);}
+
+    public Haver getHaverByUserId(long desireId, long userId) { return dao.getHaverByUserId(desireId, userId); }
 }

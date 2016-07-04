@@ -25,7 +25,8 @@ public class HaverDAO extends AbstractSuperDAO<Haver> {
         final Session session = currentSession();
 
         Criteria criteria = session.createCriteria(Haver.class)
-                .add(Restrictions.eq("desireId", desireId));
+                .add(Restrictions.eq("desireId", desireId))
+                .add(Restrictions.ne("status", HaverStatus.DELETED));
 
         List<Haver> havers = criteria.list();
 
@@ -68,8 +69,17 @@ public class HaverDAO extends AbstractSuperDAO<Haver> {
                 .add(Restrictions.eq("desireId", desireId))
                 .add(Restrictions.eq("status", HaverStatus.ACCEPTED));
 
-        Haver haver = (Haver) criteria.uniqueResult();
-        return haver;
+        return  (Haver) criteria.uniqueResult();
     }
 
+    public Haver getHaverByUserId(long desireId, long userId) {
+        final Session session = currentSession();
+
+        Criteria criteria = session.createCriteria(Haver.class)
+                .add(Restrictions.eq("desireId", desireId))
+                .add(Restrictions.eq("user.id", userId))
+                .add(Restrictions.ne("status", HaverStatus.DELETED));
+
+        return (Haver) criteria.uniqueResult();
+    }
 }

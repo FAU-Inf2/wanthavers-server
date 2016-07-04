@@ -29,8 +29,8 @@ public class HaverResourceImpl implements HaverResource {
 
     @Override
     @UnitOfWork
-    public Haver get(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the haver", required = true) long id) {
-        Haver haver = facade.getHaverByID(desireId, id);
+    public Haver get(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the user", required = true) long userId) {
+        Haver haver = facade.getHaverByUserId(desireId, userId);
 
         if (haver == null)
             throw new WebApplicationException(404);
@@ -71,11 +71,5 @@ public class HaverResourceImpl implements HaverResource {
                 break;
         }
         return h;
-    }
-
-    @Override
-    @UnitOfWork
-    public void deleteHaver(@ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the to be deleted haver", required = true) long id) {
-        facade.deleteHaver(desireId, id);
     }
 }
