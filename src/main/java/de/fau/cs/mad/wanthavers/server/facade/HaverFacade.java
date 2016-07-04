@@ -39,8 +39,8 @@ public class HaverFacade {
         return ret;
     }
 
-    public Haver updateHaver(long desireId, long userId, Haver haver) {
-        Haver ret = this.dao.update(desireId, userId, haver);
+    public Haver updateHaver(long desireId, long haverId, Haver haver) {
+        Haver ret = this.dao.update(desireId, haverId, haver);
 
         if(haver.getStatus() == HaverStatus.ACCEPTED) {
             DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
