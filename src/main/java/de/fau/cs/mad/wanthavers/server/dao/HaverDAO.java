@@ -51,8 +51,8 @@ public class HaverDAO extends AbstractSuperDAO<Haver> {
         return checkForCorrectDesireId(desireId, haver);
     }
 
-    public Haver update(long desireId, long id, Haver newHaver) {
-        Haver stored = this.findById(desireId, id);
+    public Haver update(long desireId, long userId, Haver newHaver) {
+        Haver stored = getHaverByUserId(desireId, userId);
         if (stored == null || checkForCorrectDesireId(desireId, stored) == null) return null;
 
         newHaver.setId(stored.getId());
