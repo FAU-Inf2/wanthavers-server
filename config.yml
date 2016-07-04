@@ -12,3 +12,11 @@ database:
 
 swagger:
     resourcePackage: de.fau.cs.mad.wanthavers.common.rest.api
+
+server:
+  applicationConnectors:
+    - keyStorePassword: ${KEYSTOREPW}
+      keyStorePath: keystore.jks
+      type: https
+      port: 8443
+      validateCerts: false
