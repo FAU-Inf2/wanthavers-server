@@ -29,7 +29,7 @@ public class CloudMessageTokenFacade {
         return dao.update(userId, id, token);
     }
 
-    public boolean deleteToken(long userId, long id) {
-        return dao.delete(dao.findById(userId, id));
+    public boolean deleteToken(long userId, String token) {
+        return dao.deleteToken(token);
     }
 }

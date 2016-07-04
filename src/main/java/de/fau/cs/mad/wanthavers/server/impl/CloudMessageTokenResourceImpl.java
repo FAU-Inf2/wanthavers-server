@@ -51,7 +51,7 @@ public class CloudMessageTokenResourceImpl implements CloudMessageTokenResource 
 
     @Override
     @UnitOfWork
-    public void deleteToken(@Auth User user, @ApiParam(value = "id of the to be deleted token", required = true) long id) {
-        facade.deleteToken(user.getId(), id);
+    public void deleteToken(@Auth User user, @ApiParam(value = "id of the to be deleted token", required = true) String token) {
+        facade.deleteToken(user.getId(), token);
     }
 }
