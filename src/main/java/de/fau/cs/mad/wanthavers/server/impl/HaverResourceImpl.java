@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.impl;
 
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.HaverResource;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
 import io.dropwizard.auth.Auth;
@@ -107,7 +108,14 @@ public class HaverResourceImpl implements HaverResource {
     }
 
     private void check(User user, Haver haver, long desireId) throws WebApplicationException {
-        if (user.getId() != haver.getUser().getId()) {
+        DesireFacade desireFacade = (DesireFacade) SingletonManager.get(DesireFacade.class);
+        Desire desire = desireFacade.getDesireByID(desireId);
+
+        if(desire == null) {
+            throw new WebApplicationException("desire not found", 404);
+        }
+
+        if (user.getId() != haver.getUser().getId() && user.getId() != desire.getCreator().getId()) {
             throw new WebApplicationException(401);
         }
 
