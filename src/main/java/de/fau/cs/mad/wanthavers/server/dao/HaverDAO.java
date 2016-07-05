@@ -56,6 +56,8 @@ public class HaverDAO extends AbstractSuperDAO<Haver> {
         if (stored == null || checkForCorrectDesireId(desireId, stored) == null) return null;
 
         newHaver.setId(stored.getId());
+        newHaver.setUser(stored.getUser());
+        newHaver.setCreationDate(stored.getCreationDate());
         currentSession().merge(newHaver);
 
         //persist(newHaver);
