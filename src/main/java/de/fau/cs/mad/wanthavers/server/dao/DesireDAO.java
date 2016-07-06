@@ -82,6 +82,19 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             double latMax = lat + latDiff;
             double lonMin = lon - lonDiff;
             double lonMax = lon + lonDiff;
+
+
+            Coordinate top = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 0);
+            Coordinate bottom = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 180);
+            Coordinate left = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 270);
+            Coordinate right = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 90);
+
+            latMin = left.lat;
+            latMax = right.lat;
+            lonMin = top.lon;
+            lonMax = bottom.lon;
+
+
             criteria.add(Restrictions.between("dropzone_lat", latMin, latMax));
             criteria.add(Restrictions.between("dropzone_long", lonMin, lonMax));
         }
@@ -155,5 +168,40 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
                         Math.sin(dLng / 2) * Math.sin(dLng / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return earthRadius * c;
+    }
+
+    private  static Coordinate calcEndPoint(Coordinate center , int distance, double  bearing)
+    {
+        Coordinate gp=null;
+
+        double R = 6371000; // meters , earth Radius approx
+        double PI = 3.1415926535;
+        double RADIANS = PI/180;
+        double DEGREES = 180/PI;
+
+        double lat2;
+        double lon2;
+
+        double lat1 = center.lat * RADIANS;
+        double lon1 = center.lon * RADIANS;
+        double radbear = bearing * RADIANS;
+
+        lat2 = Math.asin( Math.sin(lat1)*Math.cos(distance / R) +
+                Math.cos(lat1)*Math.sin(distance/R)*Math.cos(radbear) );
+        lon2 = lon1 + Math.atan2(Math.sin(radbear)*Math.sin(distance / R)*Math.cos(lat1),
+                Math.cos(distance/R)-Math.sin(lat1)*Math.sin(lat2));
+
+        gp = new Coordinate( lon2*DEGREES, lat2*DEGREES);
+
+        return(gp);
+    }
+
+    private static class Coordinate {
+        public double lat;
+        public double lon;
+        public Coordinate(double lat, double lon){
+            this.lat = lat;
+            this.lon = lon;
+        }
     }
 }
