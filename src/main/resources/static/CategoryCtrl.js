@@ -3,7 +3,7 @@ app.controller('CategoryCtrl',  function($scope, $rootScope, Category, Media){
     $scope.media = undefined;
     $scope.categories = [];
     $scope.base = {"id":0,"name":"ROOT"};
-    $scope.server = "http://faui21f.informatik.uni-erlangen.de:9090";
+    $scope.server = "";
 
     $scope.start = function(){
         Category.get($scope.server,0).then(function(resp){
