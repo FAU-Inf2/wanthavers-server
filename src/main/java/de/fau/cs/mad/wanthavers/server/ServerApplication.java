@@ -32,7 +32,7 @@ import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 public class ServerApplication extends Application<ServerConfiguration> {
-    public static final String SERVER_URL = "http://faui21f.informatik.uni-erlangen.de:9090";
+    public static final String SERVER_URL = "https://wanthaver.com";
     public static final String DEFAULT_LANGCODE = "en_EN";
 
     private final HibernateBundle<ServerConfiguration> hibernate =
@@ -75,7 +75,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         /** configure mail **/
         Mailer.configure("wanthavers@i2.cs.fau.de", Regions.US_WEST_2);
-        Mailer.enableFake("wanthavers@i2.cs.fau.de");
+        //Mailer.enableFake("wanthavers@i2.cs.fau.de");
 
         /** create DAOs and facades **/
 
