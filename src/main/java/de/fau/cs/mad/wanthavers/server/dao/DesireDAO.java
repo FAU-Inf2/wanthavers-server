@@ -77,7 +77,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
 
         if (radius != null && lon != null && lat != null) {
             double latDiff = getLatDiff(radius);
-            double lonDiff = getLonDiff(lon, radius);
+            double lonDiff = getLonDiff(lat, radius);
             double latMin = lat - latDiff;
             double latMax = lat + latDiff;
             double lonMin = lon - lonDiff;
