@@ -83,7 +83,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             double lonMin = lon - lonDiff;
             double lonMax = lon + lonDiff;
 
-
+            /*
             Coordinate top = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 0);
             Coordinate bottom = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 180);
             Coordinate left = calcEndPoint(new Coordinate(lat, lon), radius.intValue(), 270);
@@ -93,7 +93,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             latMax = right.lat;
             lonMin = top.lon;
             lonMax = bottom.lon;
-
+            */
 
             criteria.add(Restrictions.between("dropzone_lat", latMin, latMax));
             criteria.add(Restrictions.between("dropzone_long", lonMin, lonMax));
