@@ -16,7 +16,7 @@ public class CORSResponseFilter
 
         headers.add("Access-Control-Allow-Origin", "*");
         headers.add("Access-Control-Allow-Credentials", "true");
-        headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+        headers.add("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT, OPTIONS");
         headers.add("Access-Control-Allow-Headers", "X-Requested-With, Content-Type");
     }
 
