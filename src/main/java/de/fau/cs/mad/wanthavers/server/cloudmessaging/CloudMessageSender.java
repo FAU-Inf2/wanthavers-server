@@ -18,7 +18,7 @@ import java.util.List;
 
 public class CloudMessageSender {
     public static final String FIREBASE_URL = "https://fcm.googleapis.com/fcm/send";
-    public static final String API_KEY = "AIzaSyDQGow9aALYKSRwMm8PRCDAdm1GMr_gtWM";
+    public static final String API_KEY = "AIzaSyDozjC6AMa0O9btFvHGfHwFm7yo-_qrKRQ";
 
     /**
      * Sends message to all registered tokens of a user
