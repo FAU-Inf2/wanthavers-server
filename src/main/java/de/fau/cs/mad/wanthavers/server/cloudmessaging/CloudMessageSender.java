@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.cloudmessaging;
 
 
 import com.amazonaws.util.IOUtils;
+import com.amazonaws.util.StringUtils;
 import de.fau.cs.mad.wanthavers.common.CloudMessageSubject;
 import de.fau.cs.mad.wanthavers.common.CloudMessageToken;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
@@ -29,32 +30,35 @@ public class CloudMessageSender {
             CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
             List<CloudMessageToken> tokens = tokenDAO.findAll(message.getUserId());
 
-            for (CloudMessageToken token : tokens) {
-                JSONObject sendData = new JSONObject();
-                sendData.put("to", token.getToken());
-                sendData.put("notification", message.getNotification());
-                sendData.put("data", message.getData());
+            String[] ids = new String[tokens.size()];
+            for (int i = 0; i < tokens.size(); i++)
+                ids[i] = tokens.get(i).getToken();
+            String idsString = StringUtils.join(",", ids);
 
-                URL url = new URL(FIREBASE_URL);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestProperty("Authorization", "key=" + API_KEY);
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
+            JSONObject sendData = new JSONObject();
+            sendData.put("data", message.getData());
+            sendData.put("registration_ids", "["+idsString+"]");
 
-                OutputStream outputStream = conn.getOutputStream();
-                outputStream.write(sendData.toString().getBytes());
+            URL url = new URL(FIREBASE_URL);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("Authorization", "key=" + API_KEY);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
 
-                InputStream inputStream = conn.getInputStream();
-                String resp = IOUtils.toString(inputStream);
-                System.out.println("Send CloudMessage to User "+message.getUserId());
-                System.out.println("with token "+token.getToken());
-                System.out.println("Answer: " + resp);
+            OutputStream outputStream = conn.getOutputStream();
+            outputStream.write(sendData.toString().getBytes());
 
-                inputStream.close();
-                outputStream.close();
-                conn.disconnect();
-            }
+            InputStream inputStream = conn.getInputStream();
+            String resp = IOUtils.toString(inputStream);
+            System.out.println("Send CloudMessage to User "+message.getUserId());
+            System.out.println("with tokens "+idsString);
+            System.out.println("Answer: " + resp);
+
+            inputStream.close();
+            outputStream.close();
+            conn.disconnect();
+
 
         } catch (IOException e) {
             System.out.println("Unable to send CloudMessage to User "+message.getUserId());

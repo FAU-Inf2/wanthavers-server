@@ -59,7 +59,7 @@ public class DesireFacade {
             };
 
             for (User user : users) {
-                CloudMessage message = new CloudMessage(user.getId(), CloudMessageSubject.DESIRECOMPLETE, "Desire completed!", "Desire " + desire.getTitle() + " was completed. Rate now.");
+                CloudMessage message = new CloudMessage(user.getId(), CloudMessageSubject.DESIRECOMPLETE, "Desire " + desire.getTitle() + " was completed. Rate now.");
                 message.addKeyValue(CloudMessageSubject.DESIRECOMPLETE_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.DESIRECOMPLETE_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);

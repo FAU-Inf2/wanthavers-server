@@ -30,7 +30,7 @@ public class HaverFacade {
         DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
         Desire desire = desireDAO.findById(desireId);
 
-        CloudMessage message = new CloudMessage(desire.getCreator().getId(), CloudMessageSubject.NEWHAVER, "New Haver!",
+        CloudMessage message = new CloudMessage(desire.getCreator().getId(), CloudMessageSubject.NEWHAVER,
                 "A new Haver would like to help you out with "+desire.getTitle()+".");
         message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIREID, desireId);
         message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIRETITLE, desire.getTitle());
@@ -46,7 +46,7 @@ public class HaverFacade {
             DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
             Desire desire = desireDAO.findById(desireId);
 
-            CloudMessage message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERACCEPTED, "You were accepted!",
+            CloudMessage message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERACCEPTED,
                     "You were accepted for "+desire.getTitle()+" by "+desire.getCreator().getName()+".");
             message.addKeyValue(CloudMessageSubject.HAVERACCEPTED_DESIREID, desireId);
             message.addKeyValue(CloudMessageSubject.HAVERACCPETED_DESIRETITLE, desire.getTitle());
@@ -57,7 +57,7 @@ public class HaverFacade {
                 if(h.getStatus() == HaverStatus.ACCEPTED)
                     continue;
 
-                message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERREJECTED, "We're sorry!",
+                message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
                         "Sorry! You didn't get the job "+desire.getTitle()+" by "+desire.getCreator().getName()+". Better luck next time!");
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIRETITLE, desire.getTitle());
