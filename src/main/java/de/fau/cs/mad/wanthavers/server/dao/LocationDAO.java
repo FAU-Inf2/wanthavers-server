@@ -29,8 +29,9 @@ public class LocationDAO extends AbstractSuperDAO<Location>{
         Location l = new Location();
         l.setLat(lat);
         l.setLon(lon);
-        String tmp = address.getString("road")+" "+address.getString("house_number")+", "+address.getString("postcode")+" "+address.getString("city")+", "+address.getString("country");
-        l.setFullAddress(tmp);
+        String full = json.getString("display_name");
+        l.setFullAddress(full);
+        l.setCityName(address.getString("city"));
         return l;
     }
 
