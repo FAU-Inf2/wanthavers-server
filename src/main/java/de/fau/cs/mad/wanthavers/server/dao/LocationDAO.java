@@ -31,7 +31,11 @@ public class LocationDAO extends AbstractSuperDAO<Location>{
         l.setLon(lon);
         String full = json.getString("display_name");
         l.setFullAddress(full);
-        l.setCityName(address.getString("city"));
+        if(address.has("city")){
+            l.setCityName(address.getString("city"));
+        }else if(address.has("town")){
+            l.setCityName(address.getString("town"));
+        }
         return l;
     }
 
