@@ -10,9 +10,6 @@ database:
       hibernate.dialect: de.fau.cs.mad.wanthavers.server.misc.FixedH2Dialect
       hibernate.hbm2ddl.auto: ${DW_HBM2DDL:-validate}
 
-swagger:
-    resourcePackage: de.fau.cs.mad.wanthavers.common.rest.api
-
 server:
   applicationConnectors:
     - keyStorePassword: ${KEYSTOREPW}
@@ -20,3 +17,4 @@ server:
       type: https
       port: 8443
       validateCerts: false
+#      trustStorePath: ${JAVA_HOME}/jre/lib/security/cacerts

@@ -5,7 +5,7 @@ apply plugin: 'application'
 //application entry point
 def mainClass = 'de.fau.cs.mad.wanthavers.server.ServerApplication'
 //set the dropwizard version to use here
-def dropwizardVersion = '0.9.2'
+def dropwizardVersion = '1.0.0'
 version = '0.1'
 
 repositories {
@@ -37,10 +37,8 @@ dependencies {
     compile 'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion
     compile 'com.h2database:h2:1.4.186'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3'
-    //compile 'io.federecio:dropwizard-swagger:0.7.0'
     compile 'org.json:json:20160212'
     compile 'com.github.philsippl:parse4j:1.5'
-    compile 'com.smoketurner:dropwizard-swagger:0.9.2-3'
     compile 'com.amazonaws:aws-java-sdk:1.11.3'
     compile 'net.coobird:thumbnailator:0.4.8'
 
