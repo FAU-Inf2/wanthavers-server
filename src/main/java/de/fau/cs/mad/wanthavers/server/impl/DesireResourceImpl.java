@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.impl;
 
 import de.fau.cs.mad.wanthavers.common.Chat;
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.DesireStatus;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.DesireResource;
 import de.fau.cs.mad.wanthavers.server.facade.*;
@@ -62,6 +63,14 @@ public class DesireResourceImpl implements DesireResource {
         checkPermission(user, id);
         desire.setCreator(user);
         return desireFacade.updateDesire(id, desire);
+    }
+
+    @Override
+    @UnitOfWork
+    public void deleteDesire(long id) {
+        if(desireFacade.updateDesireStatus(id, DesireStatus.STATUS_DELETED) == null) {
+            throw new WebApplicationException(404);
+        }
     }
 
     @Override
