@@ -1,12 +1,11 @@
 package de.fau.cs.mad.wanthavers.server.auth;
 
+import com.google.common.base.Optional;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentials;
-
-import java.util.Optional;
 
 public class UserAuthenticator implements Authenticator<BasicCredentials, User> {
 
@@ -30,6 +29,6 @@ public class UserAuthenticator implements Authenticator<BasicCredentials, User> 
             }
         }
 
-        return Optional.empty();
+        return Optional.absent();
     }
 }

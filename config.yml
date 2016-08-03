@@ -17,4 +17,4 @@ server:
       type: https
       port: 8443
       validateCerts: false
-      trustStorePath: ${JAVA_HOME}/jre/lib/security/cacerts
+#      trustStorePath: ${JAVA_HOME}/jre/lib/security/cacerts
