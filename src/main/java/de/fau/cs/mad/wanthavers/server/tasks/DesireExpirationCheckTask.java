@@ -35,8 +35,8 @@ public class DesireExpirationCheckTask extends SessionContextTask {
         public void run() {
             for (; ; ) {
                 String updateStatement = "UPDATE Desire SET status = :status " +
-                        "WHERE expireDate > :dateNow " +
-                        "OR (expireDate IS NULL AND creation_time < :dateDefaultExpired) " +
+                        "WHERE ( expireDate > :dateNow " +
+                        "OR (expireDate IS NULL AND creation_time < :dateDefaultExpired) ) " +
                         "AND status = " + DesireStatus.STATUS_OPEN;
                 Session session = sessionFactory.openSession();
                 Query query = session.createQuery(updateStatement);
