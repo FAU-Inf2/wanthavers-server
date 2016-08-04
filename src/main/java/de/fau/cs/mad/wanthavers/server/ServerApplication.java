@@ -206,6 +206,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         AppVersionsTask appVersionsTask = new AppVersionsTask("AppVersionsTask", hibernate.getSessionFactory());
         appVersionsTask.executeNow();
+
+        DesireExpirationCheckTask desireExpirationCheckTask = new DesireExpirationCheckTask("DesireExpirationCheckTask", hibernate.getSessionFactory());
+        desireExpirationCheckTask.executeNow();
     }
 
     public static void main(String[] args) {

@@ -103,13 +103,6 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
 
         if (status != null && !status.isEmpty()) {
             criteria.add(Restrictions.in("status", status));
-
-            if (!status.contains(DesireStatus.STATUS_EXPIRED)) {
-                criteria.add(Restrictions.or(
-                        Restrictions.isNull("expireDate"),
-                        Restrictions.ge("expireDate", new Date(System.currentTimeMillis())))
-                );
-            }
         }
 
         if (lastDesireId != null) {
