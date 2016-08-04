@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.Category;
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.common.DesireStatus;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.facade.CategoryFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
@@ -11,6 +12,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DesireDAO extends AbstractSuperDAO<Desire> {
@@ -101,6 +103,13 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
 
         if (status != null && !status.isEmpty()) {
             criteria.add(Restrictions.in("status", status));
+
+            if (!status.contains(DesireStatus.STATUS_EXPIRED)) {
+                criteria.add(Restrictions.or(
+                        Restrictions.isNull("expireDate"),
+                        Restrictions.ge("expireDate", new Date(System.currentTimeMillis())))
+                );
+            }
         }
 
         if (lastDesireId != null) {
@@ -137,7 +146,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         List<Desire> retList = criteria.list();
 
         if (lon != null && lat != null) {
-            for(int i = 0; i < retList.size(); i++) {
+            for (int i = 0; i < retList.size(); i++) {
                 Desire d = retList.get(i);
                 double desireLat = d.getDropzone_lat();
                 double desireLon = d.getDropzone_long();
@@ -170,14 +179,13 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         return earthRadius * c;
     }
 
-    private  static Coordinate calcEndPoint(Coordinate center , int distance, double  bearing)
-    {
-        Coordinate gp=null;
+    private static Coordinate calcEndPoint(Coordinate center, int distance, double bearing) {
+        Coordinate gp = null;
 
         double R = 6371000; // meters , earth Radius approx
         double PI = 3.1415926535;
-        double RADIANS = PI/180;
-        double DEGREES = 180/PI;
+        double RADIANS = PI / 180;
+        double DEGREES = 180 / PI;
 
         double lat2;
         double lon2;
@@ -186,20 +194,21 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
         double lon1 = center.lon * RADIANS;
         double radbear = bearing * RADIANS;
 
-        lat2 = Math.asin( Math.sin(lat1)*Math.cos(distance / R) +
-                Math.cos(lat1)*Math.sin(distance/R)*Math.cos(radbear) );
-        lon2 = lon1 + Math.atan2(Math.sin(radbear)*Math.sin(distance / R)*Math.cos(lat1),
-                Math.cos(distance/R)-Math.sin(lat1)*Math.sin(lat2));
+        lat2 = Math.asin(Math.sin(lat1) * Math.cos(distance / R) +
+                Math.cos(lat1) * Math.sin(distance / R) * Math.cos(radbear));
+        lon2 = lon1 + Math.atan2(Math.sin(radbear) * Math.sin(distance / R) * Math.cos(lat1),
+                Math.cos(distance / R) - Math.sin(lat1) * Math.sin(lat2));
 
-        gp = new Coordinate( lon2*DEGREES, lat2*DEGREES);
+        gp = new Coordinate(lon2 * DEGREES, lat2 * DEGREES);
 
-        return(gp);
+        return (gp);
     }
 
     private static class Coordinate {
         public double lat;
         public double lon;
-        public Coordinate(double lat, double lon){
+
+        public Coordinate(double lat, double lon) {
             this.lat = lat;
             this.lon = lon;
         }
