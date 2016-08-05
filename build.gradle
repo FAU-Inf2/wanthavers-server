@@ -1,3 +1,7 @@
+plugins {
+    id "org.flywaydb.flyway" version "4.0.3"
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
@@ -41,7 +45,15 @@ dependencies {
     compile 'com.github.philsippl:parse4j:1.5'
     compile 'com.amazonaws:aws-java-sdk:1.11.3'
     compile 'net.coobird:thumbnailator:0.4.8'
+}
 
+flyway {
+    String jdbcURL = System.getenv("DW_DATABASE_URL");
+    if(jdbcURL == null) {
+        jdbcURL = "jdbc:h2:./wanthavers-db";
+    }
+    url = jdbcURL
+    user = 'sa'
 }
 
 task wrapper(type: Wrapper) {

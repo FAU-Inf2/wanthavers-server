@@ -5,7 +5,6 @@ import com.amazonaws.regions.Regions;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.AppVersionResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
-import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
 import de.fau.cs.mad.wanthavers.server.dao.*;
