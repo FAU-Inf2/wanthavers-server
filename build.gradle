@@ -1,3 +1,7 @@
+plugins {
+    id "org.flywaydb.flyway" version "4.0.3"
+}
+
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'application'
@@ -37,13 +41,19 @@ dependencies {
     compile 'io.dropwizard:dropwizard-hibernate:' + dropwizardVersion
     compile 'com.h2database:h2:1.4.186'
     compile 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.5.3'
-    //compile 'io.federecio:dropwizard-swagger:0.7.0'
     compile 'org.json:json:20160212'
     compile 'com.github.philsippl:parse4j:1.5'
-    compile 'com.smoketurner:dropwizard-swagger:0.9.2-3'
     compile 'com.amazonaws:aws-java-sdk:1.11.3'
     compile 'net.coobird:thumbnailator:0.4.8'
+}
 
+flyway {
+    String jdbcURL = System.getenv("DW_DATABASE_URL");
+    if(jdbcURL == null) {
+        jdbcURL = "jdbc:h2:./wanthavers-db";
+    }
+    url = jdbcURL
+    user = 'sa'
 }
 
 task wrapper(type: Wrapper) {

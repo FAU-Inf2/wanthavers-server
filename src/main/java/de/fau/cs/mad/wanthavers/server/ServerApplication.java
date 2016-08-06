@@ -5,7 +5,6 @@ import com.amazonaws.regions.Regions;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.AppVersionResource;
 import de.fau.cs.mad.wanthavers.common.rest.api.LoginResource;
-import de.fau.cs.mad.wanthavers.common.rest.api.UserResource;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthenticator;
 import de.fau.cs.mad.wanthavers.server.auth.UserAuthorizer;
 import de.fau.cs.mad.wanthavers.server.dao.*;
@@ -24,10 +23,6 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import io.federecio.dropwizard.swagger.SwaggerBundle;
-import io.federecio.dropwizard.swagger.SwaggerBundleConfiguration;
-import io.swagger.jaxrs.config.BeanConfig;
-import io.swagger.jaxrs.listing.ApiListingResource;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
@@ -47,13 +42,6 @@ public class ServerApplication extends Application<ServerConfiguration> {
     @Override
     public void initialize(Bootstrap<ServerConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
-
-        bootstrap.addBundle(new SwaggerBundle<ServerConfiguration>() {
-            @Override
-            protected SwaggerBundleConfiguration getSwaggerBundleConfiguration(ServerConfiguration configuration) {
-                return configuration.swaggerBundleConfiguration;
-            }
-        });
 
         bootstrap.addBundle(new AssetsBundle("/static", "/static", "index.html"));
 
@@ -198,11 +186,6 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final AppVersionResource appVersionResource = new AppVersionResourceImpl(appVersionFacade);
         environment.jersey().register(appVersionResource);
 
-        final ApiListingResource api = new ApiListingResource();
-        environment.jersey().register(api);
-        //configureSwagger(environment);
-
-
         /** register or run tasks **/
         String isProduction = System.getenv("IS_PRODUCTION");
 
@@ -222,6 +205,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         AppVersionsTask appVersionsTask = new AppVersionsTask("AppVersionsTask", hibernate.getSessionFactory());
         appVersionsTask.executeNow();
+
+        DesireExpirationCheckTask desireExpirationCheckTask = new DesireExpirationCheckTask("DesireExpirationCheckTask", hibernate.getSessionFactory());
+        desireExpirationCheckTask.executeNow();
     }
 
     public static void main(String[] args) {
@@ -230,15 +216,5 @@ public class ServerApplication extends Application<ServerConfiguration> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void configureSwagger(Environment environment) {
-        BeanConfig config = new BeanConfig();
-        config.setTitle(getName());
-        config.setVersion("0.0.1");
-        config.setBasePath("/v1");
-        String pkg = UserResource.class.getPackage().toString().split(" ")[1];
-        config.setResourcePackage(pkg);
-        config.setScan(true);
     }
 }
