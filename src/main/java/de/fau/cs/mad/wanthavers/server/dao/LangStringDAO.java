@@ -16,7 +16,20 @@ public class LangStringDAO extends AbstractSuperDAO<LangString>{
         super(sessionFactory);
     }
 
+    private LangString getFallbackValue(String key){
+        Criteria criteria = currentSession().createCriteria(LangString.class)
+                .add(Restrictions.eq("key", key))
+                .add(Restrictions.eq("langCode", ServerApplication.DEFAULT_LANGCODE));
+
+        LangString ls = (LangString) criteria.uniqueResult();
+        return ls;
+    }
+
     public LangString getByKeyAndLangCode(String key, String code){
+        if(code == null){
+            return getFallbackValue(key);
+        }
+
         Criteria criteria = currentSession().createCriteria(LangString.class)
                 .add(Restrictions.eq("key", key))
                 .add(Restrictions.eq("langCode", code));
@@ -25,18 +38,14 @@ public class LangStringDAO extends AbstractSuperDAO<LangString>{
 
         /** use default language as fallback **/
         if(ls == null){
-            criteria = currentSession().createCriteria(LangString.class)
-                    .add(Restrictions.eq("key", key))
-                    .add(Restrictions.eq("langCode", ServerApplication.DEFAULT_LANGCODE));
-
-            ls = (LangString)criteria.uniqueResult();
+            ls = getFallbackValue(key);
         }
         return ls;
     }
 
     public LangString saveOrReplace(LangString ls){
         LangString tmp = getByKeyAndLangCode(ls.getKey(), ls.getLangCode());
-        if( tmp != null){
+        if( tmp != null && tmp.getLangCode().equals(ls.getLangCode())){
             delete(tmp);
         }
 
