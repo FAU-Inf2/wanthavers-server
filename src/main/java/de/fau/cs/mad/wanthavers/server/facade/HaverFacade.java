@@ -6,8 +6,11 @@ import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
 import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessageSender;
 import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
 import de.fau.cs.mad.wanthavers.server.dao.HaverDAO;
+import de.fau.cs.mad.wanthavers.server.misc.DynamicStringParser;
 
 import java.util.List;
+
+import static de.fau.cs.mad.wanthavers.server.misc.TranslationHelper.getTranslatedString;
 
 public class HaverFacade {
     private final HaverDAO dao;
@@ -30,8 +33,11 @@ public class HaverFacade {
         DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
         Desire desire = desireDAO.findById(desireId);
 
+        DynamicStringParser cloudMessageStr = DynamicStringParser.parse(getTranslatedString("HAVER_NEW_NOTIFICATION_BODY", desire.getCreator().getLangCode()));
+        cloudMessageStr.set("desire", desire.getTitle());
+
         CloudMessage message = new CloudMessage(desire.getCreator().getId(), CloudMessageSubject.NEWHAVER,
-                "A new Haver would like to help you out with "+desire.getTitle()+".");
+                cloudMessageStr.getValue());
         message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIREID, desireId);
         message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIRETITLE, desire.getTitle());
         CloudMessageSender.sendMessage(message);
@@ -46,8 +52,13 @@ public class HaverFacade {
             DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
             Desire desire = desireDAO.findById(desireId);
 
+            DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
+                    getTranslatedString("HAVER_ACCEPTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
+            cloudMessageStr.set("desireTitle", desire.getTitle());
+            cloudMessageStr.set("desireCreator", desire.getCreator().getName());
+
             CloudMessage message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERACCEPTED,
-                    "You were accepted for "+desire.getTitle()+" by "+desire.getCreator().getName()+".");
+                    cloudMessageStr.getValue());
             message.addKeyValue(CloudMessageSubject.HAVERACCEPTED_DESIREID, desireId);
             message.addKeyValue(CloudMessageSubject.HAVERACCPETED_DESIRETITLE, desire.getTitle());
             CloudMessageSender.sendMessage(message);
@@ -57,8 +68,13 @@ public class HaverFacade {
                 if(h.getStatus() == HaverStatus.ACCEPTED)
                     continue;
 
+                cloudMessageStr = DynamicStringParser.parse(
+                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
+                cloudMessageStr.set("desireTitle", desire.getTitle());
+                cloudMessageStr.set("desireCreator", desire.getCreator().getName());
+
                 message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
-                        "Sorry! You didn't get the job "+desire.getTitle()+" by "+desire.getCreator().getName()+". Better luck next time!");
+                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);

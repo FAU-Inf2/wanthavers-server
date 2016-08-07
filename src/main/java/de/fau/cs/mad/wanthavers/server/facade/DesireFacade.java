@@ -9,8 +9,11 @@ import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
 import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessageSender;
 import de.fau.cs.mad.wanthavers.server.dao.DesireDAO;
 import de.fau.cs.mad.wanthavers.server.dao.HaverDAO;
+import de.fau.cs.mad.wanthavers.server.misc.DynamicStringParser;
 
 import java.util.List;
+
+import static de.fau.cs.mad.wanthavers.server.misc.TranslationHelper.getTranslatedString;
 
 public class DesireFacade {
     private final DesireDAO dao;
@@ -59,7 +62,12 @@ public class DesireFacade {
             };
 
             for (User user : users) {
-                CloudMessage message = new CloudMessage(user.getId(), CloudMessageSubject.DESIRECOMPLETE, "Desire " + desire.getTitle() + " was completed. Rate now.");
+                DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
+                        getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_BODY", desire.getCreator().getLangCode()));
+                cloudMessageStr.set("desire", desire.getTitle());
+
+                CloudMessage message = new CloudMessage(user.getId(), CloudMessageSubject.DESIRECOMPLETE,
+                        cloudMessageStr.getValue());
                 message.addKeyValue(CloudMessageSubject.DESIRECOMPLETE_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.DESIRECOMPLETE_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);
