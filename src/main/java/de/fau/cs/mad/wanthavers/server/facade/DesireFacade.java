@@ -64,7 +64,7 @@ public class DesireFacade {
             for (User user : users) {
                 DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
                         getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_BODY", desire.getCreator().getLangCode()));
-                cloudMessageStr.set("desire", desire.getTitle());
+                cloudMessageStr = cloudMessageStr.set("desire", desire.getTitle());
 
                 CloudMessage message = new CloudMessage(user.getId(), CloudMessageSubject.DESIRECOMPLETE,
                         cloudMessageStr.getValue());

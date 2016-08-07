@@ -34,7 +34,7 @@ public class HaverFacade {
         Desire desire = desireDAO.findById(desireId);
 
         DynamicStringParser cloudMessageStr = DynamicStringParser.parse(getTranslatedString("HAVER_NEW_NOTIFICATION_BODY", desire.getCreator().getLangCode()));
-        cloudMessageStr.set("desire", desire.getTitle());
+        cloudMessageStr = cloudMessageStr.set("desire", desire.getTitle());
 
         CloudMessage message = new CloudMessage(desire.getCreator().getId(), CloudMessageSubject.NEWHAVER,
                 cloudMessageStr.getValue());
@@ -54,8 +54,8 @@ public class HaverFacade {
 
             DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
                     getTranslatedString("HAVER_ACCEPTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
-            cloudMessageStr.set("desireTitle", desire.getTitle());
-            cloudMessageStr.set("desireCreator", desire.getCreator().getName());
+            cloudMessageStr = cloudMessageStr.set("desireTitle", desire.getTitle());
+            cloudMessageStr = cloudMessageStr.set("desireCreator", desire.getCreator().getName());
 
             CloudMessage message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERACCEPTED,
                     cloudMessageStr.getValue());
@@ -70,8 +70,8 @@ public class HaverFacade {
 
                 cloudMessageStr = DynamicStringParser.parse(
                         getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
-                cloudMessageStr.set("desireTitle", desire.getTitle());
-                cloudMessageStr.set("desireCreator", desire.getCreator().getName());
+                cloudMessageStr = cloudMessageStr.set("desireTitle", desire.getTitle());
+                cloudMessageStr = cloudMessageStr.set("desireCreator", desire.getCreator().getName());
 
                 message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
                         getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
