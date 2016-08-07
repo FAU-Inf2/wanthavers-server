@@ -189,6 +189,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         /** register or run tasks **/
         String isProduction = System.getenv("IS_PRODUCTION");
 
+        CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
+        createStringsTask.executeNow();
+
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
         createCategoriesTask.executeNow();
 
@@ -199,9 +202,6 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         CreateAdminUserTask createAdminUserTask = new CreateAdminUserTask("CreateAdminUserTask", hibernate.getSessionFactory());
         createAdminUserTask.executeNow();
-
-        CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
-        createStringsTask.executeNow();
 
         AppVersionsTask appVersionsTask = new AppVersionsTask("AppVersionsTask", hibernate.getSessionFactory());
         appVersionsTask.executeNow();
