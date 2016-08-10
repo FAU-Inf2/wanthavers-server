@@ -74,7 +74,7 @@ public class HaverFacade {
                 cloudMessageStr = cloudMessageStr.set("desireCreator", desire.getCreator().getName());
 
                 message = new CloudMessage(h.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
-                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", h.getUser().getLangCode()));
+                        cloudMessageStr.getValue());
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);
