@@ -33,6 +33,11 @@ public class DesireFlagFacade {
         desire.setFlagCounter(desire.getFlagCounter() + 1);
         desireDAO.update(id, desire);
 
+        System.out.println("***FLAGDEBUG***");
+        System.out.println("FlagCounter = "+desire.getFlagCounter());
+        System.out.println("Modulo = "+ desire.getFlagCounter() % 5);
+        System.out.println("boolBound = "+(desire.getFlagCounter() % 5 == 0));
+
         if(desire.getFlagCounter() % 5 == 0) {
             List<DesireFlag> flags = dao.getDesireFlagsByDesireId(id);
             String reasons = "";
