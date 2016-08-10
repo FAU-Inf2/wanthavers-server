@@ -69,12 +69,12 @@ public class HaverFacade {
                     continue;
 
                 cloudMessageStr = DynamicStringParser.parse(
-                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
+                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", h.getUser().getLangCode()));
                 cloudMessageStr = cloudMessageStr.set("desireTitle", desire.getTitle());
                 cloudMessageStr = cloudMessageStr.set("desireCreator", desire.getCreator().getName());
 
-                message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
-                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
+                message = new CloudMessage(h.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
+                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_BODY", h.getUser().getLangCode()));
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);
