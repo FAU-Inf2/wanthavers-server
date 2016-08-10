@@ -30,14 +30,15 @@ public class CloudMessageSender {
             CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
             List<CloudMessageToken> tokens = tokenDAO.findAll(message.getUserId());
 
-            String[] ids = new String[tokens.size()];
-            for (int i = 0; i < tokens.size(); i++)
-                ids[i] = tokens.get(i).getToken();
-            String idsString = StringUtils.join(",", ids);
-
+            // For documentation of sendData see CloudMessageSubject
             JSONObject sendData = new JSONObject();
             sendData.put("data", message.getData());
-            sendData.put("registration_ids", "["+idsString+"]");
+            if(tokens.size() == 1) {
+                sendData.put("to", tokens.get(0).getToken());
+            } else {
+                for (int i = 0; i < tokens.size(); i++)
+                    sendData.accumulate("registration_ids", tokens.get(i).getToken());
+            }
 
             URL url = new URL(FIREBASE_URL);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -46,13 +47,13 @@ public class CloudMessageSender {
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
 
+            System.out.println("Sending CloudMessage: "+ sendData.toString());
             OutputStream outputStream = conn.getOutputStream();
             outputStream.write(sendData.toString().getBytes());
 
             InputStream inputStream = conn.getInputStream();
             String resp = IOUtils.toString(inputStream);
             System.out.println("Send CloudMessage to User "+message.getUserId());
-            System.out.println("with tokens "+idsString);
             System.out.println("Answer: " + resp);
 
             inputStream.close();
