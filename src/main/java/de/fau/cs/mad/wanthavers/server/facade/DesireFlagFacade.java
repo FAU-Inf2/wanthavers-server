@@ -33,18 +33,13 @@ public class DesireFlagFacade {
         desire.setFlagCounter(desire.getFlagCounter() + 1);
         desireDAO.update(id, desire);
 
-        System.out.println("***FLAGDEBUG***");
-        System.out.println("FlagCounter = "+desire.getFlagCounter());
-        System.out.println("Modulo = "+ desire.getFlagCounter() % 5);
-        System.out.println("boolBound = "+(desire.getFlagCounter() % 5 == 0));
-
         if(desire.getFlagCounter() % 5 == 0) {
             List<DesireFlag> flags = dao.getDesireFlagsByDesireId(id);
             String reasons = "";
             for(DesireFlag f : flags)
                 reasons += f.getFlagReason() + ": " + f.getComment() + "\n";
 
-            Mailer.send("Desire with Id "+desire.getId()+":"+desire.getTitle()+" has over 5 flags!", reasons, "");
+            Mailer.send("Desire with Id "+desire.getId()+":"+desire.getTitle()+" has over 5 flags!", reasons, "wanthavers@i2.cs.fau.de");
         }
 
         return ret;
