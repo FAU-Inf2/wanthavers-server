@@ -32,6 +32,7 @@ public class ChatDAO{
     public List<Chat> getChatsByUser(User u) {
         ParseQuery<ParseChat> query = ParseQuery.getQuery(ParseChat.class);
         query.whereEqualTo(ParseChat.user1, u.getId());
+        query.whereGreaterThan(ParseChat.counter, 0);
 
         List<Chat> list = new ArrayList<>();
         try {
