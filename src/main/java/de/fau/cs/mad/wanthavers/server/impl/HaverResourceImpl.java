@@ -78,6 +78,7 @@ public class HaverResourceImpl implements HaverResource {
                 desireFacade.updateDesire(desireId, d);
                 break;
             case HaverStatus.ADDED:
+            case HaverStatus.DELETED:
                 /* Unaccept haver */
                 // See if haver was already accepted and revert status of desire
                 if (haver.getId() == getAccepted(desireId).getId()) {
@@ -85,8 +86,6 @@ public class HaverResourceImpl implements HaverResource {
                     d.setStatus(DesireStatus.STATUS_OPEN);
                     desireFacade.updateDesire(desireId, d);
                 }
-                break;
-            case HaverStatus.DELETED:
                 break;
             case HaverStatus.REJECTED:
                 break;
@@ -98,19 +97,13 @@ public class HaverResourceImpl implements HaverResource {
     @Override
     @UnitOfWork
     public Haver updateHaverStatus(@Auth User user, @ApiParam(value = "id of the desire", required = true) long desireId, @ApiParam(value = "id of the haver relation", required = true) long userId, int status) {
-        if (status == HaverStatus.ACCEPTED && acceptedHaverAlreadyExists(desireId)) {
-            throw new WebApplicationException(409);
-        }
-
         Haver stored = facade.getHaverByUserId(desireId, userId);
 
         if (stored == null)
             throw new WebApplicationException(404);
 
-        check(user, stored, desireId);
-
         stored.setStatus(status);
-        return facade.updateHaver(desireId, userId, stored);
+        return this.updateHaver(user, desireId, userId, stored);
     }
 
     private void check(User user, Haver haver, long desireId) throws WebApplicationException {
