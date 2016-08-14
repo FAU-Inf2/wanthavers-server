@@ -71,22 +71,28 @@ public class HaverResourceImpl implements HaverResource {
             throw new WebApplicationException(409);
         }
 
-        Haver h = facade.updateHaver(desireId, id, haver);
-
-        switch (h.getStatus()) {
+        switch (haver.getStatus()) {
             case HaverStatus.ACCEPTED:
                 Desire d = desireFacade.getDesireByID(desireId);
                 d.setStatus(DesireStatus.STATUS_IN_PROGRESS);
                 desireFacade.updateDesire(desireId, d);
                 break;
             case HaverStatus.ADDED:
+                /* Unaccept haver */
+                // See if haver was already accepted and revert status of desire
+                if (haver.getId() == getAccepted(desireId).getId()) {
+                    d = desireFacade.getDesireByID(desireId);
+                    d.setStatus(DesireStatus.STATUS_OPEN);
+                    desireFacade.updateDesire(desireId, d);
+                }
                 break;
             case HaverStatus.DELETED:
                 break;
             case HaverStatus.REJECTED:
                 break;
         }
-        return h;
+
+        return facade.updateHaver(desireId, id, haver);
     }
 
     @Override

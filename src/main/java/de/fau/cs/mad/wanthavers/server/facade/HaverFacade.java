@@ -48,6 +48,7 @@ public class HaverFacade {
     public Haver updateHaver(long desireId, long haverId, Haver haver) {
         Haver ret = this.dao.update(desireId, haverId, haver);
 
+        /* Send push notifications on accept */
         if(haver.getStatus() == HaverStatus.ACCEPTED) {
             DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
             Desire desire = desireDAO.findById(desireId);
