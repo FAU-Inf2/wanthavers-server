@@ -64,6 +64,7 @@ mainClassName = mainClass
 run {
     String isProduction = System.getenv("IS_PRODUCTION");
     if(isProduction != null && isProduction.equals("true")) {
+        dependsOn(flywayMigrate)
         dependsOn(flywayInfo)
     }
     args 'server', 'config.yml'

@@ -1,0 +1,2 @@
+ALTER TABLE Desire
+    ADD COLUMN biddingAllowed BOOLEAN DEFAULT FALSE;
