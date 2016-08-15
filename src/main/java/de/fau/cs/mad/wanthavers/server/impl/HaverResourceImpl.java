@@ -103,7 +103,7 @@ public class HaverResourceImpl implements HaverResource {
             throw new WebApplicationException(404);
 
         stored.setStatus(status);
-        return this.updateHaver(user, desireId, userId, stored);
+        return this.updateHaver(user, desireId, stored.getId(), stored);
     }
 
     private void check(User user, Haver haver, long desireId) throws WebApplicationException {
