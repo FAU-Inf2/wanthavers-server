@@ -67,11 +67,30 @@ public class HaverResourceImpl implements HaverResource {
     public Haver updateHaver(@Auth User user, @ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the haver", required = true) long id, @ApiParam(value = "new details of the specified haver", required = true) Haver haver) {
         check(user, haver, desireId);
 
-        if (haver.getStatus() == HaverStatus.ACCEPTED && acceptedHaverAlreadyExists(desireId)) {
+        return setHaverStatus(desireId, id, haver, haver.getStatus());
+    }
+
+    @Override
+    @UnitOfWork
+    public Haver updateHaverStatus(@Auth User user, @ApiParam(value = "id of the desire", required = true) long desireId, @ApiParam(value = "id of the haver relation", required = true) long userId, int status) {
+        Haver stored = facade.getHaverByUserId(desireId, userId);
+
+        if (stored == null)
+            throw new WebApplicationException(404);
+
+        return setHaverStatus(desireId, stored.getId(), stored, status);
+    }
+
+    private Haver setHaverStatus(long desireId, long haverId, Haver haver, int status) {
+        if (status == HaverStatus.ACCEPTED && acceptedHaverAlreadyExists(desireId)) {
+            System.out.println("*****HAVERID "+getAccepted(desireId).getId());
+            System.out.println("*****HAVERSTATUS "+getAccepted(desireId).getStatus());
+            System.out.println("*****HAVERNAME "+getAccepted(desireId).getUser().getName());
+            System.out.println("*****HAVERUSERID "+getAccepted(desireId).getUser().getId());
             throw new WebApplicationException(409);
         }
 
-        switch (haver.getStatus()) {
+        switch (status) {
             case HaverStatus.ACCEPTED:
                 Desire d = desireFacade.getDesireByID(desireId);
                 d.setStatus(DesireStatus.STATUS_IN_PROGRESS);
@@ -93,19 +112,9 @@ public class HaverResourceImpl implements HaverResource {
                 break;
         }
 
-        return facade.updateHaver(desireId, id, haver);
-    }
+        haver.setStatus(status);
 
-    @Override
-    @UnitOfWork
-    public Haver updateHaverStatus(@Auth User user, @ApiParam(value = "id of the desire", required = true) long desireId, @ApiParam(value = "id of the haver relation", required = true) long userId, int status) {
-        Haver stored = facade.getHaverByUserId(desireId, userId);
-
-        if (stored == null)
-            throw new WebApplicationException(404);
-
-        stored.setStatus(status);
-        return this.updateHaver(user, desireId, stored.getId(), stored);
+        return facade.updateHaver(desireId, haver.getId(), haver);
     }
 
     private void check(User user, Haver haver, long desireId) throws WebApplicationException {
