@@ -81,6 +81,8 @@ public class HaverResourceImpl implements HaverResource {
             case HaverStatus.DELETED:
                 /* Unaccept haver */
                 // See if haver was already accepted and revert status of desire
+                if(getAccepted(desireId) == null)
+                    break;
                 if (haver.getId() == getAccepted(desireId).getId()) {
                     d = desireFacade.getDesireByID(desireId);
                     d.setStatus(DesireStatus.STATUS_OPEN);
