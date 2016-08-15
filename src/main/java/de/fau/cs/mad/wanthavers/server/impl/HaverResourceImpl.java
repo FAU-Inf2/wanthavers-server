@@ -83,10 +83,6 @@ public class HaverResourceImpl implements HaverResource {
 
     private Haver setHaverStatus(long desireId, long haverId, Haver haver, int status) {
         if (status == HaverStatus.ACCEPTED && acceptedHaverAlreadyExists(desireId)) {
-            System.out.println("*****HAVERID "+getAccepted(desireId).getId());
-            System.out.println("*****HAVERSTATUS "+getAccepted(desireId).getStatus());
-            System.out.println("*****HAVERNAME "+getAccepted(desireId).getUser().getName());
-            System.out.println("*****HAVERUSERID "+getAccepted(desireId).getUser().getId());
             throw new WebApplicationException(409);
         }
 
