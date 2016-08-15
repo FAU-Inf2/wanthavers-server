@@ -105,7 +105,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.in("status", status));
 
             //if only open desires are requested then only return desires that are not expired in case the job hasn't already marked them
-            if(status.contains(DesireStatus.STATUS_OPEN)) {
+            if(status.size() == 1 && status.contains(DesireStatus.STATUS_OPEN)) {
                 criteria.add(Restrictions.or(Restrictions.isNull("expireDate"), Restrictions.ge("expireDate", new Date(System.currentTimeMillis()))));
             }
         }
