@@ -18,3 +18,30 @@ server:
       port: 8443
       validateCerts: false
 #      trustStorePath: ${JAVA_HOME}/jre/lib/security/cacerts
+
+logging:
+  level: INFO
+
+  loggers:
+    "de.fau.cs.mad.swipe": DEBUG
+# json parsing exceptions
+    "io.dropwizard.jersey.jackson.JsonProcessingExceptionMapper": DEBUG
+
+#    hibernate tracing
+#    log sql
+#    "org.hibernate.SQL": DEBUG
+#    parameters of prepared statements
+#    "org.hibernate.type": TRACE
+
+#   log incoming/outgoing plain requests including json
+    "org.glassfish.jersey.logging.ServerLoggingFilter": DEBUG
+    "org.glassfish.jersey.logging.LoggingFeature": DEBUG
+
+  appenders:
+   - type: console
+   - type: file
+     currentLogFilename: ./default.log
+     archive: true
+     archivedLogFilenamePattern: ./default-%d.log.gz
+     archivedFileCount: 7
+     timeZone: UTC
