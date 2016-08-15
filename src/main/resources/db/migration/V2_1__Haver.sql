@@ -1,2 +1,2 @@
 ALTER TABLE Haver
-    ADD COLUMN requestedPrice DOUBLE DEFAULT 0
+    ADD COLUMN requestedPrice DOUBLE DEFAULT 0;
