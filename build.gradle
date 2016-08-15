@@ -65,7 +65,6 @@ run {
     String isProduction = System.getenv("IS_PRODUCTION");
     if(isProduction != null && isProduction.equals("true")) {
         dependsOn(flywayInfo)
-        dependsOn(flywayBaseline)
     }
     args 'server', 'config.yml'
 }
