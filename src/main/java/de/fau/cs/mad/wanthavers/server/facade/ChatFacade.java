@@ -13,23 +13,23 @@ import java.util.List;
 public class ChatFacade {
     private final ChatDAO dao;
 
-    public ChatFacade(ChatDAO dao){
+    public ChatFacade(ChatDAO dao) {
         this.dao = dao;
     }
 
-    public List<Chat> getChatsByUser(User u){
+    public List<Chat> getChatsByUser(User u) {
         return this.dao.getChatsByUser(u);
     }
 
-    public Chat createChat(long u1, long u2, long desireId){
+    public Chat createChat(long u1, long u2, long desireId) {
         return this.dao.createChat(u1, u2, desireId);
     }
 
-    public List<Message> getMessagesByChat(String chatId, User user, Long lastCreationTime, Integer limit){
+    public List<Message> getMessagesByChat(String chatId, User user, Long lastCreationTime, Integer limit) {
         return this.dao.getMessages(chatId, user, lastCreationTime, limit);
     }
 
-    public Message createMessage(String chatId, User user, String body){
+    public Message createMessage(String chatId, User user, String body) {
         Message ret = this.dao.createMessage(chatId, user, body);
 
         CloudMessageTokenDAO tokenDAO = (CloudMessageTokenDAO) SingletonManager.get(CloudMessageTokenDAO.class);
@@ -49,5 +49,9 @@ public class ChatFacade {
 
     public Chat getChat(long user1, long user2, long desireId) {
         return this.dao.getOrCreateChat(user1, user2, desireId);
+    }
+
+    public Chat getChatByChatId(String chatId) {
+        return dao.getChatByChatId(chatId);
     }
 }

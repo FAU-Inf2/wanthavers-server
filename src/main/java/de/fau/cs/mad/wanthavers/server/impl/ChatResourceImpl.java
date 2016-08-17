@@ -31,7 +31,7 @@ public class ChatResourceImpl implements ChatResource {
     @Override
     public List<Chat> get(@Auth User user) {
         List<Chat> tmp = this.chatFacade.getChatsByUser(user);
-        if(tmp == null){
+        if (tmp == null) {
             throw new WebApplicationException(404);
         }
 
@@ -42,18 +42,32 @@ public class ChatResourceImpl implements ChatResource {
     @Override
     public List<Message> getMessages(@Auth User user, String id, Long lastCreationTime, Integer limit) {
         List<Message> tmp = this.chatFacade.getMessagesByChat(id, user, lastCreationTime, limit);
-        if(tmp == null){
+        if (tmp == null) {
             throw new WebApplicationException(404);
         }
         return tmp;
     }
 
+    @Override
+    @UnitOfWork
+    public User getOtherUser(@Auth User user, String id) {
+        Chat chat = chatFacade.getChatByChatId(id);
+
+        if (chat == null)
+            throw new WebApplicationException(404);
+
+        if (user.getId() == chat.getUserObject1().getId()) {
+            return chat.getUserObject2();
+        }
+
+        return chat.getUserObject1();
+    }
 
     @UnitOfWork
     @Override
     public Chat createChat(@Auth User user, Chat chat) {
         Chat tmp = this.chatFacade.createChat(chat.getUser1(), chat.getUser2(), chat.getDesireId());
-        if(tmp == null){
+        if (tmp == null) {
             throw new WebApplicationException(400);
         }
 
@@ -65,7 +79,7 @@ public class ChatResourceImpl implements ChatResource {
     @Override
     public Message createMessage(@Auth User user, String id, Message msg) {
         Message tmp = this.chatFacade.createMessage(id, user, msg.getBody());
-        if(tmp == null){
+        if (tmp == null) {
             throw new WebApplicationException(400);
         }
         return tmp;
