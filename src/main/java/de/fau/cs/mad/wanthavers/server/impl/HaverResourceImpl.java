@@ -81,6 +81,22 @@ public class HaverResourceImpl implements HaverResource {
         return setHaverStatus(desireId, stored.getId(), stored, status);
     }
 
+    @Override
+    @UnitOfWork
+    public Haver updateRequestedPrice(@Auth User user, long desireId, long userId, double requestedPrice) {
+        if (user.getId() != userId)
+            throw new WebApplicationException(403);
+
+        Haver stored = facade.getHaverByUserId(desireId, userId);
+
+        if (stored == null)
+            throw new WebApplicationException(404);
+
+        stored.setRequestedPrice(requestedPrice);
+
+        return facade.updateHaver(desireId, stored.getId(), stored);
+    }
+
     private Haver setHaverStatus(long desireId, long haverId, Haver haver, int status) {
         if (status == HaverStatus.ACCEPTED && acceptedHaverAlreadyExists(desireId)) {
             throw new WebApplicationException(409);
@@ -96,7 +112,7 @@ public class HaverResourceImpl implements HaverResource {
             case HaverStatus.DELETED:
                 /* Unaccept haver */
                 // See if haver was already accepted and revert status of desire
-                if(getAccepted(desireId) == null)
+                if (getAccepted(desireId) == null)
                     break;
                 if (haver.getId() == getAccepted(desireId).getId()) {
                     d = desireFacade.getDesireByID(desireId);
@@ -117,7 +133,7 @@ public class HaverResourceImpl implements HaverResource {
         DesireFacade desireFacade = (DesireFacade) SingletonManager.get(DesireFacade.class);
         Desire desire = desireFacade.getDesireByID(desireId);
 
-        if(desire == null) {
+        if (desire == null) {
             throw new WebApplicationException("desire not found", 404);
         }
 
