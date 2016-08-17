@@ -105,7 +105,7 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.add(Restrictions.in("status", status));
 
             //if only open desires are requested then only return desires that are not expired in case the job hasn't already marked them
-            if(status.size() == 1 && status.contains(DesireStatus.STATUS_OPEN)) {
+            if (status.size() == 1 && status.contains(DesireStatus.STATUS_OPEN)) {
                 criteria.add(Restrictions.or(Restrictions.isNull("expireDate"), Restrictions.ge("expireDate", new Date(System.currentTimeMillis()))));
             }
         }
@@ -118,19 +118,23 @@ public class DesireDAO extends AbstractSuperDAO<Desire> {
             criteria.setMaxResults(limit);
         }
 
-        if (creatorId != null) {
-            criteria.add(Restrictions.eq("creator.id", creatorId));
-        }
-
+        //get desire ids where user is haver
+        ArrayList<Long> ids = new ArrayList<>();
         if (haverId != null) {
             UserFacade userFacade = (UserFacade) SingletonManager.get(UserFacade.class);
             List<Desire> desiresAsHaver = userFacade.getDesiresAsHaver(haverId, haverStatus);
 
-            ArrayList<Long> ids = new ArrayList<>();
             for (Desire d : desiresAsHaver) {
                 ids.add(d.getId());
             }
+        }
 
+        //if creator id and haver id is given combine them by or
+        if (creatorId != null && haverId != null) {
+            criteria.add(Restrictions.or(Restrictions.eq("creator.id", creatorId), Restrictions.in("id", ids)));
+        } else if (creatorId != null) {
+            criteria.add(Restrictions.eq("creator.id", creatorId));
+        } else if (haverId != null) {
             if (!ids.isEmpty()) {
                 criteria.add(Restrictions.in("id", ids));
             } else {
