@@ -53,6 +53,7 @@ public class DesireResourceImpl implements DesireResource {
         //set desire creator
         newDesire.setCreator(user);
         newDesire.setCreation_time(new Date(System.currentTimeMillis()));
+        setExpireDate(newDesire);
 
         return desireFacade.createNewDesire(newDesire);
     }
@@ -62,6 +63,8 @@ public class DesireResourceImpl implements DesireResource {
     public Desire updateDesire(@Auth User user, @ApiParam(value = "id of the Desire", required = true) long id, @ApiParam(value = "new details of the specified Desire", required = true) Desire desire) {
         checkPermission(user, id);
         desire.setCreator(user);
+        setExpireDate(desire);
+        
         return desireFacade.updateDesire(id, desire);
     }
 
@@ -100,5 +103,14 @@ public class DesireResourceImpl implements DesireResource {
         if (u.getId() != d.getCreator().getId()) {
             throw new WebApplicationException(401);
         }
+    }
+
+    private void setExpireDate(Desire desire) {
+        if(desire.getValidTimespan() == null) {
+            return;
+        }
+
+        Date expireDate = new Date(desire.getCreation_time().getTime() + desire.getValidTimespan());
+        desire.setExpireDate(expireDate);
     }
 }
