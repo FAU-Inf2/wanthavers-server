@@ -42,9 +42,9 @@ public class DesireExpirationCheckTask extends SessionContextTask {
                 Session session = sessionFactory.openSession();
                 Query query = session.createQuery(updateStatement);
                 query.setParameter("status", DesireStatus.STATUS_EXPIRED);
-                query.setParameter("dateNow", new Timestamp(System.currentTimeMillis()));
+                query.setParameter("dateNow", new Timestamp(System.currentTimeMillis()).getTime());
                 //if no expire date is given by user then compare to server default
-                query.setParameter("dateDefaultExpired", new Timestamp(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(DEFAULT_EXPIRE_DURATION_DAYS)));
+                query.setParameter("dateDefaultExpired", new Timestamp(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(DEFAULT_EXPIRE_DURATION_DAYS)).getTime());
 
                 query.executeUpdate();
                 session.close();
