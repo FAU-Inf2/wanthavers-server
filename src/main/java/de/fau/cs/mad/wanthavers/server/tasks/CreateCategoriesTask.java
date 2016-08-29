@@ -83,7 +83,7 @@ public class CreateCategoriesTask extends SessionContextTask {
         registerLangString(EN, DIY_KEY, "Do-It-Yourself Products");
 
         final String CLOTHES_IMAGE  = "https://s3.eu-central-1.amazonaws.com/whimages/000000c/shirt.png";
-        registerLangString(DE, CLOTHES_KEY, "Kleidung & Schumck");
+        registerLangString(DE, CLOTHES_KEY, "Kleidung & Schmuck");
         registerLangString(EN, CLOTHES_KEY, "Clothes & Jewellery");
 
         final String LIVING_IMAGE   = "https://s3.eu-central-1.amazonaws.com/whimages/000000c/desk.png";
