@@ -21,8 +21,9 @@ public class RegisterApplePushTask extends SessionContextTask {
     @Override
     public void run(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
         /** configure ApnsClient for sending push to Apple **/
+        String pw = System.getenv("APPLE_PW");
         final ApnsClient apnsClient = new ApnsClientBuilder()
-                .setClientCredentials(new File("/certificate/x.p12"), "12-pw")
+                .setClientCredentials(new File("wanthavers.p12"), pw)
                 .build();
 
         final Future<Void> connectFuture = apnsClient.connect(ApnsClient.DEVELOPMENT_APNS_HOST);

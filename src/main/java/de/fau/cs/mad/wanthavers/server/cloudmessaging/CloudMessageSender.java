@@ -80,6 +80,10 @@ public class CloudMessageSender {
                     System.out.println("Sending Push message: "+payload+" to user "+message.getUserId());
 
                     final ApnsClient apnsClient = (ApnsClient) SingletonManager.get(ApnsClient.class);
+                    if(apnsClient == null) {
+                        System.out.println("Sending push to Apple servers not possible, as there is no connection!");
+                        continue;
+                    }
                     apnsClient.sendNotification(pushNotification);
                 }
             }
