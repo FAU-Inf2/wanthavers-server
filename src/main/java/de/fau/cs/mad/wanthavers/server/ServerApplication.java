@@ -189,6 +189,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         /** register or run tasks **/
         String isProduction = System.getenv("IS_PRODUCTION");
 
+        RegisterApplePushTask applePushTask = new RegisterApplePushTask("RegisterApplePushTask", hibernate.getSessionFactory());
+        applePushTask.executeNow();
+
         CreateStringsTask createStringsTask = new CreateStringsTask("CreateStringsTask", hibernate.getSessionFactory());
         createStringsTask.executeNow();
 

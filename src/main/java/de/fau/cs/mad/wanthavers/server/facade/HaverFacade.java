@@ -36,8 +36,10 @@ public class HaverFacade {
         DynamicStringParser cloudMessageStr = DynamicStringParser.parse(getTranslatedString("HAVER_NEW_NOTIFICATION_BODY", desire.getCreator().getLangCode()));
         cloudMessageStr = cloudMessageStr.set("desire", desire.getTitle());
 
-        CloudMessage message = new CloudMessage(desire.getCreator().getId(), CloudMessageSubject.NEWHAVER,
-                cloudMessageStr.getValue());
+        CloudMessage message = new CloudMessage(desire.getCreator().getId(),
+                CloudMessageSubject.NEWHAVER,
+                cloudMessageStr.getValue(),
+                getTranslatedString("HAVER_NEW_NOTIFICATION_TITLE", desire.getCreator().getLangCode()));
         message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIREID, desireId);
         message.addKeyValue(CloudMessageSubject.NEWHAVER_DESIRETITLE, desire.getTitle());
         CloudMessageSender.sendMessage(message);
@@ -58,8 +60,10 @@ public class HaverFacade {
             cloudMessageStr = cloudMessageStr.set("desireTitle", desire.getTitle());
             cloudMessageStr = cloudMessageStr.set("desireCreator", desire.getCreator().getName());
 
-            CloudMessage message = new CloudMessage(haver.getUser().getId(), CloudMessageSubject.HAVERACCEPTED,
-                    cloudMessageStr.getValue());
+            CloudMessage message = new CloudMessage(haver.getUser().getId(),
+                    CloudMessageSubject.HAVERACCEPTED,
+                    cloudMessageStr.getValue(),
+                    getTranslatedString("HAVER_ACCEPTED_NOTIFICATION_TITLE", haver.getUser().getLangCode()));
             message.addKeyValue(CloudMessageSubject.HAVERACCEPTED_DESIREID, desireId);
             message.addKeyValue(CloudMessageSubject.HAVERACCPETED_DESIRETITLE, desire.getTitle());
             CloudMessageSender.sendMessage(message);
@@ -74,8 +78,10 @@ public class HaverFacade {
                 cloudMessageStr = cloudMessageStr.set("desireTitle", desire.getTitle());
                 cloudMessageStr = cloudMessageStr.set("desireCreator", desire.getCreator().getName());
 
-                message = new CloudMessage(h.getUser().getId(), CloudMessageSubject.HAVERREJECTED,
-                        cloudMessageStr.getValue());
+                message = new CloudMessage(h.getUser().getId(),
+                        CloudMessageSubject.HAVERREJECTED,
+                        cloudMessageStr.getValue(),
+                        getTranslatedString("HAVER_REJECTED_NOTIFICATION_TITLE", h.getUser().getLangCode()));
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.HAVERREJECTED_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);

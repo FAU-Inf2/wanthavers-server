@@ -66,8 +66,10 @@ public class DesireFacade {
                         getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_BODY", desire.getCreator().getLangCode()));
                 cloudMessageStr = cloudMessageStr.set("desire", desire.getTitle());
 
-                CloudMessage message = new CloudMessage(user.getId(), CloudMessageSubject.DESIRECOMPLETE,
-                        cloudMessageStr.getValue());
+                CloudMessage message = new CloudMessage(user.getId(),
+                        CloudMessageSubject.DESIRECOMPLETE,
+                        cloudMessageStr.getValue(),
+                        getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_TITLE", desire.getCreator().getLangCode()));
                 message.addKeyValue(CloudMessageSubject.DESIRECOMPLETE_DESIREID, desireId);
                 message.addKeyValue(CloudMessageSubject.DESIRECOMPLETE_DESIRETITLE, desire.getTitle());
                 CloudMessageSender.sendMessage(message);
