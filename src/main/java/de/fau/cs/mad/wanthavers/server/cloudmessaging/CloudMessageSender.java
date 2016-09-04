@@ -78,7 +78,7 @@ public class CloudMessageSender {
 
                     pushNotification = new SimpleApnsPushNotification(tokenKey, IOS_PACKAGE_NAME, payload);
 
-                    System.out.println("Sending Push message: "+payload+" to user "+message.getUserId());
+                    System.out.println("Sending Push message: "+payload+" to user "+message.getUserId()+" with token "+token.getToken());
 
                     final ApnsClient apnsClient = (ApnsClient) SingletonManager.get(ApnsClient.class);
                     if(apnsClient == null) {
