@@ -71,6 +71,8 @@ public class CloudMessageSender {
 
                     for(String key : message.getDataWithoutHeader().keySet()) {
                         payloadBuilder.addCustomProperty(key, message.getData().get(key));
+                        System.out.println("Key "+key);
+                        System.out.println("Value "+message.getData().get(key));
                     }
 
                     String payload = payloadBuilder.buildWithDefaultMaximumLength();
