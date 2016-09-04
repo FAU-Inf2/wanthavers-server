@@ -60,7 +60,7 @@ public class CloudMessage {
     }
 
     public JSONObject getDataWithoutHeader() {
-        JSONObject dataCopy = new JSONObject(data);
+        JSONObject dataCopy = new JSONObject(data.toString());
         dataCopy.remove("message");
         dataCopy.remove("title");
         return dataCopy;
