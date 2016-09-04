@@ -66,7 +66,8 @@ public class CloudMessageSender {
                     ApnsPayloadBuilder payloadBuilder = new ApnsPayloadBuilder()
                             .setBadgeNumber(1)
                             .setAlertTitle(message.getTitle())
-                            .setAlertBody(message.getMessage());
+                            .setAlertBody(message.getMessage())
+                            .setSoundFileName("default");
 
                     for(String key : message.getDataWithoutHeader().keySet()) {
                         payloadBuilder.addCustomProperty(key, message.getData().get(key));
