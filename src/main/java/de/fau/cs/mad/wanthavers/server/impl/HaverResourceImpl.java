@@ -3,8 +3,11 @@ package de.fau.cs.mad.wanthavers.server.impl;
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.common.rest.api.HaverResource;
 import de.fau.cs.mad.wanthavers.server.SingletonManager;
+import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessage;
+import de.fau.cs.mad.wanthavers.server.cloudmessaging.CloudMessageSender;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.HaverFacade;
+import de.fau.cs.mad.wanthavers.server.misc.DynamicStringParser;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import io.swagger.annotations.ApiParam;
@@ -12,6 +15,8 @@ import io.swagger.annotations.ApiParam;
 import javax.ws.rs.WebApplicationException;
 import java.util.Date;
 import java.util.List;
+
+import static de.fau.cs.mad.wanthavers.server.misc.TranslationHelper.getTranslatedString;
 
 
 public class HaverResourceImpl implements HaverResource {
@@ -67,7 +72,7 @@ public class HaverResourceImpl implements HaverResource {
     public Haver updateHaver(@Auth User user, @ApiParam(value = "id of the desired desire", required = true) long desireId, @ApiParam(value = "id of the haver", required = true) long id, @ApiParam(value = "new details of the specified haver", required = true) Haver haver) {
         check(user, haver, desireId);
 
-        return setHaverStatus(desireId, id, haver, haver.getStatus());
+        return setHaverStatus(user, desireId, id, haver, haver.getStatus());
     }
 
     @Override
@@ -78,7 +83,7 @@ public class HaverResourceImpl implements HaverResource {
         if (stored == null)
             throw new WebApplicationException(404);
 
-        return setHaverStatus(desireId, stored.getId(), stored, status);
+        return setHaverStatus(user, desireId, stored.getId(), stored, status);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class HaverResourceImpl implements HaverResource {
         return facade.updateHaver(desireId, stored.getId(), stored);
     }
 
-    private Haver setHaverStatus(long desireId, long haverId, Haver haver, int status) {
+    private Haver setHaverStatus(User user, long desireId, long haverId, Haver haver, int status) {
         if (status == HaverStatus.ACCEPTED && acceptedHaverAlreadyExists(desireId)) {
             throw new WebApplicationException(409);
         }
@@ -118,6 +123,36 @@ public class HaverResourceImpl implements HaverResource {
                     d = desireFacade.getDesireByID(desireId);
                     d.setStatus(DesireStatus.STATUS_OPEN);
                     desireFacade.updateDesire(desireId, d);
+
+                    /** Send push notifications to Wanter if Haver unaccepted**/
+                    if(user.getId() == haver.getId()) {
+                        DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
+                                getTranslatedString("HAVER_UNACCEPTED_NOTIFICATION_BODY", d.getCreator().getLangCode()));
+                        cloudMessageStr = cloudMessageStr.set("desire", d.getTitle());
+                        cloudMessageStr = cloudMessageStr.set("haver", haver.getUser().getName());
+
+                        CloudMessage message = new CloudMessage(d.getCreator().getId(),
+                                CloudMessageSubject.HAVERUNACCEPTED,
+                                cloudMessageStr.getValue(),
+                                getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_TITLE", d.getCreator().getLangCode()));
+                        message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIREID, desireId);
+                        message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIRETITLE, d.getTitle());
+                        CloudMessageSender.sendMessage(message);
+                    } else {
+                        /** Send push notifications to Haver if Wanter unaccepted **/
+                        DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
+                                getTranslatedString("HAVER_UNACCEPTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
+                        cloudMessageStr = cloudMessageStr.set("desire", d.getTitle());
+                        cloudMessageStr = cloudMessageStr.set("wanter", d.getCreator().getName());
+
+                        CloudMessage message = new CloudMessage(haver.getUser().getId(),
+                                CloudMessageSubject.HAVERUNACCEPTED,
+                                cloudMessageStr.getValue(),
+                                getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_TITLE", haver.getUser().getLangCode()));
+                        message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIREID, desireId);
+                        message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIRETITLE, d.getTitle());
+                        CloudMessageSender.sendMessage(message);
+                    }
                 }
                 break;
             case HaverStatus.REJECTED:

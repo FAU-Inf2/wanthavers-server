@@ -37,6 +37,16 @@ public class CreateStringsTask extends SessionContextTask {
         setTranslation("DESIRE_COMPLETE_NOTIFICATION_BODY", "Job {{desire}} wurde abgeschlossen. Bitte bewerte die Transaktion.", DE);
         setTranslation("DESIRE_COMPLETE_NOTIFICATION_TITLE", "Job completed", EN);
         setTranslation("DESIRE_COMPLETE_NOTIFICATION_TITLE", "Job abgeschlossen", DE);
+
+        setTranslation("HAVER_UNACCEPTED_NOTIFICATION_BODY", "The accepted Haver {{haver}} decided to cancel {{desire}}.", EN);
+        setTranslation("HAVER_UNACCEPTED_NOTIFICATION_BODY", "Der aktzeptierte Haver {{haver}} hat {{desire}} abgebrochen.", DE);
+        setTranslation("HAVER_UNACCEPTED_NOTIFICATION_TITLE", "Haver unaccepted", EN);
+        setTranslation("HAVER_UNACCEPTED_NOTIFICATION_TITLE", "Haver hat abgebrochen", DE);
+
+        setTranslation("WANTER_UNACCEPTED_NOTIFICATION_BODY", "The Wanter {{wanter}} decided to remove you from fullfilling {{desire}}.", EN);
+        setTranslation("WANTER_UNACCEPTED_NOTIFICATION_BODY", "Der Wanter {{haver}} hat sich entschieden dich vom Abschließen von {{desire}} zu entfernen.", DE);
+        setTranslation("WANTER_UNACCEPTED_NOTIFICATION_TITLE", "Wanter removed your accepted request", EN);
+        setTranslation("WANTER_UNACCEPTED_NOTIFICATION_TITLE", "Wanter hat die akzeptierte Anfrage entfernt", DE);
     }
 
     private void setTranslation(String key, String value, String langCode){
