@@ -25,7 +25,16 @@ public class AppVersionsTask extends SessionContextTask {
 
     @Override
     public void run(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception {
+        /*
+            ANDROID
+         */
         registerAppVersion("wanthavers.mad.cs.fau.de.wanthavers_android", 1, AppVersion.TYPE.FEATURE, AppVersion.OS.ANDROID, "http://mad.cs.fau.de/apps/wanthavers-android");
+        registerAppVersion("wanthavers.mad.cs.fau.de.wanthavers_android", 2, AppVersion.TYPE.BREAKING_CHANGE, AppVersion.OS.ANDROID, "https://play.google.com/store/apps/details?id=wanthavers.mad.cs.fau.de.wanthavers_android");
+
+        /*
+            IOS
+         */
+        registerAppVersion("de.fau.cs.mad.wanthaver.ios", 1, AppVersion.TYPE.FEATURE, AppVersion.OS.IOS, "");
     }
 
     private void registerAppVersion(String appId, int versionCode, int type, int os, String link){
