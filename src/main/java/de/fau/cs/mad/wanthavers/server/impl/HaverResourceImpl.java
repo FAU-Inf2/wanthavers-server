@@ -134,21 +134,21 @@ public class HaverResourceImpl implements HaverResource {
                         CloudMessage message = new CloudMessage(d.getCreator().getId(),
                                 CloudMessageSubject.HAVERUNACCEPTED,
                                 cloudMessageStr.getValue(),
-                                getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_TITLE", d.getCreator().getLangCode()));
+                                getTranslatedString("HAVER_UNACCEPTED_NOTIFICATION_TITLE", d.getCreator().getLangCode()));
                         message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIREID, desireId);
                         message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIRETITLE, d.getTitle());
                         CloudMessageSender.sendMessage(message);
                     } else {
                         /** Send push notifications to Haver if Wanter unaccepted **/
                         DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
-                                getTranslatedString("HAVER_UNACCEPTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
+                                getTranslatedString("WANTER_UNACCEPTED_NOTIFICATION_BODY", haver.getUser().getLangCode()));
                         cloudMessageStr = cloudMessageStr.set("desire", d.getTitle());
                         cloudMessageStr = cloudMessageStr.set("wanter", d.getCreator().getName());
 
                         CloudMessage message = new CloudMessage(haver.getUser().getId(),
                                 CloudMessageSubject.HAVERUNACCEPTED,
                                 cloudMessageStr.getValue(),
-                                getTranslatedString("DESIRE_COMPLETE_NOTIFICATION_TITLE", haver.getUser().getLangCode()));
+                                getTranslatedString("WANTER_UNACCEPTED_NOTIFICATION_TITLE", haver.getUser().getLangCode()));
                         message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIREID, desireId);
                         message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIRETITLE, d.getTitle());
                         CloudMessageSender.sendMessage(message);
