@@ -44,7 +44,7 @@ public class CreateStringsTask extends SessionContextTask {
         setTranslation("HAVER_UNACCEPTED_NOTIFICATION_TITLE", "Haver hat abgebrochen", DE);
 
         setTranslation("WANTER_UNACCEPTED_NOTIFICATION_BODY", "The Wanter {{wanter}} decided to remove you from fullfilling {{desire}}.", EN);
-        setTranslation("WANTER_UNACCEPTED_NOTIFICATION_BODY", "Der Wanter {{haver}} hat sich entschieden dich vom Abschließen von {{desire}} zu entfernen.", DE);
+        setTranslation("WANTER_UNACCEPTED_NOTIFICATION_BODY", "Der Wanter {{wanter}} hat sich entschieden dich vom Abschließen von {{desire}} zu entfernen.", DE);
         setTranslation("WANTER_UNACCEPTED_NOTIFICATION_TITLE", "Wanter removed your accepted request", EN);
         setTranslation("WANTER_UNACCEPTED_NOTIFICATION_TITLE", "Wanter hat die akzeptierte Anfrage entfernt", DE);
     }
