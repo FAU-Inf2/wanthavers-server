@@ -146,11 +146,11 @@ public class HaverResourceImpl implements HaverResource {
                         cloudMessageStr = cloudMessageStr.set("wanter", d.getCreator().getName());
 
                         CloudMessage message = new CloudMessage(haver.getUser().getId(),
-                                CloudMessageSubject.HAVERUNACCEPTED,
+                                CloudMessageSubject.WANTERUNACCEPTED,
                                 cloudMessageStr.getValue(),
                                 getTranslatedString("WANTER_UNACCEPTED_NOTIFICATION_TITLE", haver.getUser().getLangCode()));
-                        message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIREID, desireId);
-                        message.addKeyValue(CloudMessageSubject.HAVERUNACCEPTED_DESIRETITLE, d.getTitle());
+                        message.addKeyValue(CloudMessageSubject.WANTERUNACCEPTED_DESIREID, desireId);
+                        message.addKeyValue(CloudMessageSubject.WANTERUNACCEPTED_DESIRETITLE, d.getTitle());
                         CloudMessageSender.sendMessage(message);
                     }
                 }
