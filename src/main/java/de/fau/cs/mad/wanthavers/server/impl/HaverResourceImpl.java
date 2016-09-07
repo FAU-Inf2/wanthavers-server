@@ -125,7 +125,7 @@ public class HaverResourceImpl implements HaverResource {
                     desireFacade.updateDesire(desireId, d);
 
                     /** Send push notifications to Wanter if Haver unaccepted**/
-                    if(user.getId() == haver.getId()) {
+                    if(user.getId() == haver.getUser().getId()) {
                         DynamicStringParser cloudMessageStr = DynamicStringParser.parse(
                                 getTranslatedString("HAVER_UNACCEPTED_NOTIFICATION_BODY", d.getCreator().getLangCode()));
                         cloudMessageStr = cloudMessageStr.set("desire", d.getTitle());
