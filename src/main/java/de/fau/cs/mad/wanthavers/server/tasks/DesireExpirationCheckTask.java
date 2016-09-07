@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.io.PrintWriter;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -42,14 +41,15 @@ public class DesireExpirationCheckTask extends SessionContextTask {
                 Session session = sessionFactory.openSession();
                 Query query = session.createQuery(updateStatement);
                 query.setParameter("status", DesireStatus.STATUS_EXPIRED);
-                query.setDate("dateNow", new Date(System.currentTimeMillis()));
+                query.setParameter("dateNow", new Date(System.currentTimeMillis()));
                 //if no expire date is given by user then compare to server default
-                query.setDate("dateDefaultExpired", new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(DEFAULT_EXPIRE_DURATION_DAYS)));
+                query.setParameter("dateDefaultExpired", new Date(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(DEFAULT_EXPIRE_DURATION_DAYS)));
 
-                query.executeUpdate();
+                int cnt = query.executeUpdate();
+
                 session.close();
 
-                System.out.println("expire job done at: " + new Date(System.currentTimeMillis()).toString());
+                System.out.println("****************** expire job done at: " + new Date(System.currentTimeMillis()).toString() + ", " + cnt + " desires updated");
 
                 try {
                     Thread.sleep(TimeUnit.MINUTES.toMillis(SLEEP_TIME_MINUTES));
