@@ -211,6 +211,8 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         DesireExpirationCheckTask desireExpirationCheckTask = new DesireExpirationCheckTask("DesireExpirationCheckTask", hibernate.getSessionFactory());
         desireExpirationCheckTask.executeNow();
+
+        System.out.println("Server started");
     }
 
     public static void main(String[] args) {

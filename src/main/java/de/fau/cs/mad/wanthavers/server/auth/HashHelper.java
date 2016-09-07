@@ -46,15 +46,12 @@ public class HashHelper {
     // using PBKDF2 from Sun, an alternative is https://github.com/wg/scrypt
     // cf. http://www.unlimitednovelty.com/2012/03/dont-use-bcrypt.html
     private static String hash(String password, byte[] salt) throws Exception {
-        long time = System.currentTimeMillis();
-        System.out.println("START HASHING");
         if (password == null || password.length() == 0)
             throw new IllegalArgumentException("Empty passwords are not supported.");
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         SecretKey key = f.generateSecret(new PBEKeySpec(
                 password.toCharArray(), salt, iterations, desiredKeyLen)
         );
-        System.out.println("FINISHED HASHING IN "+(System.currentTimeMillis() - time));
         return Base64.encodeBase64String(key.getEncoded());
     }
 }

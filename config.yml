@@ -20,7 +20,7 @@ server:
 #      trustStorePath: ${JAVA_HOME}/jre/lib/security/cacerts
 
 logging:
-  level: INFO
+  level: WARN
 
   loggers:
     "de.fau.cs.mad.swipe": DEBUG

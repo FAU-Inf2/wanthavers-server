@@ -49,7 +49,7 @@ public class DesireExpirationCheckTask extends SessionContextTask {
                 query.executeUpdate();
                 session.close();
 
-                System.out.println("expire job done");
+                System.out.println("expire job done at: " + new Date(System.currentTimeMillis()).toString());
 
                 try {
                     Thread.sleep(TimeUnit.MINUTES.toMillis(SLEEP_TIME_MINUTES));

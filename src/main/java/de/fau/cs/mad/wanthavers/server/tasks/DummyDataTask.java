@@ -81,6 +81,8 @@ public class DummyDataTask extends SessionContextTask {
         jon.setPassword("test");
         jon.setImage(getMediaForURL("https://s3.eu-central-1.amazonaws.com/whimages/0fe5a41a-1a49-4b26-b383-39b01643f948.jpg"));
         jon.setRating(2.5F);
+        jon.setFirstName("Jon");
+        jon.setLastName("Doe");
 
         User max = new User("Max Muster", "m.muster@xyz.de");
         max.setPassword("test");
