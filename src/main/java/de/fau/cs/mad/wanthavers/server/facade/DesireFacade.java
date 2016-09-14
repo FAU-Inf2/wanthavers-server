@@ -28,7 +28,7 @@ public class DesireFacade {
 
     public List<Desire> getAllDesiresByFilter(Long categoryId, Double price_min, Double price_max, Double reward_min, Float rating_min, Double lat, Double lon, Double radius, List<Integer> status, Long lastDesireId, Integer limit, Long creatorId, Long haverId, List<Integer> haverStatus) {
         return dao.findAllByFilter(categoryId, price_min, price_max, reward_min, rating_min, lat, lon, radius, status, lastDesireId, limit, creatorId, haverId, haverStatus);
-    }desire
+    }
 
     public Desire createNewDesire(Desire desire){
         return dao.create(desire);
