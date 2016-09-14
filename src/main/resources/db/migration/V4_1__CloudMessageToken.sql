@@ -1,2 +1,2 @@
 ALTER TABLE CloudMessageToken
-  ALTER COLUMN tokenType VARCHAR(255);
+  ADD COLUMN tokenType VARCHAR(255);
