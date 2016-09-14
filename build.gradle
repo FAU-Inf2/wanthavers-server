@@ -70,9 +70,8 @@ run {
         dependsOn(flywayInfo)
         dependsOn(flywayRepair)
         dependsOn(flywayInfo)
-        dependsOn(flywayMigrate)
-        dependsOn(flywayInfo)
-        dependsOn(flywayInfo)
+
+
     }
     args 'server', 'config.yml'
 }
