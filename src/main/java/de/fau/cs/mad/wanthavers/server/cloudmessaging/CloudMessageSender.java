@@ -20,7 +20,7 @@ import java.util.List;
 public class CloudMessageSender {
     public static final String FIREBASE_URL = "https://fcm.googleapis.com/fcm/send";
     public static final String API_KEY = "AIzaSyDozjC6AMa0O9btFvHGfHwFm7yo-_qrKRQ";
-    public static final String IOS_PACKAGE_NAME = "de.fau.cs.mad.wanthaver.ios";
+    public static final String IOS_PACKAGE_NAME = "de.fau.cs.mad.wanthaver.ios.store";
 
     /**
      * Sends message to all registered tokens of a user
