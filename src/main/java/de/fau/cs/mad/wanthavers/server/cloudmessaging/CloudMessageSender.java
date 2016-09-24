@@ -35,7 +35,7 @@ public class CloudMessageSender {
                 return;
 
             for(CloudMessageToken token : tokens) {
-                if(token.getTokenType().equals(CloudMessageToken.ANDROID_TOKEN) || token.getTokenType() == null) {
+                if(token.getTokenType() == null || token.getTokenType().equals(CloudMessageToken.ANDROID_TOKEN)) {
                     // For documentation of sendData see CloudMessageSubject
                     JSONObject sendData = new JSONObject();
                     sendData.put("data", message.getData());
