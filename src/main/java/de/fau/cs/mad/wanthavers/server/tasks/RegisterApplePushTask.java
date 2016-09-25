@@ -26,7 +26,15 @@ public class RegisterApplePushTask extends SessionContextTask {
                 .setClientCredentials(new File("wanthavers.p12"), pw)
                 .build();
 
-        final Future<Void> connectFuture = apnsClient.connect(ApnsClient.DEVELOPMENT_APNS_HOST);
+        String isProduction = System.getenv("IS_PRODUCTION");
+        final Future<Void> connectFuture;
+
+        if (isProduction != null && isProduction.equals("true")) {
+            connectFuture = apnsClient.connect(ApnsClient.PRODUCTION_APNS_HOST);
+        } else {
+            connectFuture = apnsClient.connect(ApnsClient.DEVELOPMENT_APNS_HOST);
+        }
+
         connectFuture.await();
 
         if(connectFuture.isSuccess()) {
