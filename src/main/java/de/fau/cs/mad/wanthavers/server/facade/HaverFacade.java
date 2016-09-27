@@ -28,15 +28,6 @@ public class HaverFacade {
     }
 
     public Haver createNewHaver(long desireId, Haver newHaver) {
-
-        /** TESTING **/
-        Haver existingHaver = getHaverByUserId(desireId, newHaver.getUser().getId());
-        if(existingHaver != null) {
-            return updateHaver(existingHaver.getDesireId(), existingHaver.getId(), existingHaver);
-        }
-
-
-
         Haver ret = this.dao.create(newHaver);
 
         DesireDAO desireDAO = (DesireDAO) SingletonManager.get(DesireDAO.class);
