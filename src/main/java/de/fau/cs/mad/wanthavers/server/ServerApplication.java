@@ -31,7 +31,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
     public static final String DEFAULT_LANGCODE = "en_EN";
 
     private final HibernateBundle<ServerConfiguration> hibernate =
-            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class, LangString.class, AppVersion.class) {
+            new HibernateBundle<ServerConfiguration>(User.class, Desire.class, Rating.class, Haver.class, Media.class, Category.class, Location.class, CloudMessageToken.class, DesireFlag.class, LangString.class, AppVersion.class, UserFlag.class) {
                 @Override
                 public DataSourceFactory getDataSourceFactory(ServerConfiguration configuration) {
                     DataSourceFactory fac = configuration.getDataSourceFactory();
@@ -117,6 +117,9 @@ public class ServerApplication extends Application<ServerConfiguration> {
         final DesireFlagFacade desireFlagFacade = new DesireFlagFacade(desireFlagDAO, desireDAO);
         SingletonManager.add(desireFlagDAO);
         SingletonManager.add(desireFlagFacade);
+
+        final UserFlagDAO userFlagDAO = new UserFlagDAO(hibernate.getSessionFactory());
+        SingletonManager.add(userFlagDAO);
 
         final LangStringDAO langStringDAO = new LangStringDAO(hibernate.getSessionFactory());
         final LangStringFacade langStringFacade = new LangStringFacade(langStringDAO);
