@@ -4,6 +4,7 @@ import de.fau.cs.mad.wanthavers.common.Chat;
 import de.fau.cs.mad.wanthavers.common.Message;
 import de.fau.cs.mad.wanthavers.common.User;
 import de.fau.cs.mad.wanthavers.common.rest.api.ChatResource;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.facade.ChatFacade;
 import de.fau.cs.mad.wanthavers.server.facade.DesireFacade;
 import de.fau.cs.mad.wanthavers.server.facade.UserFacade;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class ChatResourceImpl implements ChatResource {
     private final ChatFacade chatFacade;
-    private final UserFacade userFacade;
+    private UserFacade userFacade;
     private final DesireFacade desireFacade;
 
 
@@ -78,6 +79,14 @@ public class ChatResourceImpl implements ChatResource {
     @UnitOfWork
     @Override
     public Message createMessage(@Auth User user, String id, Message msg) {
+
+        ChatResourceImpl chatResource = (ChatResourceImpl) SingletonManager.get(ChatResourceImpl.class);
+        User otherUser = chatResource.getOtherUser(user, id);
+
+        if(userFacade.isUserBlocked(otherUser.getId(), user.getId()) || userFacade.isUserBlocked(user.getId(), otherUser.getId())){
+            throw new WebApplicationException(423); //Status Code: Locked
+        }
+
         Message tmp = this.chatFacade.createMessage(id, user, msg.getBody());
         if (tmp == null) {
             throw new WebApplicationException(400);

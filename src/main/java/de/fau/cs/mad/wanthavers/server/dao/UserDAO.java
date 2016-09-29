@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.*;
 import de.fau.cs.mad.wanthavers.server.ServerApplication;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import de.fau.cs.mad.wanthavers.server.auth.HashHelper;
 import de.fau.cs.mad.wanthavers.server.misc.Mailer;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -150,5 +151,29 @@ public class UserDAO extends AbstractSuperDAO<User> {
 
         persist(user);
         return true;
+    }
+
+    public UserFlag flagUser(long issuerId, long userId) {
+
+        UserFlag uf = new UserFlag();
+        uf.setIssuerId(issuerId);
+        uf.setUserId(userId);
+
+        UserFlagDAO userFlagDao = (UserFlagDAO)SingletonManager.get(UserFlagDAO.class);
+        userFlagDao.create(uf);
+
+        return uf;
+    }
+
+    public boolean isUserBlocked(long issuerId, long userId){
+        Criteria criteria = currentSession().createCriteria(UserFlag.class)
+                .add(Restrictions.eq("issuerId", issuerId))
+                .add(Restrictions.eq("userId", userId));
+
+        if(criteria.list().size() > 0){
+            return true;
+        }
+
+        return false;
     }
 }

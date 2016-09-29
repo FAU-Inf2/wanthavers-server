@@ -112,4 +112,10 @@ public class UserResourceImpl implements UserResource {
             throw new WebApplicationException(400);
         }
     }
+
+    @Override
+    public UserFlag flagUser(@Auth User user, long userId) {
+        return this.facade.flagUser(user.getId(), userId);
+    }
+
 }

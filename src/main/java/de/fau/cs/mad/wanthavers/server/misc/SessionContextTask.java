@@ -38,7 +38,7 @@ public abstract class SessionContextTask extends Task{
     }
 
     public void executeNow() throws Exception {
-        execute(null, new PrintWriter(System.out));
+        execute(new ImmutableMultimap.Builder<String, String>().build(), new PrintWriter(System.out));
     }
 
     public abstract void run(ImmutableMultimap<String, String> parameters, PrintWriter output) throws Exception;

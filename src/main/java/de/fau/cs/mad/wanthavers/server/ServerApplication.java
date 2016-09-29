@@ -66,6 +66,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
         //Mailer.enableFake("wanthavers@i2.cs.fau.de");
 
         /** create DAOs and facades **/
+        SingletonManager.add(hibernate.getSessionFactory());
 
         final RatingDAO ratingDAO = new RatingDAO(hibernate.getSessionFactory());
         final RatingFacade ratingFacade = new RatingFacade(ratingDAO);
@@ -198,16 +199,16 @@ public class ServerApplication extends Application<ServerConfiguration> {
         CreateCategoriesTask createCategoriesTask = new CreateCategoriesTask("CreateCategoriesTask", hibernate.getSessionFactory());
         createCategoriesTask.executeNow();
 
-        DummyDataTask dummyDataTask = new DummyDataTask("DummyDataTask", hibernate.getSessionFactory());
-        if (isProduction != null && !isProduction.equals("true")) {
-            dummyDataTask.executeNow();
-        }
-
         CreateAdminUserTask createAdminUserTask = new CreateAdminUserTask("CreateAdminUserTask", hibernate.getSessionFactory());
         createAdminUserTask.executeNow();
 
         AppVersionsTask appVersionsTask = new AppVersionsTask("AppVersionsTask", hibernate.getSessionFactory());
         appVersionsTask.executeNow();
+
+        DummyDataTask dummyDataTask = new DummyDataTask("DummyDataTask", hibernate.getSessionFactory());
+        if (isProduction != null && !isProduction.equals("true")) {
+            dummyDataTask.executeNow();
+        }
 
         DesireExpirationCheckTask desireExpirationCheckTask = new DesireExpirationCheckTask("DesireExpirationCheckTask", hibernate.getSessionFactory());
         desireExpirationCheckTask.executeNow();

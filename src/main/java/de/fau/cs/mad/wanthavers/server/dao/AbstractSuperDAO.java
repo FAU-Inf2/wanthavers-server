@@ -2,6 +2,7 @@ package de.fau.cs.mad.wanthavers.server.dao;
 
 import de.fau.cs.mad.wanthavers.common.AbstractModel;
 import de.fau.cs.mad.wanthavers.common.Desire;
+import de.fau.cs.mad.wanthavers.server.SingletonManager;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -55,4 +56,6 @@ public abstract class AbstractSuperDAO<E extends AbstractModel> extends Abstract
         return update;
     }
     */
+
+
 }

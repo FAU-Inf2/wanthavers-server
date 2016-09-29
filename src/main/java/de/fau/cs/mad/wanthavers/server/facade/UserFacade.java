@@ -3,6 +3,7 @@ package de.fau.cs.mad.wanthavers.server.facade;
 import de.fau.cs.mad.wanthavers.common.Desire;
 import de.fau.cs.mad.wanthavers.common.Location;
 import de.fau.cs.mad.wanthavers.common.User;
+import de.fau.cs.mad.wanthavers.common.UserFlag;
 import de.fau.cs.mad.wanthavers.server.dao.UserDAO;
 
 import java.util.List;
@@ -49,5 +50,9 @@ public class UserFacade {
     public List<Location> getSavedLocations(long userid){
         return this.dao.getSavedLocations(userid);
     }
+
+    public UserFlag flagUser(long issuerId, long userId) {return this.dao.flagUser(issuerId, userId);}
+
+    public boolean isUserBlocked(long issuerId, long userId) {return this.dao.isUserBlocked(issuerId, userId);}
 
 }
