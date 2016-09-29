@@ -114,6 +114,7 @@ public class UserResourceImpl implements UserResource {
     }
 
     @Override
+    @UnitOfWork
     public UserFlag flagUser(@Auth User user, long userId) {
         return this.facade.flagUser(user.getId(), userId);
     }
