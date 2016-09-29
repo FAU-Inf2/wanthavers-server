@@ -162,6 +162,7 @@ public class ServerApplication extends Application<ServerConfiguration> {
 
         final ChatResourceImpl chatResource = new ChatResourceImpl(chatFacade, userFacade, desireFacade);
         environment.jersey().register(chatResource);
+        SingletonManager.add(chatResource);
 
         final MediaResourceImpl mediaResource = new MediaResourceImpl(mediaFacade);
         environment.jersey().register(mediaResource);
