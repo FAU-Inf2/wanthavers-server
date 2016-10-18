@@ -25,8 +25,8 @@ public class HaverDAO extends AbstractSuperDAO<Haver> {
         final Session session = currentSession();
 
         Criteria criteria = session.createCriteria(Haver.class)
-                .add(Restrictions.eq("desireId", desireId));
-//                .add(Restrictions.ne("status", HaverStatus.DELETED));
+                .add(Restrictions.eq("desireId", desireId))
+                .add(Restrictions.ne("status", HaverStatus.DELETED));
 
         List<Haver> havers = criteria.list();
 
